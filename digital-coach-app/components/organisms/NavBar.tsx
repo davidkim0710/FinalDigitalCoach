@@ -30,8 +30,8 @@ export default function NavBar() {
             <a className={style.linksText}>Create Custom Question Set</a>
           </Link>
           {/*Here while developing, can be removed later if desired */}
-          <Link href='/resources'>
-            <a className={style.linksText}>Resources</a>
+          <Link href='/connections'>
+            <a className={style.linksText}>Connections</a>
           </Link>
           <Link href='/progress'>
             <a className={style.linksText}>Progress Tracking</a>

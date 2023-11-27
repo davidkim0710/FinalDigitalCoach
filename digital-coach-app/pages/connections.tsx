@@ -1,9 +1,9 @@
 import AuthGuard from "@App/lib/auth/AuthGuard";
 
-export default function ResourcesPage() {
+export default function ConnectionsPage() {
   return (
     <AuthGuard>
-      <h1>Resources Page</h1>
+      <h1>Connections Page</h1>
     </AuthGuard>
   );
 }
