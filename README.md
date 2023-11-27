@@ -12,7 +12,7 @@ For more detailed documentation on the different parts of the app ([frontend](/d
 
 1. Create a firebase app [here](https://console.firebase.google.com)
 1. Create a service account for the firebase app you've created using the Google Cloud console with [instructions here](https://cloud.google.com/iam/docs/creating-managing-service-accounts#creating)
-1. Populate the `.env` files in `digital-coach-app/` and `digital-coach-app/functions/` directory with the service account credentials
+1. Populate the `.env` files in `digital-coach-app/` and `digital-coach-app/functions/` directory with the service account credentials. The files in the repository are just sample env files. Make sure that the files are named .env without the example part!
 1. Install the latest stable version of Node [here](https://nodejs.org/en/)
 1. Install yarn [here](https://classic.yarnpkg.com/en/docs/install)
 1. Install Python 3.10 [here](https://www.python.org/downloads/)
@@ -29,7 +29,10 @@ For more detailed documentation on the different parts of the app ([frontend](/d
    ```
    and download all packages in the UI prompt (sorry we didn't figure out which ones you really need)
 1. Create an account with Assembly AI and get an API key
-1. Populate the .env file in `ml-api/` with the API key from AssemblyAI
+1. Populate the .env file in `ml-api/` with the API key from AssemblyAI. The files in the repository are just sample env files. Make sure that the files are named .env without the example part!
+2. Ensure that firebase is connected: run `firebase login` and click the link to login and authenticate
+3. Run `firebase projects:list` to see the projectId
+4. Set the current project using the projectId from the previous step: `firebase use <projectId>`
 
 ## Frontend
 
@@ -57,7 +60,6 @@ For more detailed documentation on the different parts of the app ([frontend](/d
 1. start your redis server with the instructions from the installation page [here](https://redis.io/docs/getting-started/)
 1. cd to the `ml-api` directory
 1. run `pipenv install` to install the dependencies for the flask API
-1. Comment out all references to `resource` in the worker.py code
 1. run `pipenv run serve` to start the Flask API server
 
 # Technologies Used
