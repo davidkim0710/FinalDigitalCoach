@@ -19,7 +19,6 @@ const questionsData: any[] = [
       "Do you plan to pursue an accounting designation after graduation? If not, why not? If so, which one and why?",
       "Do you plan to sit for the CPA exam? If so, are you eligible and when will you sit for the exam?",
       "Identify tax forms such as T5, T3 and T1.",
-      "Identify tax forms such as T5, T3 and T1.",
       "If I buy a piece of equipment, walk me through the impact on the three financial statements.",
       "If you are interested in public accounting, are you more interested in tax or audit?",
       "If you were working on an audit for a major client and noticed several errors in the company's reports, how would you communicate this to a project leader who is known to have a short temper and little tolerance for disagreement?",
@@ -53,6 +52,13 @@ const questionsData: any[] = [
       "Why are you interested in pursuing a career in accounting?",
       "Why did you choose to study accounting?	",
       "Why do you want to be a CA?",
+      "What is a debit and credit?",
+      "What is the difference between accrual and cash accounting?",
+      "How do you handle discrepancies in financial statements?",
+      "What is the difference between accounts payable and accounts receivable?",
+      "How do you stay updated on changes in accounting standards and regulations?",
+      "How do you handle tight deadlines and pressure in a financial reporting role?",
+      "Discuss a challenging financial project you worked on and how you contributed to its success"
     ],
   },
   {
@@ -62,12 +68,14 @@ const questionsData: any[] = [
       "Explain a time you had to use logic to solve an engineering problem",
       "What engineering skills have you learned or improved upon in the past six months?",
       "What software packages are you familiar with?",
-      // "Describe a time you had to work on a team and something didn't go well. What would you do differently?",
-      // "Have you ever had an experience with a difficult client, employer, or employee? How did you handle the situation?",
-      // "Why are you interested in this role? Why are you interested in working at this company?",
+      "Describe a time you had to work on a team and something didn't go well. What would you do differently?",
+      "Have you ever had an experience with a difficult client, employer, or employee? How did you handle the situation?",
       "What strengths do you have that make you a good engineer?",
-      // "What will be the biggest challenge for you in this position?",
-      // "Where would you like to be in your career five years from now?"
+      "What is the most challenging engineering project you dealt with? How did you ensure it was a success?",
+      "What processes do you use to make sure you haven’t made any mistakes?",
+      "What steps do you take to keep your engineering skills current?",
+      "Can you tell me about a project that fell behind schedule? What happened, and what was the outcome of the project?",
+      "Can you tell me about the most challenging technical report you ever had to create?"
     ],
   },
   {
@@ -81,7 +89,18 @@ const questionsData: any[] = [
       "Can you walk us through your experience with a specific programming language or technology?",
       "Can you give an example of how you have applied your technical skills to provide a business solution?",
       "How would you implement a breadth-first search algorithm?",
+      "How would you implement a depth-first search algorithm?",
       "Can you write a SQL query to retrieve data from a database table?",
+      "Walk me through your resume and explain how your experience fits this role.",
+      "What programming language do you know the best and which do you use the most often?",
+      "Explain the role of Object Oriented Programming in languages like Java.",
+      "What experience do you have with website development, specifically using Node and javascript frameworks?",
+      "What is Big O notation and how can it be used to analyze the complexity of algorithms?",
+      "How would you implement a secure user authentication system in a web application?",
+      "What is a relational database and how would you store information in one, consider using SQL?",
+      "In concurrency, explain the concept of deadlock and how it can be prevented.",
+      "What are the main differences between a process and a thread?",
+      "Describe how blockchain functions and some of its potential applications."
     ],
   },
   {
@@ -97,6 +116,14 @@ const questionsData: any[] = [
       "What is the greatest financial challenge facing our industry today?",
       "What are three financial changes that you anticipate in our industry over the next ten years?",
       "Why have you chosen to work in finance?",
+      "If I could use only one statement to review the overall health of a company, which statement would I use, and why?",
+      "When should a company consider issuing debt instead of equity?",
+      "Which is cheaper, debt or equity?",
+      "When do you capitalize rather than expense a purchase?",
+      "Why would two companies merge?",
+      "What major factors drive mergers and acquisitions?",
+      "Why would a company fund its operations by issuing equity rather than debt?"
+
     ],
   },
 ];
