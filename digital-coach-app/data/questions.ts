@@ -126,6 +126,84 @@ const questionsData: any[] = [
 
     ],
   },
+  {
+    subject: "Data Science",
+    questions: [
+      "Explain the difference between Data Analytics and Data Science.",
+      "What are the differences between supervised and unsupervised learning?",
+      "How can you avoid overfitting in your model?",
+      "What is p-value and what is its significance?",
+      "What is the difference between population and sample?",
+      "Tell me about a time you had to communicate your technical findings to a non-technical audience.",
+      "Tell me about a time you used data visualization in a project.",
+      "How would you handle missing values in a dataset?",
+      "Tell me about a project where your analysis had a significant impact on decision-making.",
+    ],
+  },
+  {
+    subject: "Human Resources",
+    questions: [
+      "Describe the significance of HR in an organization.",
+      "Tell me about a time you had to collaborate with others at different levels of a company.",
+      "How would you handle a conflict between employees?",
+      "How would you ensure diversity and inclusion in a workplace?",
+      "Tell me about a time you had a disagreement with leadership and how you approached this.",
+      "How do you measure and improve employee engagement?",
+      "Tell me about a time you handled a conflict between employees.",
+    ],
+  },
+  {
+    subject: "Information Technology",
+    questions: [
+      "What is your experience with cloud computing platforms?",
+      "Tell me about a time you had to learn and implement a new technology.",
+      "What considerations do you take into account when designing a new IT infrastructure?",
+      "How do you ensure the security and integrity of a network/system?",
+    ],
+  },
+  {
+    subject: "Law",
+    questions: [
+      "Why did you choose to study law?",
+      "Can you discuss a recent legal development or case that caught your attention?",
+      "How do you approach legal research and stay updated on changes in laws and regulations?",
+      "How do you handle ethical dilemmas or conflicts of interest in your practice?",
+      "How do you handle stress and high-pressure situations in the legal profession?",
+      "How do you keep your client informed and involved in their case?",
+    ],
+  },
+  {
+    subject: "Marketing",
+    questions: [
+      "What motivated you to pursue a career in marketing?",
+      "Describe a successful marketing campaign you were a part of. What was your role, and what were the results?",
+      "How do you approach market research, and what tools or methods do you use?",
+      "Can you discuss a time when a marketing campaign didn't go as planned? What did you learn from that experience?",
+      "Describe your experience with data analytics and how you use data to inform marketing decisions.",
+    ],
+  },
+  {
+    subject: "Operations",
+    questions: [
+      "How do you delegate work to employees?",
+      "What is one example of a project you oversaw that involved multiple teams? How did you manage that situation, and what was the result?",
+      "What do you do when facing a small budget or lack of resources? Have you faced this challenge in the past?",
+      "Tell me about the best manager you’ve ever had.",
+      "Which Management Information Systems have you used?",
+      "Discuss an instance in which one of your ideas has helped to improve operations at other companies.",
+    ],
+  },
+  {
+    subject: "Product Management",
+    questions: [
+      "What role do you think communication plays in successful product management?",
+      "What is your approach to learning about a new product or industry?",
+      "How do you handle collaboration across different fields such as engineering, design, and other teams?",
+      "Can you walk through the stages of a product life cycle?",
+      "Describe a situation where you had to pivot a product strategy.",
+      "What challenges have you faced during a product launch, and how did you overcome them?",
+    ],
+  },
 ];
 
 export default questionsData;
