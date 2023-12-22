@@ -204,6 +204,26 @@ const questionsData: any[] = [
       "What challenges have you faced during a product launch, and how did you overcome them?",
     ],
   },
+  {
+    subject: "Any",
+    questions: [
+      "Tell me about yourself.",
+      "What interests you about this position with this company?",
+      "What are your strengths?",
+      "What are your weaknesses?",
+      "What has been your recent greatest achievement?",
+      "Where do you see yourself in 5 years?",
+      "What skills and qualities do you possess that make you a good fit for this role?",
+      "What makes you stand out from the other candidates?",
+      "Describe a situation where you had to work with a difficult team member.",
+      "Can you share an example of a project or task that didn't go as planned?",
+      "Tell me about a situation where you received constructive feedback.",
+      "Discuss a situation where you had to work under pressure to meet a project deadline.",
+      "Describe a time when you had to step up and demonstrate leadership skills.",
+      "Tell me about a time when you had to meet a tight deadline and how you managed your time?",
+      "Do you prefer to work with others or individually?",
+    ],
+  },
 ];
 
 export default questionsData;
