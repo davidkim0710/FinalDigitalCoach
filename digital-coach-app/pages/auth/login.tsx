@@ -30,7 +30,7 @@ export default function LoginPage() {
   const {
     error: authError,
     currentUser,
-    loginWithGoogle,
+    // loginWithGoogle,
     login,
   } = useAuthContext();
   const {
@@ -73,10 +73,10 @@ export default function LoginPage() {
             <LoginIcon />
             Login
           </Button>
-          <Button onClick={loginWithGoogle}>Login with Google</Button>
+          {/* <Button onClick={loginWithGoogle}>Login with Google</Button> */}
           <Link href="/auth/signup">
             <a>New user? sign up</a>
-          </Link>
+          </Link> 
         </form>
 
         </div>

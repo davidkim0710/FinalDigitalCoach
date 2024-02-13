@@ -10,7 +10,7 @@ interface AuthContextState {
   fetchUser: () => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
-  loginWithGoogle: () => Promise<void>;
+  // loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
 }
 

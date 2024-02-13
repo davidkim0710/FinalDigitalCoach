@@ -32,16 +32,16 @@ export function AuthContextProvider({ children }: PropsWithChildren<{}>) {
       }
     };
 
-    const loginWithGoogle = async () => {
-      try {
-        const { user } = await AuthService.loginWithGoogle();
-        const userDocSnapshot = await UserService.getUser(user.uid);
+    // const loginWithGoogle = async () => {
+    //   try {
+    //     const { user } = await AuthService.loginWithGoogle();
+    //     const userDocSnapshot = await UserService.getUser(user.uid);
 
-        setCurrentUser(userDocSnapshot);
-      } catch (error: any) {
-        setError(error.message);
-      }
-    };
+    //     setCurrentUser(userDocSnapshot);
+    //   } catch (error: any) {
+    //     setError(error.message);
+    //   }
+    // };
 
     const signup = async (email: string, password: string) => {
       try {
@@ -74,7 +74,7 @@ export function AuthContextProvider({ children }: PropsWithChildren<{}>) {
       error,
       login,
       signup,
-      loginWithGoogle,
+      // loginWithGoogle,
       logout,
       fetchUser,
     };

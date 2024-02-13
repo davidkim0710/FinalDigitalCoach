@@ -4,8 +4,8 @@ import {
   signInWithEmailAndPassword,
   UserCredential,
   signOut,
-  signInWithPopup,
-  GoogleAuthProvider,
+  // signInWithPopup,
+  // GoogleAuthProvider,
   User,
   onAuthStateChanged as firebaseOnAuthStateChanged,
   createUserWithEmailAndPassword,
@@ -29,10 +29,10 @@ class AuthService extends FirebaseService {
     return createUserWithEmailAndPassword(this.auth, email, password);
   }
 
-  async loginWithGoogle(): Promise<UserCredential> {
-    const provider = new GoogleAuthProvider();
-    return signInWithPopup(this.auth, provider);
-  }
+  // async loginWithGoogle(): Promise<UserCredential> {
+  //   const provider = new GoogleAuthProvider();
+  //   return signInWithPopup(this.auth, provider);
+  // }
 
   async logout(): Promise<void> {
     signOut(this.auth);
