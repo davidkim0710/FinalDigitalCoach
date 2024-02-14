@@ -67,7 +67,7 @@ function ProgressInit() {
       <div className={styles.ProgressPage_body}>
         <div className={styles.ProgressPage_bodyLeft}>
           <Card title='Initial Interview'>
-            <Link href='/start'>
+            <Link href='/video'>
               <a className={styles.linksText}>Start an Interview</a>
             </Link>
           </Card>
