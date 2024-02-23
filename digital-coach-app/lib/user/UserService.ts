@@ -72,7 +72,7 @@ class UserService extends FirebaseService {
   async registerUser(userId: string, userDetails: IBaseUserAttributes) {
     const userDocRef = this.getDocRef(userId);
 
-    return updateDoc(userDocRef, {
+    return await updateDoc(userDocRef, {
       ...userDetails,
       registrationCompletedAt: Timestamp.now(),
       hasCompletedInterview: false
