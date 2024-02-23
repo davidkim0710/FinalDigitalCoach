@@ -49,7 +49,7 @@ export default function RegisterPage() {
       currentUser!.id
     );
 
-    await UserService.registerUser(currentUser!.id, {
+    UserService.registerUser(currentUser!.id, {
       name,
       concentration,
       proficiency,
