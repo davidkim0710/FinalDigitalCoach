@@ -1,9 +1,14 @@
+import React from 'react';
 import AuthGuard from "@App/lib/auth/AuthGuard";
+import ForumApp from '@App/components/organisms/Forums/ForumApp';
 
 export default function ConnectionsPage() {
   return (
     <AuthGuard>
-      <h1>Connections Page</h1>
+      <div>
+        <h1>Connections Page</h1>
+        <ForumApp />
+      </div>
     </AuthGuard>
   );
 }
