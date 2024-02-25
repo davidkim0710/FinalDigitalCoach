@@ -1,0 +1,23 @@
+const BASE_URL = 'http://localhost:8000/api'; // backend API URL, idk
+
+export async function getThreads() {
+  const response = await fetch(`${BASE_URL}/threads`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch threads');
+  }
+  return response.json();
+}
+
+export async function createThread(title, content) {
+  const response = await fetch(`${BASE_URL}/threads`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ title, content }),
+  });
+  if (!response.ok) {
+    throw new Error('Failed to create thread');
+  }
+  return response.json();
+}
