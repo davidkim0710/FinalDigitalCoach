@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import ThreadList from './ThreadList';
 import NewThreadForm from './NewThreadForm';
-import ForumService from '.forumapi'; 
+import ForumService from './forumapi'; 
 
 function ForumApp() {
   const [threads, setThreads] = useState([]);
