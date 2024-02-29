@@ -1,23 +1,58 @@
-const BASE_URL = 'http://localhost:8000/api'; // backend API URL, idk
+import {
+  addDoc,
+  collection,
+  DocumentReference,
+  Firestore,
+  getDocs,
+  getFirestore,
+  query,
+} from "firebase/firestore";
 
-export async function getThreads() {
-  const response = await fetch(`${BASE_URL}/threads`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch threads');
+class ForumService {
+  private firestore: Firestore;
+
+  constructor() {
+    this.firestore = getFirestore();
   }
-  return response.json();
+
+  private getThreadsCollectionRef() {
+    return collection(this.firestore, "threads");
+  }
+
+  async getAllThreads() {
+    const threadsQuery = query(this.getThreadsCollectionRef());
+    return getDocs(threadsQuery);
+  }
+
+  async createThread(title, content) {
+    const threadsCollectionRef = this.getThreadsCollectionRef();
+
+    const newThread = {
+      title,
+      content,
+      createdAt: new Date(),
+    };
+
+    return addDoc(threadsCollectionRef, newThread);
+  }
+
+  async getThreadPosts(threadId) {
+    const threadRef = collection(this.firestore, "threads", threadId);
+    const postsQuery = query(collection(threadRef, "posts"));
+    return getDocs(postsQuery);
+  }
+
+  async addPost(threadId, content) {
+    const threadRef = collection(this.firestore, "threads", threadId);
+    const postsCollectionRef = collection(threadRef, "posts");
+
+    const newPost = {
+      content,
+      createdAt: new Date(),
+    };
+
+    return addDoc(postsCollectionRef, newPost);
+  }
 }
 
-export async function createThread(title, content) {
-  const response = await fetch(`${BASE_URL}/threads`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ title, content }),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to create thread');
-  }
-  return response.json();
-}
+export default new ForumService();
