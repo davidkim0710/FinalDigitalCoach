@@ -28,12 +28,12 @@ function ForumApp() {
       setLoading(true);
       await ForumService.createThread(title, content);
       const threadsData = await ForumService.getAllThreads();
-      const threadsArray = threadsData.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const threadsArray = await threadsData.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setThreads(threadsArray);
     } catch (error) {
       console.error('Error creating or fetching threads:', error);
     } finally {
-        setLoading(false); // Set loading to false when fetching is complete
+        setLoading(false); 
     }
   };
 
