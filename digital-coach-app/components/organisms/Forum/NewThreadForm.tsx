@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Button from '@App/components/atoms/Button';
 
 function NewThreadForm({ onSubmit }) {
   const [title, setTitle] = useState('');
@@ -22,7 +23,7 @@ function NewThreadForm({ onSubmit }) {
         <label>Content:</label>
         <textarea value={content} onChange={(e) => setContent(e.target.value)} required />
       </div>
-      <button type="submit">Submit</button>
+      <Button onClick = handleSubmit >Submit</Button>
     </form>
   );
 }
