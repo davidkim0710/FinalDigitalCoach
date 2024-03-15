@@ -1,5 +1,6 @@
 import React from 'react';
 import ForumService from './forumapi'; // Import ForumService
+import Button from '@App/components/atoms/Button';
 
 function ThreadList({ threads, setLoading }) {
   const handleEdit = async (threadId) => {
@@ -29,8 +30,8 @@ function ThreadList({ threads, setLoading }) {
         <div key={thread.id}>
           <h3>{thread.title}</h3>
           <p>{thread.content}</p>
-          <button onClick={() => handleEdit(thread.id)}>Edit</button>
-          <button onClick={() => handleDelete(thread.id)}>Delete</button>
+          <Button onClick={() => handleEdit(thread.id)}>Edit</Button>
+          <Button onClick={() => handleDelete(thread.id)}>Delete</Button>
         </div>
       ))}
     </div>
