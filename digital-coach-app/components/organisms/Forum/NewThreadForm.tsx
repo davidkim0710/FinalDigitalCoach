@@ -23,7 +23,7 @@ function NewThreadForm({ onSubmit }) {
         <label>Content:</label>
         <textarea value={content} onChange={(e) => setContent(e.target.value)} required />
       </div>
-      <Button onClick = handleSubmit >Submit</Button>
+      <Button onClick = {handleSubmit} >Submit</Button>
     </form>
   );
 }
