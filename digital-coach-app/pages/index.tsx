@@ -33,7 +33,7 @@ const Home: NextPage = () => {
     isFetching: isFetchingAverageScore,
   } = useGetUserAverageScore(currentUser?.id);
 
-  const [tip, setTip] = useState("");
+  const [tip, setTips] = useState("");
 
   useEffect(() => {
     const tips = [
