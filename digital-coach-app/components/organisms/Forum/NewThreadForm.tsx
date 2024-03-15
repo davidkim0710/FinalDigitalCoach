@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Button from '@App/components/atoms/Button';
+import Button from '../../atoms/Button';
 
 function NewThreadForm({ onSubmit }) {
   const [title, setTitle] = useState('');
