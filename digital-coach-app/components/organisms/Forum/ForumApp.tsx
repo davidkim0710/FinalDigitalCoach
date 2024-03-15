@@ -25,8 +25,8 @@ function ForumApp() {
 
   const handleNewThread = async (title, content) => {
     try {
-      await ForumService.createThread(title, content);
       setLoading(true);
+      await ForumService.createThread(title, content);
     } catch (error) {
       console.error('Error creating or fetching threads:', error);
     } 
