@@ -39,7 +39,7 @@ function ForumApp() {
       {loading ? (
         <p>Loading threads...</p> // Display loading message when threads are being fetched
       ) : (
-        <ThreadList threads={threads} />
+        <ThreadList threads={threads} setLoading={setLoading}/>
       )}
     </div>
   );
