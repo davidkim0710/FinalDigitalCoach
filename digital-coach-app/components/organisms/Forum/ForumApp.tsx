@@ -29,9 +29,7 @@ function ForumApp() {
       setLoading(true);
     } catch (error) {
       console.error('Error creating or fetching threads:', error);
-    } finally {
-      setLoading(false); 
-    }
+    } 
   };
 
   return (
