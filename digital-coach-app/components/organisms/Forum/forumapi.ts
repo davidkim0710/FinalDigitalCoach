@@ -1,11 +1,13 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   DocumentReference,
   Firestore,
   getDocs,
   getFirestore,
   query,
+  updateDoc,
 } from "firebase/firestore";
 
 class ForumService {
@@ -52,6 +54,16 @@ class ForumService {
     };
 
     return addDoc(postsCollectionRef, newPost);
+  }
+
+  async editThread(threadId, newData) {
+    const threadRef = collection(this.firestore, "threads").doc(threadId);
+    return updateDoc(threadRef, newData);
+  }
+
+  async deleteThread(threadId) {
+    const threadRef = collection(this.firestore, "threads").doc(threadId);
+    return deleteDoc(threadRef);
   }
 }
 
