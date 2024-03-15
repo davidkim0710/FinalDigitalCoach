@@ -27,9 +27,6 @@ function ForumApp() {
     try {
       await ForumService.createThread(title, content);
       setLoading(true);
-      const threadsData = await ForumService.getAllThreads();
-      const threadsArray = await threadsData.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setThreads(threadsArray);
     } catch (error) {
       console.error('Error creating or fetching threads:', error);
     } finally {
