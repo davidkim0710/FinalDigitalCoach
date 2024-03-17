@@ -14,8 +14,7 @@ function ThreadList({ threads, setLoading }) {
   const handleEditSubmit = async (title, content) => {
     try {
       setLoading(true);
-      const newData = { title, content };
-      await ForumService.editThread(editThread, newData);
+      await ForumService.editThread(editThread, title, content);
       // Reset the editThread state to exit the edit mode
       setEditThread(null);
     } catch (error) {
