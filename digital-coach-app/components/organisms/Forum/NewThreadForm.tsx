@@ -24,16 +24,19 @@ function NewThreadForm({ onSubmit }) {
       <Card title = "Create New Thread">
         <TextField
           type='text'
-          label='Title: '
+          label='Title '
           value={title}
           required
           onChange={(e) => setTitle(e.target.value)}
         />
         <br />
-        <div>
-          <label>Content:</label>
-          <textarea value={content} onChange={(e) => setContent(e.target.value)} required />
-        </div>
+        <TextField
+          type='text'
+          label='Thread Content '
+          value={content}
+          required
+          onChange={(e) => setContent(e.target.value)}
+        />
         <Button
           variant='contained'
           type='submit'
