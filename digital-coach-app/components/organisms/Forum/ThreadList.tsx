@@ -40,8 +40,8 @@ function ThreadList({ threads, setLoading }) {
     <div>
       <h2>Threads</h2>
       {threads.map(thread => (
-        <div key={thread.id}>
-          {editThreadId === thread.id ? (
+        <div key={thread.threadId}>
+          {editThreadId === thread.threadId ? (
             // Render EditThreadForm if editThread state matches the current thread
             <EditThreadForm
               initialTitle={thread.title}
@@ -54,7 +54,7 @@ function ThreadList({ threads, setLoading }) {
               <h3>{thread.title}</h3>
               <p>{thread.content}</p>
               <Button onClick={() => handleEdit(thread.id)}>Edit</Button>
-              <Button onClick={() => handleDelete(thread.id)}>Delete</Button>
+              <Button onClick={() => handleDelete(thread.threadId)}>Delete</Button>
             </>
           )}
         </div>
