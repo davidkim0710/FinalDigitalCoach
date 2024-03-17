@@ -35,22 +35,14 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit }) {
             onChange={(e) => setContent(e.target.value)}
           />
           <br />
-        <div>
-          <label>Title:</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
-        </div>
-        <div>
-          <label>Content:</label>
-          <textarea value={content} onChange={(e) => setContent(e.target.value)} required />
-        </div>
-        <Button
-            variant='contained'
-            type='submit'
-            sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
-            onClick = {handleSubmit}>
-            Submit
-          </Button>
-          </FormControl>
+          <Button
+              variant='contained'
+              type='submit'
+              sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
+              onClick = {handleSubmit}>
+              Submit
+            </Button>
+        </FormControl>
       </Card>
     </form>
   );
