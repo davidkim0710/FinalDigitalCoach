@@ -88,12 +88,6 @@ export default function BasicInfoForm({ userId }: userInfo) {
         />
         <br />
         <div>
-          <Button
-            variant='contained'
-            type='submit'
-            sx={{ maxWidth: '30%', backgroundColor: '#023047' }}>
-            Create Question Set
-          </Button>
           <FormControlLabel
             control={
               <Checkbox
@@ -106,6 +100,12 @@ export default function BasicInfoForm({ userId }: userInfo) {
             }
             label='Create Interview Set with this Question Set'
           />
+          <Button
+            variant='contained'
+            type='submit'
+            sx={{ maxWidth: '30%', backgroundColor: '#023047' }}>
+            Create Question Set
+          </Button>
         </div>
       </FormControl>
     </form>
