@@ -3,9 +3,7 @@ import Card from '@App/components/atoms/Card';
 import {
   TextField,
   FormControl,
-  Button,
-  FormControlLabel,
-  Checkbox,
+  Button
 } from '@mui/material';
 
 function NewThreadForm({ onSubmit }) {
