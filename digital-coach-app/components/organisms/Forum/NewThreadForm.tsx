@@ -27,7 +27,7 @@ function NewThreadForm({ onSubmit }) {
           label='Title: '
           value={title}
           required
-          onChange={(e) => setTitle(e.target.value)
+          onChange={(e) => setTitle(e.target.value)}
         />
         <br />
         <div>
