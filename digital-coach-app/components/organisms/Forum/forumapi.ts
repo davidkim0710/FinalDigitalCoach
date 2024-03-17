@@ -4,6 +4,7 @@ import {
   deleteDoc,
   DocumentReference,
   Firestore,
+  doc,
   getDoc,
   getDocs,
   getFirestore,
