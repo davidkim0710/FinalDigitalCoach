@@ -60,11 +60,10 @@ function ForumApp() {
             required
             onChange={handleSearchChange}
       />
+      <br />
       {isFormOpen ? (
         <NewThreadForm onSubmit={handleNewThread} onClose={() => setIsFormOpen(false)} />
       ) : (
-        <br />
-        <br />
         <Button
           variant='contained'
           type='submit'
