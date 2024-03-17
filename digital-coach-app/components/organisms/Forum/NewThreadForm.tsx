@@ -22,28 +22,31 @@ function NewThreadForm({ onSubmit }) {
   return (
     <form onSubmit={handleSubmit}>
       <Card title = "Create New Thread">
-        <TextField
-          type='text'
-          label='Title '
-          value={title}
-          required
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <br />
-        <TextField
-          type='text'
-          label='Thread Content '
-          value={content}
-          required
-          onChange={(e) => setContent(e.target.value)}
-        />
-        <Button
-          variant='contained'
-          type='submit'
-          sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
-          onClick = {handleSubmit}>
-          Submit
-        </Button>
+        <FormControl fullWidth>
+          <TextField
+            type='text'
+            label='Title '
+            value={title}
+            required
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <br />
+          <TextField
+            type='text'
+            label='Thread Content '
+            value={content}
+            required
+            onChange={(e) => setContent(e.target.value)}
+          />
+          <br />
+          <Button
+            variant='contained'
+            type='submit'
+            sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
+            onClick = {handleSubmit}>
+            Submit
+          </Button>
+        </FormControl>
       </Card>
     </form>
   );
