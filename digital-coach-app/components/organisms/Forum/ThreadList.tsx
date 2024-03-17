@@ -64,8 +64,9 @@ function ThreadList({ threads, setLoading }) {
                   Edit
                 </Button>
                 <Button onClick={() => handleDelete(thread.id)}>Delete</Button>
+                
+              </Card>
               </>
-          </Card>
           )}
         </div>
       ))}
