@@ -45,7 +45,13 @@ function ForumApp() {
       {isFormOpen ? (
         <NewThreadForm onSubmit={handleNewThread} onClose={() => setIsFormOpen(false)} />
       ) : (
-        <button onClick={() => setIsFormOpen(true)}>Create New Thread</button>
+        <Button
+          variant='contained'
+          type='submit'
+          sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
+          onClick={() => setIsFormOpen(true)
+          Create New Thread
+        </Button>
       )}
       {loading ? (
         <p>Loading threads...</p>
