@@ -54,7 +54,7 @@ function ThreadList({ threads, setLoading }) {
           ) : (
             // Render thread details with edit and delete buttons
             <>
-              <Card title={thread.title>
+              <Card title={thread.title}>
                 <p>{thread.content}</p>
                 <Button
                   variant='contained'
