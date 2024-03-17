@@ -54,12 +54,12 @@ function ForumApp() {
   return (
     <div>
       <h1>Discussion Forum</h1>
-      <TextField
-        label="Search Threads"
-        variant="outlined"
-        value={searchQuery}
-        onChange={handleSearchChange}
-        sx={{ marginBottom: '16px' }}
+       <TextField
+            type='text'
+            label='Search for a Thread '
+            value={searchQuery}
+            required
+            onChange={handleSearchChange}
       />
       {isFormOpen ? (
         <NewThreadForm onSubmit={handleNewThread} onClose={() => setIsFormOpen(false)} />
