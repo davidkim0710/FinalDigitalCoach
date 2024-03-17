@@ -22,10 +22,14 @@ function NewThreadForm({ onSubmit }) {
   return (
     <form onSubmit={handleSubmit}>
       <Card title = "Create New Thread">
-        <div>
-          <label>Title:</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
-        </div>
+        <TextField
+          type='text'
+          label='Title: '
+          value={title}
+          required
+          onChange={(e) => setTitle(e.target.value)
+        />
+        <br />
         <div>
           <label>Content:</label>
           <textarea value={content} onChange={(e) => setContent(e.target.value)} required />
