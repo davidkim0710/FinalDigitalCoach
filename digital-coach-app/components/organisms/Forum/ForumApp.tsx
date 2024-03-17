@@ -53,7 +53,6 @@ function ForumApp() {
 
   return (
     <div>
-      <h1>Discussion Forum</h1>
        <TextField
             type='text'
             label='Search for a Thread '
