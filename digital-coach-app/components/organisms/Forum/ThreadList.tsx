@@ -1,16 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ForumService from './forumapi'; // Import ForumService
 import Button from '@App/components/atoms/Button';
+import EditThreadForm from './EditThreadForm'; // Import EditThreadForm
 
 function ThreadList({ threads, setLoading }) {
-  const handleEdit = async (threadId) => {
-    const newData = {
-      // Provide updated data for the thread
-    };
+  const [editThread, setEditThread] = useState(null);
+
+  const handleEdit = (threadId) => {
+    // Set the thread to be edited
+    setEditThread(threadId);
+  };
+
+  const handleEditSubmit = async (title, content) => {
     try {
-      await ForumService.editThread(threadId, newData);
+      setLoading(true);
+      const newData = { title, content };
+      await ForumService.editThread(editThread, newData);
+      // Reset the editThread state to exit the edit mode
+      setEditThread(null);
     } catch (error) {
       console.error('Error editing thread:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -20,6 +31,8 @@ function ThreadList({ threads, setLoading }) {
       await ForumService.deleteThread(threadId);
     } catch (error) {
       console.error('Error deleting thread:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -28,10 +41,22 @@ function ThreadList({ threads, setLoading }) {
       <h2>Threads</h2>
       {threads.map(thread => (
         <div key={thread.id}>
-          <h3>{thread.title}</h3>
-          <p>{thread.content}</p>
-          <Button onClick={() => handleEdit(thread.id)}>Edit</Button>
-          <Button onClick={() => handleDelete(thread.id)}>Delete</Button>
+          {editThread === thread.id ? (
+            // Render EditThreadForm if editThread state matches the current thread
+            <EditThreadForm
+              initialTitle={thread.title}
+              initialContent={thread.content}
+              onSubmit={(title, content) => handleEditSubmit(title, content)}
+            />
+          ) : (
+            // Render thread details with edit and delete buttons
+            <>
+              <h3>{thread.title}</h3>
+              <p>{thread.content}</p>
+              <Button onClick={() => handleEdit(thread.id)}>Edit</Button>
+              <Button onClick={() => handleDelete(thread.id)}>Delete</Button>
+            </>
+          )}
         </div>
       ))}
     </div>
