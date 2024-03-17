@@ -30,8 +30,8 @@ function ThreadList({ threads, setLoading }) {
   const handleDelete = async (threadId) => {
     try {
       console.log(threadId);
-      setLoading(true);
       await ForumService.deleteThread(threadId);
+      setLoading(true);
     } catch (error) {
       console.error('Error deleting thread:', error);
     } finally {
