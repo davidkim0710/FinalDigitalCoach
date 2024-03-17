@@ -62,7 +62,7 @@ class ForumService {
   }
 
   async deleteThread(threadId) {
-    const threadRef = collection(this.firestore, "threads").doc(threadId);
+    const threadRef = collection(this.firestore, "threads", threadId);
     return deleteDoc(threadRef);
   }
 }
