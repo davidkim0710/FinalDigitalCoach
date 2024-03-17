@@ -63,8 +63,13 @@ function ThreadList({ threads, setLoading }) {
                   onClick={() => handleEdit(thread.id)}>
                   Edit
                 </Button>
-                <Button onClick={() => handleDelete(thread.id)}>Delete</Button>
-                
+                <Button
+                  variant='contained'
+                  type='submit'
+                  sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
+                  onClick={() => handleDelete(thread.id)}>
+                  Delete
+                </Button>
               </Card>
               </>
           )}
