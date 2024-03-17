@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import ThreadList from './ThreadList';
 import {
-  Button
+  Button,
+  TextField
 } from '@mui/material';
 import ForumService from './forumapi'; // Import ForumService
 import NewThreadForm from './NewThreadForm';
@@ -10,6 +11,7 @@ function ForumApp() {
   const [threads, setThreads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false); // State to control form visibility
+  const [searchQuery, setSearchQuery] = useState(''); // State to hold the search query
 
   useEffect(() => {
     const fetchThreads = async () => {
@@ -39,9 +41,26 @@ function ForumApp() {
     }
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  // Filter threads based on the search query
+  const filteredThreads = threads.filter(thread =>
+    thread.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    thread.content.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div>
       <h1>Discussion Forum</h1>
+      <TextField
+        label="Search Threads"
+        variant="outlined"
+        value={searchQuery}
+        onChange={handleSearchChange}
+        sx={{ marginBottom: '16px' }}
+      />
       {isFormOpen ? (
         <NewThreadForm onSubmit={handleNewThread} onClose={() => setIsFormOpen(false)} />
       ) : (
@@ -56,7 +75,7 @@ function ForumApp() {
       {loading ? (
         <p>Loading threads...</p>
       ) : (
-        <ThreadList threads={threads} setLoading={setLoading} />
+        <ThreadList threads={filteredThreads} setLoading={setLoading} />
       )}
     </div>
   );
