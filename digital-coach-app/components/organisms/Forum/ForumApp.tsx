@@ -27,8 +27,8 @@ function ForumApp() {
   const handleNewThread = async (title, content) => {
     try {
       setLoading(true);
-      await ForumService.createThread(title, content);
       setIsFormOpen(false); // Close the form after submitting
+      await ForumService.createThread(title, content);
     } catch (error) {
       console.error('Error creating or fetching threads:', error);
     } finally {
