@@ -5,7 +5,7 @@ import {
 } from '@mui/material';
 import ForumService from './forumapi'; // Import ForumService
 import NewThreadForm from './NewThreadForm';
-import { useAuth } from '@app/lib/auth/AuthContext'; // Import the authentication context
+import { useAuth } from '@App/lib/auth/AuthContext'; // Import the authentication context
 
 function ForumApp() {
   const [threads, setThreads] = useState([]);
