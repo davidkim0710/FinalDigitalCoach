@@ -4,6 +4,7 @@ import {
   FormControl,
   Button
 } from '@mui/material';
+import Card from '@App/components/atoms/Card';
 
 function EditThreadForm({ initialTitle, initialContent, onSubmit }) {
   const [title, setTitle] = useState(initialTitle);
@@ -16,16 +17,17 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Edit Thread</h2>
-      <div>
-        <label>Title:</label>
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
-      </div>
-      <div>
-        <label>Content:</label>
-        <textarea value={content} onChange={(e) => setContent(e.target.value)} required />
-      </div>
-      <Button type="submit">Submit</Button>
+      <Card title = "Edit Thread">
+        <div>
+          <label>Title:</label>
+          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+        </div>
+        <div>
+          <label>Content:</label>
+          <textarea value={content} onChange={(e) => setContent(e.target.value)} required />
+        </div>
+        <Button type="submit">Submit</Button>
+      </Card>
     </form>
   );
 }
