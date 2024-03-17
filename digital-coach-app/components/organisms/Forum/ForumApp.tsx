@@ -49,7 +49,7 @@ function ForumApp() {
           variant='contained'
           type='submit'
           sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
-          onClick={() => setIsFormOpen(true)}
+          onClick={() => setIsFormOpen(true)}>
           Create New Thread
         </Button>
       )}
