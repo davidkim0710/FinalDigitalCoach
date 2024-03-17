@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import ForumService from './forumapi'; // Import ForumService
-import Button from '@App/components/atoms/Button';
+import {
+  Button
+} from '@mui/material';
 import EditThreadForm from './EditThreadForm'; // Import EditThreadForm
 
 function ThreadList({ threads, setLoading }) {
