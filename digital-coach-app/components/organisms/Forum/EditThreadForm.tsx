@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import Button from '../../atoms/Button';
+import {
+  TextField,
+  FormControl,
+  Button
+} from '@mui/material';
 
 function EditThreadForm({ initialTitle, initialContent, onSubmit }) {
   const [title, setTitle] = useState(initialTitle);
