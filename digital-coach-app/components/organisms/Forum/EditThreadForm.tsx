@@ -18,6 +18,23 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit }) {
   return (
     <form onSubmit={handleSubmit}>
       <Card title = "Edit Thread">
+        <FormControl fullWidth>
+          <TextField
+            type='text'
+            label='Title '
+            value={title}
+            required
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <br />
+          <TextField
+            type='text'
+            label='Thread Content '
+            value={content}
+            required
+            onChange={(e) => setContent(e.target.value)}
+          />
+          <br />
         <div>
           <label>Title:</label>
           <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
@@ -33,6 +50,7 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit }) {
             onClick = {handleSubmit}>
             Submit
           </Button>
+          </FormControl>
       </Card>
     </form>
   );
