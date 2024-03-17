@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import ThreadList from './ThreadList';
-import NewThreadForm from './NewThreadForm';
 import ForumService from './forumapi'; // Import ForumService
+import NewThreadForm from './NewThreadForm';
 
 function ForumApp() {
   const [threads, setThreads] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
+  const [isFormOpen, setIsFormOpen] = useState(false); // State to control form visibility
 
   useEffect(() => {
     const fetchThreads = async () => {
@@ -16,7 +17,7 @@ function ForumApp() {
       } catch (error) {
         console.error('Error fetching threads:', error);
       } finally {
-        setLoading(false); // Set loading to false when fetching is complete
+        setLoading(false);
       }
     };
 
@@ -27,19 +28,26 @@ function ForumApp() {
     try {
       setLoading(true);
       await ForumService.createThread(title, content);
+      setIsFormOpen(false); // Close the form after submitting
     } catch (error) {
       console.error('Error creating or fetching threads:', error);
-    } 
+    } finally {
+      setLoading(true);
+    }
   };
 
   return (
     <div>
       <h1>Discussion Forum</h1>
-      <NewThreadForm onSubmit={handleNewThread} />
-      {loading ? (
-        <p>Loading threads...</p> // Display loading message when threads are being fetched
+      {isFormOpen ? (
+        <NewThreadForm onSubmit={handleNewThread} onClose={() => setIsFormOpen(false)} />
       ) : (
-        <ThreadList threads={threads} setLoading={setLoading}/>
+        <button onClick={() => setIsFormOpen(true)}>Create New Thread</button>
+      )}
+      {loading ? (
+        <p>Loading threads...</p>
+      ) : (
+        <ThreadList threads={threads} setLoading={setLoading} />
       )}
     </div>
   );
