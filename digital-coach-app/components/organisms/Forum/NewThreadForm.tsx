@@ -15,7 +15,7 @@ function NewThreadForm({ onSubmit }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Card title = "Create New Thread>
+      <Card title = "Create New Thread">
         <div>
           <label>Title:</label>
           <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
