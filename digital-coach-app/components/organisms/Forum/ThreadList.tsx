@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Card from '@App/components/atoms/Card';
 import ForumService from './forumapi'; // Import ForumService
 import {
   Button
@@ -53,17 +54,18 @@ function ThreadList({ threads, setLoading }) {
           ) : (
             // Render thread details with edit and delete buttons
             <>
-              <h3>{thread.title}</h3>
-              <p>{thread.content}</p>
-              <Button
-                variant='contained'
-                type='submit'
-                sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
-                onClick={() => handleEdit(thread.id)}>
-                Edit
-              </Button>
-              <Button onClick={() => handleDelete(thread.id)}>Delete</Button>
-            </>
+              <Card title={thread.title>
+                <p>{thread.content}</p>
+                <Button
+                  variant='contained'
+                  type='submit'
+                  sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
+                  onClick={() => handleEdit(thread.id)}>
+                  Edit
+                </Button>
+                <Button onClick={() => handleDelete(thread.id)}>Delete</Button>
+              </>
+          </Card>
           )}
         </div>
       ))}
