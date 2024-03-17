@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Card from '@App/components/atoms/Card';
 import Button from '../../atoms/Button';
 
 function NewThreadForm({ onSubmit }) {
