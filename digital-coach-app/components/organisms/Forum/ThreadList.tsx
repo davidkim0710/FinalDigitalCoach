@@ -63,6 +63,7 @@ function ThreadList({ threads, setLoading }) {
                   onClick={() => handleEdit(thread.id)}>
                   Edit
                 </Button>
+                </br>
                 <Button
                   variant='contained'
                   type='submit'
