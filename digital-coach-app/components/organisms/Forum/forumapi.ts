@@ -56,8 +56,13 @@ class ForumService {
     return addDoc(postsCollectionRef, newPost);
   }
 
-  async editThread(threadId, newData) {
-    const threadRef = collection(this.firestore, "threads").doc(threadId);
+  async editThread(threadId, title, content) {
+    const threadRef = collection(this.firestore, "threads", threadId);
+    const newThread = {
+      title,
+      content,
+      createdAt: new Date(),
+    };
     return updateDoc(threadRef, newData);
   }
 
