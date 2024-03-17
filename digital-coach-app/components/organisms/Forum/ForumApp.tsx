@@ -61,6 +61,7 @@ function ForumApp() {
             onChange={handleSearchChange}
       />
       <br />
+      <br />
       {isFormOpen ? (
         <NewThreadForm onSubmit={handleNewThread} onClose={() => setIsFormOpen(false)} />
       ) : (
