@@ -68,6 +68,7 @@ class ForumService {
 
 
   async deleteThread(threadId) {
+    console.log(threadId);
     const threadRef = this.getDocRef(threadId); // Construct a reference to the specific thread document
     const threadSnapshot = await getDoc(threadRef);
   
