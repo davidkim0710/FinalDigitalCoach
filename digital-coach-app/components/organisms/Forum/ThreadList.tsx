@@ -55,7 +55,13 @@ function ThreadList({ threads, setLoading }) {
             <>
               <h3>{thread.title}</h3>
               <p>{thread.content}</p>
-              <Button onClick={() => handleEdit(thread.id)}>Edit</Button>
+              <Button
+                variant='contained'
+                type='submit'
+                sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
+                onClick={() => handleEdit(thread.id)>
+                Edit
+              </Button>
               <Button onClick={() => handleDelete(thread.id)}>Delete</Button>
             </>
           )}
