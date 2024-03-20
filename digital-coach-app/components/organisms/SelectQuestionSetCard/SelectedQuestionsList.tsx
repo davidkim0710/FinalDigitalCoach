@@ -34,6 +34,7 @@ const sampleSubjects = [
 export default function SelectedQuestionsList(props: propsInfo) {
   const [userQuestionSets, setUserQuestionSets] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+   const { currentUser } = useAuthContext();
 
   useEffect(() => {
     async function fetchUserQuestionSets() {
