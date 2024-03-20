@@ -43,7 +43,7 @@ export default function SelectedQuestionsList(props: propsInfo) {
       });
       setUserQuestionSets(userQuestionsSets);
     }
-    fetchUserQuestionSets();
+    await fetchUserQuestionSets();
   }, []);
 
   useEffect(() => {
