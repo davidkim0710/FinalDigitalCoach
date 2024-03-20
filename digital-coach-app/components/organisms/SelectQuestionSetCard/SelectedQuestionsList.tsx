@@ -55,6 +55,7 @@ export default function SelectedQuestionsList(props: propsInfo) {
     console.log('selectedSet useEffectFired');
     const fetchQuestions = async () => {
       const selectedQuestions: any[] = [];
+      console.log(props.selectedSet.questions.length);
       for (let i = 0; i < props.selectedSet.questions.length; i++) {
         selectedQuestions.push(
           await QuestionService.getById(props.selectedSet.questions[i])
