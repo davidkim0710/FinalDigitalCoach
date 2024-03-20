@@ -6,7 +6,7 @@ import {
   Button
 } from '@mui/material';
 
-function NewThreadForm({ onSubmit }) {
+function NewThreadForm({ onSubmit, onClose }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -19,11 +19,11 @@ function NewThreadForm({ onSubmit }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Card title = "Create New Thread">
+      <Card title="Create New Thread">
         <FormControl fullWidth>
           <TextField
             type='text'
-            label='Title '
+            label='Title'
             value={title}
             required
             onChange={(e) => setTitle(e.target.value)}
@@ -31,7 +31,7 @@ function NewThreadForm({ onSubmit }) {
           <br />
           <TextField
             type='text'
-            label='Thread Content '
+            label='Thread Content'
             value={content}
             required
             onChange={(e) => setContent(e.target.value)}
@@ -40,9 +40,16 @@ function NewThreadForm({ onSubmit }) {
           <Button
             variant='contained'
             type='submit'
-            sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
-            onClick = {handleSubmit}>
+            sx={{ marginRight: '10px', backgroundColor: '#023047' }}
+          >
             Submit
+          </Button>
+          <Button
+            variant='contained'
+            color='error'
+            onClick={onClose} // Call onClose function when the button is clicked
+          >
+            Exit
           </Button>
         </FormControl>
       </Card>
