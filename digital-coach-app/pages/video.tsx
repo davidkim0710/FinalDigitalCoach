@@ -167,7 +167,17 @@ export default function VideoPage() {
     } catch (e) {
     }
   };
-
+  useEffect(() => {
+    async function fetchUserQuestionSets() {
+      const userQuestionsSets: any[] = (
+        await QuestionSetsService.getQuestionSetByUserId(currentUser!.id)
+      ).docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+      });
+      setUserQuestionSets(userQuestionsSets);
+    }
+    fetchUserQuestionSets();
+  }, []);
   useEffect(() => {
     if (videoRef.current && previewStream) {
       videoRef.current.srcObject = previewStream;
