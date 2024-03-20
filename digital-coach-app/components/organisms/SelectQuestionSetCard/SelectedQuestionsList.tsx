@@ -38,7 +38,10 @@ export default function SelectedQuestionsList(props: propsInfo) {
   useEffect(() => {
     async function fetchUserQuestionSets() {
       const userQuestionsSets: any[] = (
-        await QuestionSetsService.getFeaturedQuestionSets()
+        await QuestionSetsService.getQuestionSetByUserId(currentUser!.id)
+      ).docs.map((doc) => {
+        return { id: doc.id, ...doc.data() };
+      });
       ).docs.map((doc) => {
         return { id: doc.id, ...doc.data() };
       });
