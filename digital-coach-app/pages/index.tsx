@@ -32,7 +32,6 @@ const Home: NextPage = () => {
     isLoading: isLoadingAverageScore,
     isFetching: isFetchingAverageScore,
   } = useGetUserAverageScore(currentUser?.id);
-  console.log(questionSets);
 
   const [tip, setTips] = useState("");
 
