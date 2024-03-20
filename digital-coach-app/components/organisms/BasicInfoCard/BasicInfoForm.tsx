@@ -41,7 +41,7 @@ export default function BasicInfoForm({ userId }: userInfo) {
       isFeatured: false,
       createdBy: userId,
     };
-    const thisQuestionSet = QuestionSetsService.createQuestionSet(
+    const thisQuestionSet = await QuestionSetsService.createQuestionSet(
       questionSet
     );
     // A reference to the questionSet is stored in the newly created interviewSet
@@ -53,7 +53,7 @@ export default function BasicInfoForm({ userId }: userInfo) {
         questionSetRef: thisQuestionSet.id,
       };
       console.log('Calling create function in BasicInfoForm');
-      InterviewSetsService.create(userId, interviewSet);
+      await InterviewSetsService.create(userId, interviewSet);
     }
     location.reload();
   };
