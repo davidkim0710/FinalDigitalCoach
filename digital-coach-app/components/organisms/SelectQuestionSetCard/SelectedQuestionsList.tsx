@@ -44,6 +44,7 @@ export default function SelectedQuestionsList(props: propsInfo) {
       });
       setUserQuestionSets(userQuestionsSets);
     }
+    console.log(userQuestionSets);
     fetchUserQuestionSets();
   }, []);
 
