@@ -44,6 +44,7 @@ export default function BasicInfoForm({ userId }: userInfo) {
     const thisQuestionSet = await QuestionSetsService.createQuestionSet(
       questionSet
     );
+    console.log("hi");
     // A reference to the questionSet is stored in the newly created interviewSet
     if (makeInterview) {
       const interviewSet = {
