@@ -8,7 +8,6 @@ import styles from '@App/styles/VideoPage.module.scss';
 import axios from 'axios';
 import SelectQuestionSetCard from '@App/components/organisms/SelectQuestionSetCard';
 import CircularProgressWithLabel from '@App/components/organisms/CircularProgressWithLabel';
-import QuestionSetsService from '@App/lib/questionSets/QuestionSetsService';
 import InterviewService from '@App/lib/interview/InterviewService';
 import useAuthContext from '@App/lib/auth/AuthContext';
 import { IBaseInterview } from '@App/lib/interview/models';
@@ -168,17 +167,6 @@ export default function VideoPage() {
     } catch (e) {
     }
   };
-  useEffect(() => {
-    async function fetchUserQuestionSets() {
-      const userQuestionsSets: any[] = (
-        await QuestionSetsService.getQuestionSetByUserId(currentUser!.id)
-      ).docs.map((doc) => {
-        return { id: doc.id, ...doc.data() };
-      });
-      setUserQuestionSets(userQuestionsSets);
-    }
-    fetchUserQuestionSets();
-  }, []);
   useEffect(() => {
     if (videoRef.current && previewStream) {
       videoRef.current.srcObject = previewStream;
