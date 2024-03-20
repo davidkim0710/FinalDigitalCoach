@@ -8,6 +8,7 @@ import EditThreadForm from './EditThreadForm'; // Import EditThreadForm
 
 function ThreadList({ threads, setLoading }) {
   const [editThreadId, setEditThreadId] = useState(null);
+  const [isFormOpen, setIsFormOpen] = useState(false); // State to control form visibility
 
   const handleEdit = (threadId) => {
     // Set the thread to be edited
