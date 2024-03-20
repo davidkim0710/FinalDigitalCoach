@@ -51,6 +51,7 @@ function ThreadList({ threads, setLoading }) {
               initialTitle={thread.title}
               initialContent={thread.content}
               onSubmit={(title, content) => handleEditSubmit(thread.id, title, content)}
+              onClose={() => setIsFormOpen(false)
             />
           ) : (
             // Render thread details with edit and delete buttons
