@@ -42,9 +42,6 @@ export default function SelectedQuestionsList(props: propsInfo) {
       ).docs.map((doc) => {
         return { id: doc.id, ...doc.data() };
       });
-      ).docs.map((doc) => {
-        return { id: doc.id, ...doc.data() };
-      });
       setUserQuestionSets(userQuestionsSets);
     }
     console.log(userQuestionSets);
