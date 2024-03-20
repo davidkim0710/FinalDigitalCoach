@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import Card from '@App/components/atoms/Card';
 
-function EditThreadForm({ initialTitle, initialContent, onSubmit }) {
+function EditThreadForm({ initialTitle, initialContent, onSubmit, onClose }) {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
 
