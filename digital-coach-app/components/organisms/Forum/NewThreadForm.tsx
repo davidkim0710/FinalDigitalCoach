@@ -44,10 +44,12 @@ function NewThreadForm({ onSubmit, onClose }) {
           >
             Submit
           </Button>
+          <br />
           <Button
             variant='contained'
             color='error'
-            onClick={onClose} // Call onClose function when the button is clicked
+            sx={{ marginRight: '10px' }}
+            onClick={onClose}
           >
             Exit
           </Button>
