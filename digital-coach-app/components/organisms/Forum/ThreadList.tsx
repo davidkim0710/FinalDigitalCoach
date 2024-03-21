@@ -30,12 +30,11 @@ function ThreadList({ threads, setLoading }) {
       console.log(threadId);
       setLoading2(true);
       await ForumService.deleteThread(threadId);
-    } catch (error) {
-      console.error('Error deleting thread:', error);
-    } finally {
       setLoading(true);
       setLoading2(false);
-    }
+    } catch (error) {
+      console.error('Error deleting thread:', error);
+    } 
   };
 
   const handleExitEdit = () => {
