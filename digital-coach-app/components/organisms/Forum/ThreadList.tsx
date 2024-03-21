@@ -8,7 +8,6 @@ import EditThreadForm from './EditThreadForm'; // Import EditThreadForm
 
 function ThreadList({ threads, setLoading }) {
   const [editThreadId, setEditThreadId] = useState(null);
-  const [isFormOpen, setIsFormOpen] = useState(false); // State to control form visibility
 
   const handleEdit = (threadId) => {
     // Set the thread to be edited
@@ -18,7 +17,6 @@ function ThreadList({ threads, setLoading }) {
   const handleEditSubmit = async (threadId, title, content) => {
     try {
       setLoading(true);
-      setIsFormOpen(false); // Close the form after submitting
       await ForumService.editThread(threadId, { title, content });
       // Reset the editThread state to exit the edit mode
       setEditThreadId(null);
@@ -53,7 +51,6 @@ function ThreadList({ threads, setLoading }) {
               initialTitle={thread.title}
               initialContent={thread.content}
               onSubmit={(title, content) => handleEditSubmit(thread.id, title, content)}
-              onClose={() => setIsFormOpen(false)}
             />
           ) : (
             // Render thread details with edit and delete buttons
