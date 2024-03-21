@@ -24,6 +24,9 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit, onExit }) {
             label='Title'
             value={title}
             required
+            inputProps={{ minLength: 1,
+              maxLength: 40,
+            }}
             onChange={(e) => setTitle(e.target.value)}
           />
           <br />
@@ -32,6 +35,9 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit, onExit }) {
             label='Thread Content'
             value={content}
             required
+            inputProps={{ minLength: 1,
+              maxLength: 1000,
+            }}
             onChange={(e) => setContent(e.target.value)}
           />
           <br />
