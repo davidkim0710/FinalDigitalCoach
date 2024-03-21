@@ -33,8 +33,8 @@ function ThreadList({ threads, setLoading }) {
     } catch (error) {
       console.error('Error deleting thread:', error);
     } finally {
-      setLoading2(false);
       setLoading(true);
+      setLoading2(false);
     }
   };
 
