@@ -57,6 +57,9 @@ function ForumApp() {
             label='Search for a Thread '
             value={searchQuery}
             required
+            inputProps={{
+              maxLength: 50,
+            }}
             onChange={handleSearchChange}
       />
       <br />
