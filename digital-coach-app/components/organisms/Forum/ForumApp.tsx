@@ -10,6 +10,7 @@ import NewThreadForm from './NewThreadForm';
 function ForumApp() {
   const [threads, setThreads] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loading2, setLoading2] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false); // State to control form visibility
   const [searchQuery, setSearchQuery] = useState(''); // State to hold the search query
 
@@ -73,10 +74,10 @@ function ForumApp() {
           Create New Thread
         </Button>
       )}
-      {loading ? (
+      {loading || loading2 ? (
         <p>Loading threads...</p>
       ) : (
-        <ThreadList threads={filteredThreads} setLoading={setLoading} />
+        <ThreadList threads={filteredThreads} setLoading={setLoading} setLoading2={setLoading2} />
       )}
     </div>
   );
