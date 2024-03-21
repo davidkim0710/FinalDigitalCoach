@@ -21,11 +21,10 @@ function ForumApp() {
         const threadsArray = await threadsData.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setThreads(threadsArray);
         console.log(threads);
+        setLoading(false);
       } catch (error) {
         console.error('Error fetching threads:', error);
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     fetchThreads();
