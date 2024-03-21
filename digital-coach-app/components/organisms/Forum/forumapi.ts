@@ -75,9 +75,7 @@ class ForumService {
   
     if (!threadSnapshot.exists()) throw new Error("Error deleting thread: Thread not found!");
   
-    await deleteDoc(threadRef);
-  
-    return threadSnapshot;
+    return deleteDoc(threadRef);
   }
 
 }
