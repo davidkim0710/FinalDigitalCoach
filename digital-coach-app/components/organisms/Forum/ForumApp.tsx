@@ -45,16 +45,6 @@ function ForumApp() {
     setSearchQuery(event.target.value);
   };
 
-  const handleThreadDelete = async (threadId) => {
-    try {
-      setDeletingThread(true); // Set deletingThread to true before deleting
-      await ForumService.deleteThread(threadId);
-    } catch (error) {
-      console.error('Error deleting thread:', error);
-    } finally {
-      setDeletingThread(false); // Set deletingThread to false after deleting
-    }
-  };
 
   const filteredThreads = threads.filter(thread =>
     thread.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -83,7 +73,7 @@ function ForumApp() {
           Create New Thread
         </Button>
       )}
-      {loading || deletingThread ? ( // Check if either loading or deletingThread is true
+      {loading ? ( // Check if either loading or deletingThread is true
         <p>Loading threads...</p>
       ) : (
         <ThreadList threads={filteredThreads} setLoading={setLoading} handleThreadDelete={handleThreadDelete} />
