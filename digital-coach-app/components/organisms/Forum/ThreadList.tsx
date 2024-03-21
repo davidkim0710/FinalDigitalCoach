@@ -4,7 +4,7 @@ import ForumService from './forumapi'; // Import ForumService
 import { Button } from '@mui/material';
 import EditThreadForm from './EditThreadForm'; // Import EditThreadForm
 
-function ThreadList({ threads, setLoading }) {
+function ThreadList({ threads, setLoading, setLoading2 }) {
   const [editThreadId, setEditThreadId] = useState(null);
 
   const handleEdit = (threadId) => {
@@ -28,12 +28,14 @@ function ThreadList({ threads, setLoading }) {
   const handleDelete = async (threadId) => {
     try {
       console.log(threadId);
-      setLoading(true); // Set loading to true before deleting
+      setLoading2(true);
       await ForumService.deleteThread(threadId);
+      // Update the threads state by filtering out the deleted thread
+      setThreads(threads.filter(thread => thread.id !== threadId));
     } catch (error) {
       console.error('Error deleting thread:', error);
     } finally {
-      setLoading(false); // Set loading to false after deleting
+      setLoading2(false);
     }
   };
 
