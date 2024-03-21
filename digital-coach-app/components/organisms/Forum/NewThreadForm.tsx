@@ -26,6 +26,7 @@ function NewThreadForm({ onSubmit, onClose }) {
             label='Title'
             value={title}
             required
+            inputProps={{ minLength: 1, maxLength: 50 }} // Define min and max length
             onChange={(e) => setTitle(e.target.value)}
           />
           <br />
