@@ -12,7 +12,6 @@ function ForumApp() {
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false); // State to control form visibility
   const [searchQuery, setSearchQuery] = useState(''); // State to hold the search query
-  const [deletingThread, setDeletingThread] = useState(false); // State to track thread deletion operation
 
   useEffect(() => {
     const fetchThreads = async () => {
@@ -27,7 +26,7 @@ function ForumApp() {
     };
 
     fetchThreads();
-  }, [loading, deletingThread]); // Add deletingThread to the dependency array
+  }, [loading]); // Add deletingThread to the dependency array
 
   const handleNewThread = async (title, content) => {
     try {
