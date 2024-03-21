@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import Card from '@App/components/atoms/Card';
 
-function EditThreadForm({ initialTitle, initialContent, onSubmit, onClose }) {
+function EditThreadForm({ initialTitle, initialContent, onSubmit }) {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
 
@@ -47,7 +47,6 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit, onClose }) {
             variant='contained'
             color='error'
             sx={{ marginRight: '10px' }}
-            onClick={onClose}
           >
             Exit
           </Button>
