@@ -42,14 +42,6 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit }) {
               onClick = {handleSubmit}>
               Submit
             </Button>
-          <br />
-          <Button
-            variant='contained'
-            color='error'
-            sx={{ marginRight: '10px' }}
-          >
-            Exit
-          </Button>
         </FormControl>
       </Card>
     </form>
