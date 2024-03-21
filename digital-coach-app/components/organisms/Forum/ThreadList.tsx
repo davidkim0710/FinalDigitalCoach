@@ -60,7 +60,7 @@ function ThreadList({ threads, setLoading}) {
             <>
               <Card title={thread.title}>
                 <p>{thread.content}</p>
-                <p>{thread.createdAt.toString()}</p>
+                <p>{(new Date(thread.createdAt.seconds * 1000 + thread.createdAt.nanoseconds / 1000000)).toString()}</p>
                 <Button
                   variant='contained'
                   type='submit'
