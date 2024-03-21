@@ -26,8 +26,8 @@ function NewThreadForm({ onSubmit, onClose }) {
             label='Title'
             value={title}
             required
-            inputProps={{
-              maxLength: 25,
+            inputProps={{ minLength: 1,
+              maxLength: 40,
             }}
             onChange={(e) => setTitle(e.target.value)}
           />
@@ -37,6 +37,9 @@ function NewThreadForm({ onSubmit, onClose }) {
             label='Thread Content'
             value={content}
             required
+            inputProps={{ minLength: 1,
+              maxLength: 1000,
+            }}
             onChange={(e) => setContent(e.target.value)}
           />
           <br />
