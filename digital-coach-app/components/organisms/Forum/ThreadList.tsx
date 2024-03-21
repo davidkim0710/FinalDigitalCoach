@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import Card from '@App/components/atoms/Card';
 import ForumService from './forumapi'; // Import ForumService
-import {
-  Button
-} from '@mui/material';
+import { Button } from '@mui/material';
 import EditThreadForm from './EditThreadForm'; // Import EditThreadForm
 
 function ThreadList({ threads, setLoading }) {
@@ -30,7 +28,6 @@ function ThreadList({ threads, setLoading }) {
   const handleDelete = async (threadId) => {
     try {
       console.log(threadId);
-      
       setLoading(true);
       await ForumService.deleteThread(threadId);
     } catch (error) {
@@ -38,6 +35,10 @@ function ThreadList({ threads, setLoading }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleExitEdit = () => {
+    setEditThreadId(null); // Function to exit edit mode
   };
 
   return (
@@ -51,6 +52,7 @@ function ThreadList({ threads, setLoading }) {
               initialTitle={thread.title}
               initialContent={thread.content}
               onSubmit={(title, content) => handleEditSubmit(thread.id, title, content)}
+              onExit={handleExitEdit} // Pass the function to exit edit mode
             />
           ) : (
             // Render thread details with edit and delete buttons
@@ -73,7 +75,7 @@ function ThreadList({ threads, setLoading }) {
                   Delete
                 </Button>
               </Card>
-              </>
+            </>
           )}
         </div>
       ))}
