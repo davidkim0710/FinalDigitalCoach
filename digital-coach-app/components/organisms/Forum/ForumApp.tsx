@@ -26,7 +26,7 @@ function ForumApp() {
     };
 
     fetchThreads();
-  }, [loading]); // Add deletingThread to the dependency array
+  }, [loading]); 
 
   const handleNewThread = async (title, content) => {
     try {
@@ -75,7 +75,7 @@ function ForumApp() {
       {loading ? ( // Check if either loading or deletingThread is true
         <p>Loading threads...</p>
       ) : (
-        <ThreadList threads={filteredThreads} setLoading={setLoading} handleThreadDelete={handleThreadDelete} />
+        <ThreadList threads={filteredThreads} setLoading={setLoading} />
       )}
     </div>
   );
