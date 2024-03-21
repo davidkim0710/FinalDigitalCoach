@@ -71,7 +71,6 @@ class ForumService {
 
   async deleteThread(threadId) {
     const threadRef = doc(this.firestore, "threads", threadId); // Construct a reference to the specific thread document
-    const threadSnapshot = getDoc(threadRef);
   
     if (!threadRef) throw new Error("Error deleting thread: Thread not found!");
   
