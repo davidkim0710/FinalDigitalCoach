@@ -32,7 +32,6 @@ function ThreadList({ threads, setLoading}) {
   } catch (error) {
     console.error('Error deleting thread:', error);
   } finally {
-    setLoading(true); // Only set loading to true after deletion is finished
   }
 };
 
