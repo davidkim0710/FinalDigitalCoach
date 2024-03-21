@@ -10,9 +10,9 @@ import NewThreadForm from './NewThreadForm';
 function ForumApp() {
   const [threads, setThreads] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loading2, setLoading2] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false); // State to control form visibility
   const [searchQuery, setSearchQuery] = useState(''); // State to hold the search query
+  const [deletingThread, setDeletingThread] = useState(false); // State to track thread deletion operation
 
   useEffect(() => {
     const fetchThreads = async () => {
@@ -20,15 +20,14 @@ function ForumApp() {
         const threadsData = await ForumService.getAllThreads();
         const threadsArray = await threadsData.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setThreads(threadsArray);
-        console.log(threads);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching threads:', error);
-      } 
+      }
     };
 
     fetchThreads();
-  }, [loading]);
+  }, [loading, deletingThread]); // Add deletingThread to the dependency array
 
   const handleNewThread = async (title, content) => {
     try {
@@ -38,7 +37,7 @@ function ForumApp() {
     } catch (error) {
       console.error('Error creating or fetching threads:', error);
     } finally {
-      setLoading(true);
+      setLoading(false);
     }
   };
 
@@ -46,7 +45,17 @@ function ForumApp() {
     setSearchQuery(event.target.value);
   };
 
-  // Filter threads based on the search query
+  const handleThreadDelete = async (threadId) => {
+    try {
+      setDeletingThread(true); // Set deletingThread to true before deleting
+      await ForumService.deleteThread(threadId);
+    } catch (error) {
+      console.error('Error deleting thread:', error);
+    } finally {
+      setDeletingThread(false); // Set deletingThread to false after deleting
+    }
+  };
+
   const filteredThreads = threads.filter(thread =>
     thread.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     thread.content.toLowerCase().includes(searchQuery.toLowerCase())
@@ -74,10 +83,10 @@ function ForumApp() {
           Create New Thread
         </Button>
       )}
-      {loading || loading2 ? (
+      {loading || deletingThread ? ( // Check if either loading or deletingThread is true
         <p>Loading threads...</p>
       ) : (
-        <ThreadList threads={filteredThreads} setLoading={setLoading} setLoading2={setLoading2} />
+        <ThreadList threads={filteredThreads} setLoading={setLoading} handleThreadDelete={handleThreadDelete} />
       )}
     </div>
   );
