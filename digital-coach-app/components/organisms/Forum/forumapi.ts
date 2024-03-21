@@ -59,7 +59,7 @@ class ForumService {
   }
 
   async editThread(threadId, title, content) {
-    const threadRef = doc(this.firestore, "threads", threadId); // Construct a reference to the specific thread document
+    const threadRef = doc(collection(this.firestore, "threads"), threadId);
     const newData = {
       title,
       content,
