@@ -15,7 +15,7 @@ function ThreadList({ threads, setLoading }) {
   const handleEditSubmit = async (threadId, title, content) => {
     try {
       setLoading(true);
-      await ForumService.editThread(threadId, title, content );
+      await ForumService.editThread(threadId, title, content);
       // Reset the editThread state to exit the edit mode
       setEditThreadId(null);
     } catch (error) {
@@ -28,13 +28,13 @@ function ThreadList({ threads, setLoading }) {
   const handleDelete = async (threadId) => {
     try {
       console.log(threadId);
-      setLoading2(true);
+      setLoading(true); // Set loading to true before deleting
       await ForumService.deleteThread(threadId);
-      setLoading(true);
-      setLoading2(false);
     } catch (error) {
       console.error('Error deleting thread:', error);
-    } 
+    } finally {
+      setLoading(false); // Set loading to false after deleting
+    }
   };
 
   const handleExitEdit = () => {
