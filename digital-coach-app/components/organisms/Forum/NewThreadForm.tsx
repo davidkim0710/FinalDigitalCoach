@@ -26,7 +26,7 @@ function NewThreadForm({ onSubmit, onClose }) {
             label='Title'
             value={title}
             required
-            maxLength = "50"
+            maxlength = "50"
             onChange={(e) => setTitle(e.target.value)}
           />
           <br />
