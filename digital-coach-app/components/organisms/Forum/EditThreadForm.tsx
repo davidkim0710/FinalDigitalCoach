@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import Card from '@App/components/atoms/Card';
 
-function EditThreadForm({ initialTitle, initialContent, onSubmit }) {
+function EditThreadForm({ initialTitle, initialContent, onSubmit, onClose }) {
   const [title, setTitle] = useState(initialTitle);
   const [content, setContent] = useState(initialContent);
 
@@ -17,11 +17,11 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Card title = "Edit Thread">
+      <Card title="Edit Thread">
         <FormControl fullWidth>
           <TextField
             type='text'
-            label='Title '
+            label='Title'
             value={title}
             required
             onChange={(e) => setTitle(e.target.value)}
@@ -29,19 +29,26 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit }) {
           <br />
           <TextField
             type='text'
-            label='Thread Content '
+            label='Thread Content'
             value={content}
             required
             onChange={(e) => setContent(e.target.value)}
           />
           <br />
           <Button
-              variant='contained'
-              type='submit'
-              sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
-              onClick = {handleSubmit}>
-              Submit
-            </Button>
+            variant='contained'
+            type='submit'
+            sx={{ marginRight: '10px', backgroundColor: '#023047' }}
+          >
+            Submit
+          </Button>
+          <Button
+            variant='contained'
+            color='error'
+            onClick={onClose} // Call onClose function when the button is clicked
+          >
+            Exit
+          </Button>
         </FormControl>
       </Card>
     </form>
