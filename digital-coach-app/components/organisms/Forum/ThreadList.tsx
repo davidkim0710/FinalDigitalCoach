@@ -60,7 +60,7 @@ function ThreadList({ threads, setLoading}) {
             <>
               <Card title={thread.title}>
                 <p>{thread.content}</p>
-                <p>{thread.createdAt}</p>
+                <p>{thread.createdAt.toString()}</p>
                 <Button
                   variant='contained'
                   type='submit'
