@@ -145,7 +145,15 @@ export default function AddQuestionsForm(props: propsInfo) {
               type='submit'>
               Add Question
             </Button>
-            <Link href='/browsequestions'>Browse Premade Questions Here</Link>
+            <Button
+              variant='contained'
+              sx={{
+                maxWidth: '50%',
+                textAlign: 'center',
+                backgroundColor: '#023047',
+              }}>
+              <Link href='/browsequestions'>Browse Premade Questions Here</Link>
+            </Button>  
           </div>
         </FormControl>
         <br />
