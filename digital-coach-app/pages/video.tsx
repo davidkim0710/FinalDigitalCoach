@@ -167,7 +167,6 @@ export default function VideoPage() {
     } catch (e) {
     }
   };
-
   useEffect(() => {
     if (videoRef.current && previewStream) {
       videoRef.current.srcObject = previewStream;

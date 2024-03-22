@@ -3,6 +3,7 @@ import { MenuItem, Select, InputLabel } from '@mui/material';
 import QuestionService from '@App/lib/question/QuestionService';
 import styles from './AddQuestionsCard.module.scss';
 import QuestionSetsService from '@App/lib/questionSets/QuestionSetsService';
+import useAuthContext from '@App/lib/auth/AuthContext';
 
 interface propsInfo {
   selectedSet: { questions: any[]; title: string; id: string };
@@ -34,16 +35,18 @@ const sampleSubjects = [
 export default function SelectedQuestionsList(props: propsInfo) {
   const [userQuestionSets, setUserQuestionSets] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+   const { currentUser } = useAuthContext();
 
   useEffect(() => {
     async function fetchUserQuestionSets() {
       const userQuestionsSets: any[] = (
-        await QuestionSetsService.getFeaturedQuestionSets()
+        await QuestionSetsService.getQuestionSetByUserId(currentUser!.id)
       ).docs.map((doc) => {
         return { id: doc.id, ...doc.data() };
       });
       setUserQuestionSets(userQuestionsSets);
     }
+    console.log(userQuestionSets);
     fetchUserQuestionSets();
   }, []);
 
@@ -52,6 +55,7 @@ export default function SelectedQuestionsList(props: propsInfo) {
     console.log('selectedSet useEffectFired');
     const fetchQuestions = async () => {
       const selectedQuestions: any[] = [];
+      console.log(props.selectedSet.questions.length);
       for (let i = 0; i < props.selectedSet.questions.length; i++) {
         selectedQuestions.push(
           await QuestionService.getById(props.selectedSet.questions[i])
