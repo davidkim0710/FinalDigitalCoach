@@ -52,6 +52,7 @@ function BrowseQuestionsPage() {
   const [lastVisible, setLastVisible] = useState<any>(null);
 
   useEffect(() => {
+    console.log("fired");
     async function fetchQuestions() {
       const questions = await QuestionService.getByFilters(
         subjectSelect as TSubject,
