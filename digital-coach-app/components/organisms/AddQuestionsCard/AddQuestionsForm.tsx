@@ -152,7 +152,7 @@ export default function AddQuestionsForm(props: propsInfo) {
                 textAlign: 'center',
                 backgroundColor: '#023047',
               }}>
-              <Link href='/browsequestions'>Browse Premade Questions Here</Link>
+              <Link href='/browsequestions'><a style={{ textDecoration: 'none', color: 'white' }}>Browse Premade Questions Here</a></Link>
             </Button>  
           </div>
         </FormControl>
