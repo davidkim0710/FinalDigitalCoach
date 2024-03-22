@@ -9,6 +9,7 @@ import {
 } from '@App/lib/question/models';
 import QuestionService from '@App/lib/question/QuestionService';
 import QuestionSetsService from '@App/lib/questionSets/QuestionSetsService';
+import Link from "next/link";
 
 interface propsInfo {
   selectedSet: { questions: any[]; title: string; id: string };
@@ -144,13 +145,7 @@ export default function AddQuestionsForm(props: propsInfo) {
               type='submit'>
               Add Question
             </Button>
-            <Button
-              variant='contained'
-              sx={{ textAlign: 'center', backgroundColor: '#023047' }}
-              type='button'
-              href='/browsequestions'>
-              View Premade Questions
-            </Button>
+            <Link href='/browsequestions'>Browse Premade Questions Here</Link>
           </div>
         </FormControl>
         <br />
