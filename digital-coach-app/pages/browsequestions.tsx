@@ -193,10 +193,15 @@ function BrowseQuestionsPage() {
           </div>
           <TextField variant="outlined" size="small" label="Question Keyword Search" onChange={handleTextFieldChange}></TextField>
           <label htmlFor="subject-select">Subject</label>
-          <Select id="subject-select" value={subjectSelect} size="small" onChange={(event) => setSubjectSelect(event.target.value)}>
-            <MenuItem value="Any">Any</MenuItem>
-            {sampleSubjects.map((subject) => (
-              <MenuItem value={subject}>{subject}</MenuItem>
+          <Select
+            id="subject-select"
+            value={subjectSelect}
+            size="small"
+            onChange={(event) => setSubjectSelect(event.target.value)}
+          >
+            <MenuItem key="any" value="Any">Any</MenuItem> {/* Unique key for "Any" */}
+            {sampleSubjects.map((subject, index) => (
+              <MenuItem key={index} value={subject}>{subject}</MenuItem> {/* Using index as key */}
             ))}
           </Select>
           <label htmlFor="type-select">Type</label>
