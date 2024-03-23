@@ -200,9 +200,9 @@ function BrowseQuestionsPage() {
             size="small"
             onChange={(event) => setSubjectSelect(event.target.value)}
           >
-            <MenuItem key="any" value="Any">Any</MenuItem> {/* Unique key for "Any" */}
+            <MenuItem key="any" value="Any">Any</MenuItem> 
             {sampleSubjects.map((subject, index) => (
-              <MenuItem key={index} value={subject}>{subject}</MenuItem> {/* Using index as key */}
+              <MenuItem key={index} value={subject}>{subject}</MenuItem> 
             ))}
           </Select>
           <label htmlFor="type-select">Type</label>
