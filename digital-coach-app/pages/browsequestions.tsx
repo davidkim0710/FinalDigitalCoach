@@ -67,6 +67,7 @@ function BrowseQuestionsPage() {
       setQuestionsData(questions.docs.map((doc) => doc.data()));
     }
     async function fetchUserQuestionSets() {
+      console.log("entered");
       const userQuestionSets: any[] = (await QuestionSetsService.getQuestionSetByUserId(currentUser!.id)).docs.map((doc) => {
         return { id: doc.id, ...doc.data() };
       });
