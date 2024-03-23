@@ -206,22 +206,22 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
 		return QuestionSetsService.createQuestionSet(questionSet);
 	});
 
-    const addQuestionSets = userData.map((user, idx) => {
-      const questionSet = {
-        title: "Question Set " + idx,
-        description: "Description " + idx,
-        questions: [
-          questions.docs[getRandomInt(questions.docs.length)].id,
-          questions.docs[getRandomInt(questions.docs.length)].id,
-          questions.docs[getRandomInt(questions.docs.length)].id,
-          questions.docs[getRandomInt(questions.docs.length)].id,
-          questions.docs[getRandomInt(questions.docs.length)].id,
-        ],
-        isFeatured: false,
-        createdBy: user,
-      };
-      return QuestionSetsService.createQuestionSet(questionSet);
-    });
+   // const addQuestionSets = userData.map((user, idx) => {
+     // const questionSet = {
+       // title: "Question Set " + idx,
+     //   description: "Description " + idx,
+    //    questions: [
+    //      questions.docs[getRandomInt(questions.docs.length)].id,
+    //      questions.docs[getRandomInt(questions.docs.length)].id,
+    //      questions.docs[getRandomInt(questions.docs.length)].id,
+    //      questions.docs[getRandomInt(questions.docs.length)].id,
+    //      questions.docs[getRandomInt(questions.docs.length)].id,
+    //    ],
+    //    isFeatured: false,
+    //    createdBy: user,
+    //  };
+    //  return QuestionSetsService.createQuestionSet(questionSet);
+   // });
 
      const addQuestionSets = new Array(8).fill(0).map((_, idx) => {
        const questionSet = {
