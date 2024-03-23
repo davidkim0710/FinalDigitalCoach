@@ -84,7 +84,7 @@ function BrowseQuestionsPage() {
     async function getTotalNumberOfQuestions() {
       const questions = await QuestionService.getAllQuestions();
       setTotalNumberOfQuestions(questions.docs.length);
-      console.log(questions.docs.length);
+      console.log(questions);
     }
     getTotalNumberOfQuestions();
   }, []);
