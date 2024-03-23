@@ -83,7 +83,7 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
          isFeatured: true,
          createdBy: null,
        };
-       return await QuestionSetsService.createQuestionSet(questionSet);
+       return QuestionSetsService.createQuestionSet(questionSet);
      });
 
 	const accountingQuestions = [
@@ -238,7 +238,7 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
          createdBy: userData[getRandomInt(userData.length)],
        };
 
-       return await QuestionSetsService.createQuestionSet(questionSet);
+       return QuestionSetsService.createQuestionSet(questionSet);
      });
 
     const addInterviewQuestions = interviewsCollectionRef
