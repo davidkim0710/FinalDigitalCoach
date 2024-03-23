@@ -272,7 +272,9 @@ class QuestionService extends FirebaseService {
       anchorDoc ? startAfter(anchorDoc) : null,
     ].filter((f) => f !== null);
     filters.push(limit(resultLimit));
-    return await getDocs(query(ref, ...filters));
+    let qs = await getDocs(query(ref, ...filters))
+    console.log(qs);
+    return qs;
   }
 }
 
