@@ -71,6 +71,7 @@ function BrowseQuestionsPage() {
         return { id: doc.id, ...doc.data() };
       });
       setUserQuestionSets(userQuestionSets);
+      console.log(userQuestionSets);
     }
 
     fetchQuestions();
