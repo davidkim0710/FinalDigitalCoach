@@ -69,22 +69,22 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
     const questions = await QuestionService.getAllQuestions();
 	  console.log(questions);
 
-    const addFeaturedQuestionSets = new Array(5).fill(0).map((_, idx) => {
-       const questionSet = {
-         title: "Featured Question Set " + idx,
-         description: "Description " + idx,
-         questions: [
-           questions.docs[getRandomInt(questions.docs.length)].id,
-           questions.docs[getRandomInt(questions.docs.length)].id,
-           questions.docs[getRandomInt(questions.docs.length)].id,
-           questions.docs[getRandomInt(questions.docs.length)].id,
-           questions.docs[getRandomInt(questions.docs.length)].id,
-         ],
-         isFeatured: true,
-         createdBy: null,
-       };
-       return QuestionSetsService.createQuestionSet(questionSet);
-     });
+   // const addFeaturedQuestionSets = new Array(5).fill(0).map((_, idx) => {
+   //    const questionSet = {
+   //      title: "Featured Question Set " + idx,
+   //      description: "Description " + idx,
+   //      questions: [
+   //        questions.docs[getRandomInt(questions.docs.length)].id,
+   //        questions.docs[getRandomInt(questions.docs.length)].id,
+   //        questions.docs[getRandomInt(questions.docs.length)].id,
+   //        questions.docs[getRandomInt(questions.docs.length)].id,
+   //        questions.docs[getRandomInt(questions.docs.length)].id,
+   //      ],
+   //      isFeatured: true,
+   //      createdBy: null,
+   //    };
+    //   return QuestionSetsService.createQuestionSet(questionSet);
+    // });
 
 	const accountingQuestions = [
 		"Do you plan to pursue an accounting designation after graduation? If not, why not? If so, which one and why?",
