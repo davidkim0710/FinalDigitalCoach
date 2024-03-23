@@ -65,6 +65,7 @@ function BrowseQuestionsPage() {
       );
       setLastVisible(questions.docs[questions.docs.length - 1]);
       setQuestionsData(questions.docs.map((doc) => doc.data()));
+      console.log(questionsData
     }
     async function fetchUserQuestionSets() {
       console.log("entered");
