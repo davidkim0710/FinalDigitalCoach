@@ -67,7 +67,7 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
     });
 
     const questions = await QuestionService.getAllQuestions();
-	  console.log(questions);
+    console.log(questions);
 
    // const addFeaturedQuestionSets = new Array(5).fill(0).map((_, idx) => {
    //    const questionSet = {
@@ -259,28 +259,28 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
 
     const questionsRef = await InterviewQuestionService.getAllInterviewQuestions();
 
-    const demoVideoFiles = ["assets/answer-1.mp4", "assets/answer-2.mp4"];
+    //const demoVideoFiles = ["assets/answer-1.mp4", "assets/answer-2.mp4"];
 
-    const video = await Promise.all(demoVideoFiles.map((filePath) => fs.readFile(filePath)));
+    //const video = await Promise.all(demoVideoFiles.map((filePath) => fs.readFile(filePath)));
 
-    const storageRef = await Promise.all(video.map((ref, idx) => StorageService.uploadAnswerVideo(ref, `answer-${idx}`)));
+    //const storageRef = await Promise.all(video.map((ref, idx) => StorageService.uploadAnswerVideo(ref, `answer-${idx}`)));
 
-    await Promise.all(
-      questionsRef.docs
-        .map(async (questionRef) => {
-          const question = questionRef.data();
-          const uid = questionRef.ref.path.split("/")[1];
+   // await Promise.all(
+   //   questionsRef.docs
+   //     .map(async (questionRef) => {
+   //       const question = questionRef.data();
+   //       const uid = questionRef.ref.path.split("/")[1];
 
-          return new Array(question.retries).fill(null).map((_, i) =>
-            AnswerService.addAnswer(questionRef.ref, {
-              videoUrl: storageRef[getRandomInt(storageRef.length)].ref.toString(),
-              isSubmission: i === 0 ? true : false,
-              userId: uid,
-            })
-          );
-        })
-        .flat()
-    );
+   //       return new Array(question.retries).fill(null).map((_, i) =>
+   //         AnswerService.addAnswer(questionRef.ref, {
+   //           videoUrl: storageRef[getRandomInt(storageRef.length)].ref.toString(),
+   //           isSubmission: i === 0 ? true : false,
+   //           userId: uid,
+   //         })
+   //       );
+   //     })
+   //     .flat()
+   // );
 
     await Promise.all(
       questionsRef.docs.map((questionSnapshot) => {
