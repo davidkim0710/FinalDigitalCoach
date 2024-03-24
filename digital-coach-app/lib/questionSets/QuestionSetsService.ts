@@ -120,8 +120,9 @@ class QuestionSetsService extends FirebaseService {
     return await getDoc(doc(ref, qsid));
   }
 
-  async addQuestionToSet(qsid: string, qid: string) {
+  async addQuestionToSet(qsid: string, questionData) {
     console.log(qsid);
+    const { question, subject, type } = questionData;
     const questionSetRef = this.getCollectionRef();
     console.log(questionSetRef);
     const questionsRef = collection(
@@ -131,24 +132,32 @@ class QuestionSetsService extends FirebaseService {
     console.log(questionsRef);
 
     const foundQuestionSet = await getDoc(doc(questionSetRef, qsid));
-    console.log(foundQuestionSet)
-    console.log(qid)
-    try{const foundQuestion = await getDoc(doc(questionsRef, qid));}catch(e){console.log(e)}
+    // Use composite key to query the question
+    const questionQuery = query(
+        collection(this.firestore, 'questions'),
+        where('question', '==', question),
+        where('subject', '==', subject),
+        where('type', '==', type)
+    );
+    
+    const querySnapshot = await getDocs(questionQuery);
+    if (querySnapshot.empty) {
+        throw new Error('Error adding question set: Question not found!');
+    }
 
-    if (!foundQuestionSet)
-      throw new Error('Error adding question set: Question set not found!');
-    if (!foundQuestion)
-      throw new Error('Error adding question set: Question not found!');
+    // Assuming there's only one matching question, get its ID
+    const questionId = querySnapshot.docs[0].id;
 
-    if (foundQuestionSet.data()?.questions.includes(qid))
-      throw new Error(
-        'Error adding question set: Question already exists in set!'
-      );
+    // Check if the question already exists in the set
+    if (foundQuestionSet.data()?.questions.includes(questionId)) {
+        throw new Error('Error adding question set: Question already exists in set!');
+    }
 
+    // Update the question set with the new question
     await updateDoc(doc(questionSetRef, qsid), {
-      questions: arrayUnion(qid),
+        questions: arrayUnion(questionId),
     });
-  }
+}
 
   async getQuestionSetByUserId(userId: string) {
     const collectionRef = this.getCollectionRef();
