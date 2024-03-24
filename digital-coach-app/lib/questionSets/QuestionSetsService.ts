@@ -122,13 +122,17 @@ class QuestionSetsService extends FirebaseService {
 
   async addQuestionToSet(qsid: string, qid: string) {
     const questionSetRef = this.getCollectionRef();
+    console.log(questionSetRef);
     const questionsRef = collection(
       this.firestore,
       'questions'
     ) as CollectionReference<IBaseQuestion>;
+    console.log(questionsRef);
 
     const foundQuestionSet = await getDoc(doc(questionSetRef, qsid));
+    console.log(foundQuestionSet)
     const foundQuestion = await getDoc(doc(questionsRef, qid));
+    console.log(foundQuestion)
 
     if (!foundQuestionSet)
       throw new Error('Error adding question set: Question set not found!');
