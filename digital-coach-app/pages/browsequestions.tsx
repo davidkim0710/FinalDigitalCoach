@@ -128,6 +128,7 @@ function BrowseQuestionsPage() {
       alert("You have no question sets to add questions to. Please create a question set first.");
       return;
     }
+    console.log(event)
     setSelectedQuestion(event);
     setShowAddQuestionModal(true);
   };
