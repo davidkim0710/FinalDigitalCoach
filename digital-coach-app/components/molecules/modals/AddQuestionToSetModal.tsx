@@ -24,7 +24,7 @@ function AddQuestionToSetModal(props: Props) {
   };
 
   const handleAdd = () => {
-    props.handleAdd(selectedQuestionSet, props.question.id);
+    props.handleAdd(selectedQuestionSet, props.question);
     handleClose();
   };
 
