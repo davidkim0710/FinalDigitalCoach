@@ -121,6 +121,7 @@ class QuestionSetsService extends FirebaseService {
   }
 
   async addQuestionToSet(qsid: string, qid: string) {
+    console.log(qsid);
     const questionSetRef = this.getCollectionRef();
     console.log(questionSetRef);
     const questionsRef = collection(
