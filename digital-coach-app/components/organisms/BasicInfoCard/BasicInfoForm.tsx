@@ -19,7 +19,7 @@ export default function BasicInfoForm({ userId }: userInfo) {
   const [questionSetName, setQuestionSetName] = useState('');
   const [timePerQ, setTimePerQ] = useState('');
   const [numRetries, setNumRetries] = useState('');
-  const [makeInterview, setMakeInterview] = useState(false);
+  const [makeInterview, setMakeInterview] = useState(true);
 
   /**
    * This function will be called when the form is submitted.
@@ -89,18 +89,6 @@ export default function BasicInfoForm({ userId }: userInfo) {
         />
         <br />
         <div>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={makeInterview}
-                onChange={() => {
-                  setMakeInterview(!makeInterview);
-                }}
-                sx={{ paddingLeft: '25px' }}
-              />
-            }
-            label='Create Interview Set with this Question Set'
-          />
           <Button
             variant='contained'
             type='submit'
