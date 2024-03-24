@@ -131,8 +131,8 @@ class QuestionSetsService extends FirebaseService {
 
     const foundQuestionSet = await getDoc(doc(questionSetRef, qsid));
     console.log(foundQuestionSet)
-    const foundQuestion = await getDoc(doc(questionsRef, qid));
-    console.log(foundQuestion)
+    console.log(qid)
+    try{const foundQuestion = await getDoc(doc(questionsRef, qid));}catch(e){console.log(e)}
 
     if (!foundQuestionSet)
       throw new Error('Error adding question set: Question set not found!');
