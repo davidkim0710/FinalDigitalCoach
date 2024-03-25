@@ -3,7 +3,7 @@ import { MenuItem, Select, InputLabel } from '@mui/material';
 import QuestionService from '@App/lib/question/QuestionService';
 import styles from './AddQuestionsCard.module.scss';
 import QuestionSetsService from '@App/lib/questionSets/QuestionSetsService';
-import InterviewSetsService from '@App/lib/pinterviewSets/interviewSetsService';
+import InterviewSetsService from '@App/lib/interviewSets/interviewSetsService';
 import useAuthContext from '@App/lib/auth/AuthContext';
 
 interface propsInfo {
