@@ -29,7 +29,7 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
       AuthService.signup("hamzah@test.com", "password"),
       AuthService.signup("steven@expo.com", "password"),
     ]);
-    const addQuestionCollection = questionsData.map(async (qList) =>
+    const addQuestionCollection = await Promise.all([questionsData.map(async (qList) =>
         qList.questions.map(
           async (question: string) =>
             await QuestionService.addQuestion({
@@ -45,7 +45,7 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
                 .split(" "),
             })
         )
-      ),
+      )]),
       addUserCollection = userCredentials.map(async ({ user }) => UserService.add(user.uid, new UserBuilder().with({ email: user.email!, name: user.email?.split("@")[0] }).build())),
       addInterviewCollection = userCredentials
         .map(({ user }, idx) =>
