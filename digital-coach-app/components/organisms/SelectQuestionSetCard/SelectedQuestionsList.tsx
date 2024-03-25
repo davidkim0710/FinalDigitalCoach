@@ -3,7 +3,7 @@ import { MenuItem, Select, InputLabel } from '@mui/material';
 import QuestionService from '@App/lib/question/QuestionService';
 import styles from './AddQuestionsCard.module.scss';
 import QuestionSetsService from '@App/lib/questionSets/QuestionSetsService';
-import '@App/lib/questionSets/useGetFeaturedQuestionSets.ts';
+import useGetFeaturedQuestionSets from'@App/lib/questionSets/useGetFeaturedQuestionSets.ts';
 import useAuthContext from '@App/lib/auth/AuthContext';
 
 interface propsInfo {
@@ -47,8 +47,13 @@ export default function SelectedQuestionsList(props: propsInfo) {
       });
       setUserQuestionSets(userQuestionsSets);
     }
+    async function fetchFeaturedQuestionSets(){
+      let feat = await useGetFeaturedQuestionSets();
+      console.log(feat);
+    }
     console.log(userQuestionSets);
     fetchUserQuestionSets();
+    fetchFeaturedQuestionSets();
   }, []);
 
   useEffect(() => {
