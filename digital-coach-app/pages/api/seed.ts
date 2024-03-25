@@ -203,7 +203,7 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
 	const featuredQuestionSets = [accountingQuestionSet, engineeringQuestionSet, computerScienceQuestionSet, financeQuestionSet];
 
 	const addFeaturedQuestionSets = featuredQuestionSets.map((questionSet) => {
-		return QuestionSetsService.createQuestionSet(questionSet);
+		return await QuestionSetsService.createQuestionSet(questionSet);
 	});
 
    // const addQuestionSets = userData.map((user, idx) => {
@@ -289,8 +289,7 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
     );
 
     res.status(200).json({
-      message: `Finished seeding in ${Date.now() - start}ms`,
-	questions: `${questions.doc}`
+      message: `Finished seeding in ${Date.now() - start}ms`
     });
   } catch (error) {
     console.log(error);
