@@ -47,7 +47,7 @@ export default function SelectedQuestionsList(props: propsInfo) {
       setUserQuestionSets(userQuestionsSets);
     }
     async function fetchFeaturedQuestionSets(){
-      const feat = await QuestionSetsService.getFeaturedQuestionSets()
+      const feat = await QuestionSetsService.getAllQuestionSets()
       console.log(feat);
     }
     console.log(userQuestionSets);
