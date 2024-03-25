@@ -47,10 +47,7 @@ export default function SelectedQuestionsList(props: propsInfo) {
       setUserQuestionSets(userQuestionsSets);
     }
     async function fetchFeaturedQuestionSets(){
-      const feat: any[] = ( await QuestionSetsService.getFeaturedQuestionSets()
-      ).docs.map((doc) => {
-        return { id: doc.id, ...doc.data() };
-      });
+      const feat = await QuestionSetsService.getFeaturedQuestionSets()
       console.log(feat);
     }
     console.log(userQuestionSets);
