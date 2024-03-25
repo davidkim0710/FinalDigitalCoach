@@ -3,6 +3,7 @@ import { MenuItem, Select, InputLabel } from '@mui/material';
 import QuestionService from '@App/lib/question/QuestionService';
 import styles from './AddQuestionsCard.module.scss';
 import QuestionSetsService from '@App/lib/questionSets/QuestionSetsService';
+import InterviewSetsService from '@App/lib/pinterviewSets/interviewSetsService';
 import useAuthContext from '@App/lib/auth/AuthContext';
 
 interface propsInfo {
@@ -47,7 +48,7 @@ export default function SelectedQuestionsList(props: propsInfo) {
       setUserQuestionSets(userQuestionsSets);
     }
     async function fetchFeaturedQuestionSets(){
-      const feat = await QuestionSetsService.getAllQuestionSets()
+      const feat = await InterviewSetsService.getAllInterviewSets()
       console.log(feat);
     }
     console.log(userQuestionSets);
