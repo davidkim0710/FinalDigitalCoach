@@ -152,7 +152,7 @@ export default function AddQuestionsForm(props: propsInfo) {
                 textAlign: 'center',
                 backgroundColor: '#023047',
               }}>
-              <Link href='/browsequestions'><a style={{ textDecoration: 'none', color: 'white' }}>Browse Questions & Add to Your Question Set Here</a></Link>
+              <Link href='/browsequestions'><a style={{ textDecoration: 'none', color: 'white' }}>Browse & Add Questions to a Set</a></Link>
             </Button>  
           </div>
         </FormControl>
