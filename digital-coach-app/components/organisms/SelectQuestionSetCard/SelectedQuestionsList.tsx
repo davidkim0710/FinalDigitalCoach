@@ -35,23 +35,27 @@ const sampleSubjects = [
 
 export default function SelectedQuestionsList(props: propsInfo) {
   const [userQuestionSets, setUserQuestionSets] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-   const { currentUser } = useAuthContext();
+  const [loadingUserQuestionSets, setLoadingUserQuestionSets] = useState<boolean>(false);
+  const [loadingQuestions, setLoadingQuestions] = useState<boolean>(false);
+  const { currentUser } = useAuthContext();
 
   useEffect(() => {
     async function fetchUserQuestionSets() {
+      setLoadingUserQuestionSets(true);
       const userQuestionsSets: any[] = (
         await QuestionSetsService.getQuestionSetByUserId(currentUser!.id)
       ).docs.map((doc) => {
         return { id: doc.id, ...doc.data() };
       });
       setUserQuestionSets(userQuestionsSets);
+      setLoadingUserQuestionSets(false);
     }
+    
     async function fetchFeaturedQuestionSets(){
       const feat = await InterviewSetsService.getAllInterviewSets()
       console.log(feat);
     }
-    console.log(userQuestionSets);
+    
     fetchUserQuestionSets();
     fetchFeaturedQuestionSets();
   }, []);
@@ -60,6 +64,7 @@ export default function SelectedQuestionsList(props: propsInfo) {
     // Fires when a question set is selected, need to get the corresponding questions and show them
     console.log('selectedSet useEffectFired');
     const fetchQuestions = async () => {
+      setLoadingQuestions(true);
       const selectedQuestions: any[] = [];
       console.log(props.selectedSet.questions.length);
       for (let i = 0; i < props.selectedSet.questions.length; i++) {
@@ -68,10 +73,9 @@ export default function SelectedQuestionsList(props: propsInfo) {
         );
       }
       props.setQuestions(selectedQuestions);
+      setLoadingQuestions(false);
     };
-    setLoading(true);
     fetchQuestions();
-    setLoading(false);
   }, [props.selectedSet]);
 
   return (
@@ -88,14 +92,18 @@ export default function SelectedQuestionsList(props: propsInfo) {
           props.setShowQuestions(true);
           props.setSelectedSet(event.target.value as propsInfo['selectedSet']);
         }}>
-        {userQuestionSets.map((questionSet) => (
-          <MenuItem key={questionSet.id} value={questionSet}>
-            {questionSet.title}
-          </MenuItem>
-        ))}
+        {loadingUserQuestionSets ? (
+          <MenuItem disabled>Loading...</MenuItem>
+        ) : (
+          userQuestionSets.map((questionSet) => (
+            <MenuItem key={questionSet.id} value={questionSet}>
+              {questionSet.title}
+            </MenuItem>
+          ))
+        )}
       </Select>
-      {loading ? (
-        <div><p>Loading...</p></div>
+      {loadingQuestions ? (
+        <div><p>Loading questions...</p></div>
       ) : props.questions.length === 0 || !props.showQuestions ? (
         <div>
           <p>No questions in this question set</p>
