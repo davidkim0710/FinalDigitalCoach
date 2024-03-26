@@ -54,7 +54,15 @@ function BrowseQuestionsPage() {
   useEffect(() => {
     console.log("fired");
     async function fetchQuestions() {
-      const questions = await QuestionService.getAllQuestions();
+      const questions = await QuestionService.getByFilters(
+      subjectSelect as TSubject,
+      typeSelect as TQuestionType,
+      experienceLevelSelect as TExperienceLevel,
+      popularityCheckbox,
+      searchText.toLowerCase().trim(),
+      RESULT_LIMIT,
+      lastVisible
+    );
       console.log(questions);
       setLastVisible(questions.docs[questions.docs.length - 1]);
       setQuestionsData(questions.docs.map((doc) => doc.data()));
