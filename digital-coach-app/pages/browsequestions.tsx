@@ -55,16 +55,17 @@ function BrowseQuestionsPage() {
     console.log("fired");
     async function fetchQuestions() {
       const questions = await QuestionService.getAllQuestions();
+      console.log(questions);
       setLastVisible(questions.docs[questions.docs.length - 1]);
       setQuestionsData(questions.docs.map((doc) => doc.data()));
     }
     async function fetchUserQuestionSets() {
-      console.log("entered");
+      //console.log("entered");
       const userQuestionSets: any[] = (await QuestionSetsService.getQuestionSetByUserId(currentUser!.id)).docs.map((doc) => {
         return { id: doc.id, ...doc.data() };
       });
       setUserQuestionSets(userQuestionSets);
-      console.log(userQuestionSets);
+      //console.log(userQuestionSets);
     }
 
     fetchQuestions();
