@@ -29,19 +29,6 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
       AuthService.signup("hamzah@test.com", "password"),
       AuthService.signup("steven@expo.com", "password"),
     ]);
-	  let question = "hi";
-	   await QuestionService.addQuestion({
-              subject: "math",
-              question,
-              companies: [],
-              popularity: Math.floor(Math.random() * 100),
-              experienceLevel: ["Entry", "Mid", "Senior", "Any"][Math.floor(Math.random() * 4)] as TExperienceLevel,
-              type: ["Behavioral", "Technical", "Any"][Math.floor(Math.random() * 3)] as TQuestionType,
-              keywords: question
-                .toLowerCase()
-                .replace(/\!|\.|\,|\'|\"|\?|\;|\:|\`|\~/g, "")
-                .split(" "),
-            })
     const addQuestionCollection = await Promise.all([questionsData.map(async (qList) =>
         qList.questions.map(
           async (question: string) =>
