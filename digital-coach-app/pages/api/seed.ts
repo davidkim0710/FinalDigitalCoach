@@ -31,7 +31,7 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
     ]);
 	   await QuestionService.addQuestion({
               subject: "math",
-              "Test",
+              question:"Test",
               companies: [],
               popularity: Math.floor(Math.random() * 100),
               experienceLevel: ["Entry", "Mid", "Senior", "Any"][Math.floor(Math.random() * 4)] as TExperienceLevel,
