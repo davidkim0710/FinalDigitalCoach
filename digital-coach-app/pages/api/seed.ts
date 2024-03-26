@@ -29,9 +29,10 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
       AuthService.signup("hamzah@test.com", "password"),
       AuthService.signup("steven@expo.com", "password"),
     ]);
+	  let question = "hi";
 	   await QuestionService.addQuestion({
               subject: "math",
-              question:"Test",
+              question,
               companies: [],
               popularity: Math.floor(Math.random() * 100),
               experienceLevel: ["Entry", "Mid", "Senior", "Any"][Math.floor(Math.random() * 4)] as TExperienceLevel,
