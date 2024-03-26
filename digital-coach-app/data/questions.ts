@@ -137,7 +137,7 @@ const questionsData: any[] = [
       "Tell me about a time you had to communicate your technical findings to a non-technical audience.",
       "Tell me about a time you used data visualization in a project.",
       "How would you handle missing values in a dataset?",
-      "Tell me about a project where your analysis had a significant impact on decision-making.",
+      "Tell me about a project where your analysis had a significant impact on decision-making."
     ],
   },
   {
@@ -149,7 +149,7 @@ const questionsData: any[] = [
       "How would you ensure diversity and inclusion in a workplace?",
       "Tell me about a time you had a disagreement with leadership and how you approached this.",
       "How do you measure and improve employee engagement?",
-      "Tell me about a time you handled a conflict between employees.",
+      "Tell me about a time you handled a conflict between employees."
     ],
   },
   {
@@ -158,7 +158,7 @@ const questionsData: any[] = [
       "What is your experience with cloud computing platforms?",
       "Tell me about a time you had to learn and implement a new technology.",
       "What considerations do you take into account when designing a new IT infrastructure?",
-      "How do you ensure the security and integrity of a network/system?",
+      "How do you ensure the security and integrity of a network/system?"
     ],
   },
   {
@@ -169,7 +169,7 @@ const questionsData: any[] = [
       "How do you approach legal research and stay updated on changes in laws and regulations?",
       "How do you handle ethical dilemmas or conflicts of interest in your practice?",
       "How do you handle stress and high-pressure situations in the legal profession?",
-      "How do you keep your client informed and involved in their case?",
+      "How do you keep your client informed and involved in their case?"
     ],
   },
   {
@@ -179,7 +179,7 @@ const questionsData: any[] = [
       "Describe a successful marketing campaign you were a part of. What was your role, and what were the results?",
       "How do you approach market research, and what tools or methods do you use?",
       "Can you discuss a time when a marketing campaign didn't go as planned? What did you learn from that experience?",
-      "Describe your experience with data analytics and how you use data to inform marketing decisions.",
+      "Describe your experience with data analytics and how you use data to inform marketing decisions."
     ],
   },
   {
@@ -190,7 +190,7 @@ const questionsData: any[] = [
       "What do you do when facing a small budget or lack of resources? Have you faced this challenge in the past?",
       "Tell me about the best manager you’ve ever had.",
       "Which Management Information Systems have you used?",
-      "Discuss an instance in which one of your ideas has helped to improve operations at other companies.",
+      "Discuss an instance in which one of your ideas has helped to improve operations at other companies."
     ],
   },
   {
@@ -201,7 +201,7 @@ const questionsData: any[] = [
       "How do you handle collaboration across different fields such as engineering, design, and other teams?",
       "Can you walk through the stages of a product life cycle?",
       "Describe a situation where you had to pivot a product strategy.",
-      "What challenges have you faced during a product launch, and how did you overcome them?",
+      "What challenges have you faced during a product launch, and how did you overcome them?"
     ],
   },
   {
@@ -221,7 +221,7 @@ const questionsData: any[] = [
       "Discuss a situation where you had to work under pressure to meet a project deadline.",
       "Describe a time when you had to step up and demonstrate leadership skills.",
       "Tell me about a time when you had to meet a tight deadline and how you managed your time?",
-      "Do you prefer to work with others or individually?",
+      "Do you prefer to work with others or individually?"
     ],
   },
 ];
