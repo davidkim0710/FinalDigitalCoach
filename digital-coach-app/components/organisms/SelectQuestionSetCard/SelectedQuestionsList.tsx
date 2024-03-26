@@ -95,7 +95,7 @@ export default function SelectedQuestionsList(props: propsInfo) {
         ))}
       </Select>
       {loading ? (
-        <p>Loading...</p>
+        <div><p>Loading...</p></div>
       ) : props.questions.length === 0 || !props.showQuestions ? (
         <div>
           <p>No questions in this question set</p>
