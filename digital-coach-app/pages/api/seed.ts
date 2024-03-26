@@ -202,8 +202,8 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
 
 	const featuredQuestionSets = [accountingQuestionSet, engineeringQuestionSet, computerScienceQuestionSet, financeQuestionSet];
 
-	const addFeaturedQuestionSets = featuredQuestionSets.map((questionSet) => {
-		return await QuestionSetsService.createQuestionSet(questionSet);
+	const addFeaturedQuestionSets = await featuredQuestionSets.map((questionSet) => {
+		return QuestionSetsService.createQuestionSet(questionSet);
 	});
 
    // const addQuestionSets = userData.map((user, idx) => {
