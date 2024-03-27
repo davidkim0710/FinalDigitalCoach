@@ -152,10 +152,10 @@ function BrowseQuestionsPage() {
           mt: 2,
         }}
       >
-        <List sx={{ bgcolor: "background.paper", width: "90%" }}>
-          {loading ? (
+        {loading ? (
             <p>Loading...</p>
-          ) : ({questionsData.map((question) => (
+          ) : (<List sx={{ bgcolor: "background.paper", width: "90%" }}>
+          {questionsData.map((question) => (
             <div>
               <ListItem>
                 <ListItemIcon>
@@ -170,7 +170,7 @@ function BrowseQuestionsPage() {
               </ListItem>
               <Divider />
             </div>
-          ))})}
+          ))}
           {page * RESULT_LIMIT >= totalNumberOfQuestions ? (
             <></>
           ) : (
@@ -178,7 +178,7 @@ function BrowseQuestionsPage() {
               View More
             </Button>
           )}
-        </List>
+        </List>)}
         <Box
           id="#filters"
           sx={{
