@@ -50,10 +50,12 @@ function BrowseQuestionsPage() {
   const [totalNumberOfQuestions, setTotalNumberOfQuestions] = useState(0);
 
   const [lastVisible, setLastVisible] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     console.log("fired");
     async function fetchQuestions() {
+      setLoading(true);
       const questions = await QuestionService.getByFilters(
       subjectSelect as TSubject,
       typeSelect as TQuestionType,
@@ -66,6 +68,7 @@ function BrowseQuestionsPage() {
       console.log(questions);
       setLastVisible(questions.docs[questions.docs.length - 1]);
       setQuestionsData(questions.docs.map((doc) => doc.data()));
+      setLoading(false);
     }
     async function fetchUserQuestionSets() {
       //console.log("entered");
@@ -149,7 +152,9 @@ function BrowseQuestionsPage() {
           mt: 2,
         }}
       >
-        <List sx={{ bgcolor: "background.paper", width: "90%" }}>
+        {loading ? (
+          <p>Loading...</p>
+        ) : (<List sx={{ bgcolor: "background.paper", width: "90%" }}>
           {questionsData.map((question) => (
             <div>
               <ListItem>
@@ -165,7 +170,7 @@ function BrowseQuestionsPage() {
               </ListItem>
               <Divider />
             </div>
-          ))}
+          ))})}
           {page * RESULT_LIMIT >= totalNumberOfQuestions ? (
             <></>
           ) : (
