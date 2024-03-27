@@ -170,7 +170,7 @@ function BrowseQuestionsPage() {
               </ListItem>
               <Divider />
             </div>
-          ))})}
+          ))}
           {page * RESULT_LIMIT >= totalNumberOfQuestions ? (
             <></>
           ) : (
@@ -178,7 +178,7 @@ function BrowseQuestionsPage() {
               View More
             </Button>
           )}
-        </List>
+        </List>)}
         <Box
           id="#filters"
           sx={{
