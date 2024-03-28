@@ -24,8 +24,7 @@ const sampleSubjects = [
   "Marketing",
   "Operations",
   "Product Management",
-  "Computer Science",
-  "Any",
+  "Computer Science"
 ];
 
 function BrowseQuestionsPage() {
