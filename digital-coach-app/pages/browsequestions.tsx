@@ -110,6 +110,7 @@ function BrowseQuestionsPage() {
   const handleFilterSubmit = async (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setPage(page + 1);
+    setLoading(true);
     const data = await QuestionService.getByFilters(
       subjectSelect as TSubject,
       typeSelect as TQuestionType,
@@ -121,6 +122,7 @@ function BrowseQuestionsPage() {
     );
     setLastVisible(data.docs[data.docs.length - 1]);
     setQuestionsData(data.docs.map((doc) => doc.data()));
+    setLoading(false);
   };
 
   const handleTextFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
