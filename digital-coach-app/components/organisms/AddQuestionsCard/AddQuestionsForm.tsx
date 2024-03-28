@@ -21,15 +21,17 @@ interface propsInfo {
 }
 
 const sampleSubjects = [
-  'Math',
-  'Science',
-  'English',
-  'History',
-  'Geography',
-  'Chemistry',
-  'Physics',
-  'Business Accounting and Analytics',
-  'Any',
+  "Business Accounting and Analytics",
+  "Data Science",
+  "Finance",
+  "Human Resources",
+  "Information Technology",
+  "Law",
+  "Marketing",
+  "Operations",
+  "Product Management",
+  "Computer Science",
+  "Any",
 ];
 
 export default function AddQuestionsForm(props: propsInfo) {
