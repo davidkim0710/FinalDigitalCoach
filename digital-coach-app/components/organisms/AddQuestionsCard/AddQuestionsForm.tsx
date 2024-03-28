@@ -121,8 +121,8 @@ export default function AddQuestionsForm(props: propsInfo) {
             onChange={(event) => {
               setQuestionType(event.target.value as TQuestionType);
             }}>
-            <MenuItem value='behavioral'>Behavioral</MenuItem>
-            <MenuItem value='technical'>Technical</MenuItem>
+            <MenuItem value='Behavioral'>Behavioral</MenuItem>
+            <MenuItem value='Technical'>Technical</MenuItem>
           </TextField>
           <br />
           <TextField
