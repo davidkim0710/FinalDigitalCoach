@@ -58,7 +58,7 @@ function ForumApp() {
   };
 
 
-  const filteredThreads = threads.filter(thread =>
+  let filteredThreads = threads.filter(thread =>
     thread.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     thread.content.toLowerCase().includes(searchQuery.toLowerCase())
   );
