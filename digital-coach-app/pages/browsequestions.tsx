@@ -70,12 +70,10 @@ function BrowseQuestionsPage() {
       setLoading(false);
     }
     async function fetchUserQuestionSets() {
-      //console.log("entered");
       const userQuestionSets: any[] = (await QuestionSetsService.getQuestionSetByUserId(currentUser!.id)).docs.map((doc) => {
         return { id: doc.id, ...doc.data() };
       });
       setUserQuestionSets(userQuestionSets);
-      //console.log(userQuestionSets);
     }
 
     fetchQuestions();
