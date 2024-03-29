@@ -23,13 +23,15 @@ function NewThreadForm({ onSubmit, onClose }) {
     <form onSubmit={handleSubmit}>
       <Card title="Edit Thread">
       <TextField
-        label="Title"
-        value={title}
-        onChange={(event) => setTitle(event.target.value)}
-        required
-        fullWidth
-      />
-      <br />
+            type='text'
+            label='Title'
+            value={title}
+            required
+            inputProps={{ minLength: 1,
+              maxLength: 40,
+            }}
+            onChange={(e) => setTitle(e.target.value)}
+          />
       <br />
       <TextField
         label="Content"
