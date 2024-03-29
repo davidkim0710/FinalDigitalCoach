@@ -55,7 +55,7 @@ function BrowseQuestionsPage() {
     console.log("fired");
     async function fetchQuestions() {
       setLoading(true);
-      const questions = await QuestionService.getPopularityDesc();
+      const questions = await QuestionService.getByPopularityDesc();
       console.log(questions);
       setLastVisible(questions.docs[questions.docs.length - 1]);
       setQuestionsData(questions.docs.map((doc) => doc.data()));
