@@ -109,7 +109,7 @@ function ThreadList({ threads, setLoading}) {
                   </Button>
                 </>
               )}
-               <form onSubmit={() => handleAddComment(thread.id)}>
+               <form onSubmit={(event) => handleAddComment(event, thread.id)}>
                 <input
                   type="text"
                   value={newComment}
