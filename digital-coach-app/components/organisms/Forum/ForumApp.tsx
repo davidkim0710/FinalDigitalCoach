@@ -15,7 +15,6 @@ function ForumApp() {
   const [searchQuery, setSearchQuery] = useState(''); // State to hold the search query
   const {currentUser} = useAuthContext();
   console.log(currentUser.document);
-  console.log(fetchUser);
 
   useEffect(() => {
     const fetchThreads = async () => {
