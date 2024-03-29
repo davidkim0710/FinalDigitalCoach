@@ -57,8 +57,6 @@ const Home: NextPage = () => {
       ];
     const randInd = Math.floor(Math.random() * tips.length);
     setTips(tips[randInd]);
-    
-    seed();
   }, []);
 
   if (
