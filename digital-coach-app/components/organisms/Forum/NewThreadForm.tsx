@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import { Button, Checkbox, FormControl,FormControlLabel, TextField } from '@mui/material';
 import Card from '@App/components/atoms/Card';
 
 function NewThreadForm({ onSubmit, onClose }) {
@@ -22,44 +22,46 @@ function NewThreadForm({ onSubmit, onClose }) {
   return (
     <form onSubmit={handleSubmit}>
       <Card title="Edit Thread">
-      <TextField
-            type='text'
-            label='Title'
-            value={title}
+        <FormControl fullWidth>
+          <TextField
+                type='text'
+                label='Title'
+                value={title}
+                required
+                inputProps={{ minLength: 1,
+                  maxLength: 40,
+                }}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+          <br />
+          <TextField
+            label="Content"
+            value={content}
+            onChange={(event) => setContent(event.target.value)}
             required
-            inputProps={{ minLength: 1,
-              maxLength: 40,
-            }}
-            onChange={(e) => setTitle(e.target.value)}
+            fullWidth
+            multiline
+            rows={4}
           />
-      <br />
-      <TextField
-        label="Content"
-        value={content}
-        onChange={(event) => setContent(event.target.value)}
-        required
-        fullWidth
-        multiline
-        rows={4}
-      />
-      <br />
-      <br />
-      {/* Checkbox for "Are you a Digital Coach alumni (practiced at least one interview)?" */}
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={isAlumni}
-            onChange={(event) => setIsAlumni(event.target.checked)}
-            color="primary"
+          <br />
+          <br />
+          {/* Checkbox for "Are you a Digital Coach alumni (practiced at least one interview)?" */}
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={isAlumni}
+                onChange={(event) => setIsAlumni(event.target.checked)}
+                color="primary"
+              />
+            }
+            label="Are you a Digital Coach alumni (practiced at least 1 interview)?"
           />
-        }
-        label="Are you a Digital Coach alumni (practiced at least 1 interview)?"
-      />
-      <br />
-      <br />
-      <Button variant="contained" type="submit">
-        Submit
-      </Button>
+          <br />
+          <br />
+          <Button variant="contained" type="submit">
+            Submit
+          </Button>
+          </FormControl>
         </Card>
     </form>
   );
