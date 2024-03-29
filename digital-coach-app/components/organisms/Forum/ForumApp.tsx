@@ -6,12 +6,14 @@ import {
 } from '@mui/material';
 import ForumService from './forumapi'; // Import ForumService
 import NewThreadForm from './NewThreadForm';
+import useAuthContext from '@App/lib/auth/AuthContext';
 
 function ForumApp() {
   const [threads, setThreads] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false); // State to control form visibility
   const [searchQuery, setSearchQuery] = useState(''); // State to hold the search query
+  const {currentUser} = useAuthContext();
 
   useEffect(() => {
     const fetchThreads = async () => {
