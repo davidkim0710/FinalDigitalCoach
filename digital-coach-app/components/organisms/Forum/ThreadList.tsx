@@ -62,7 +62,7 @@ function ThreadList({ threads, setLoading}) {
               <p>{thread.content}</p>
               <p>Last Updated on {(new Date(thread.createdAt.seconds * 1000 + thread.createdAt.nanoseconds / 1000000)).toLocaleString()}</p>
               <p>Author: {thread.author}</p>
-              {thread.isAlumni && (<p>Alumnus of Digital Coach</p>)}
+              {thread.alumni && (<p>Alumnus of Digital Coach</p>)}
               {/* Conditionally render edit and delete buttons */}
               {currentUser.id === thread.authorID && (
                 <>
