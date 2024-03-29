@@ -117,7 +117,7 @@ function ThreadList({ threads, setLoading}) {
                 <Button
                     variant='contained'
                     type='submit'
-                    sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
+                    sx={{ maxWidth: '30%', backgroundColor: '#023047' }}>
                     Add Comment
                   </Button>
               </form>
