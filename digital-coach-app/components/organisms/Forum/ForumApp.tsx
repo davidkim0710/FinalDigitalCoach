@@ -66,6 +66,14 @@ function ForumApp() {
             }}
             onChange={handleSearchChange}
       />
+      <FormControl>
+          <InputLabel>Sort By</InputLabel>
+          <Select value={sortBy} onChange={handleSortChange}>
+            <MenuItem value="">None</MenuItem>
+            <MenuItem value="alumni">Alumni</MenuItem>
+            <MenuItem value="date">Date</MenuItem>
+          </Select>
+        </FormControl>
       <br />
       <br />
       {isFormOpen ? (
