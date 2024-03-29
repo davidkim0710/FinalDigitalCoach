@@ -22,6 +22,10 @@ class ForumService {
   private getThreadsCollectionRef() {
     return collection(this.firestore, "threads");
   }
+  
+  private getCommentsCollectionRef(threadId: string) {
+    return collection(this.firestore, "threads", threadId, "comments");
+  }
 
   async getAllThreads() {
     const threadsQuery = query(this.getThreadsCollectionRef());
@@ -41,6 +45,19 @@ class ForumService {
     };
 
     return addDoc(threadsCollectionRef, newThread);
+  }
+
+  async addComment(threadId, content, name, id) {
+    const commentsCollectionRef = this.getCommentsCollectionRef(threadId);
+
+    const newComment = {
+      content,
+      createdAt: new Date(),
+      author: name,
+      authorID: id
+    };
+
+    return addDoc(commentsCollectionRef, newComment);
   }
 
   async getThreadPosts(threadId) {
@@ -67,6 +84,12 @@ class ForumService {
     if (!threadRef) throw new Error("Error deleting thread: Thread not found!");
   
     return deleteDoc(threadRef);
+  }
+
+  async deleteComment(threadId, commentId) {
+    const commentRef = doc(this.firestore, "threads", threadId, "comments", commentId);
+    if (!commentRef) throw new Error("Error deleting comment: Comment not found!");
+    return deleteDoc(commentRef);
   }
 
 }
