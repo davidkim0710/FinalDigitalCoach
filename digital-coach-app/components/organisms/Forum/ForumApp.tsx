@@ -90,8 +90,8 @@ function ForumApp() {
             inputProps={{
               maxLength: 50,
             }}
-            onChange={handleSearchChange},
-         justifyContent: 'flex-start'
+            onChange={handleSearchChange}
+           justifyContent: 'flex-start'
       />
         <FormControl style={{width: "30%" }}>
             <InputLabel>Sort By</InputLabel>
