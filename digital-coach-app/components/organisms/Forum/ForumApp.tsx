@@ -91,7 +91,8 @@ function ForumApp() {
             }}
             onChange={handleSearchChange}
       />
-        <FormControl style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+        <FormControl style={{size: "30%" }}>
             <InputLabel>Sort By</InputLabel>
             <Select value={sortBy} onChange={handleSortChange}>
               <MenuItem value="">None</MenuItem>
@@ -100,6 +101,7 @@ function ForumApp() {
               <MenuItem value="date-des">Date (descending)</MenuItem>
             </Select>
           </FormControl>
+        </div>
       <br />
       <br />
       {isFormOpen ? (
