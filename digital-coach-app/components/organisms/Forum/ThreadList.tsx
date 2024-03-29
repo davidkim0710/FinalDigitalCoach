@@ -8,6 +8,7 @@ import useAuthContext from '@App/lib/auth/AuthContext';
 function ThreadList({ threads, setLoading}) {
   const [editThreadId, setEditThreadId] = useState(null);
   const { currentUser } = useAuthContext();
+  const [newComment, setNewComment] = useState('');
 
   const handleEdit = (threadId) => {
     // Set the thread to be edited
@@ -41,6 +42,29 @@ function ThreadList({ threads, setLoading}) {
 
   const handleExitEdit = () => {
     setEditThreadId(null); // Function to exit edit mode
+  };
+
+  const handleAddComment = async (threadId) => {
+    try {
+      setLoading(true);
+      await ForumService.addComment(threadId, newComment, currentUser.name, currentUser.id);
+      setNewComment('');
+      setLoading(false);
+    } catch (error) {
+      console.error('Error adding comment:', error);
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteComment = async (threadId, commentId) => {
+    try {
+      setLoading(true);
+      await ForumService.deleteComment(threadId, commentId);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      setLoading(false);
+    }
   };
 
   return (
@@ -83,6 +107,32 @@ function ThreadList({ threads, setLoading}) {
                   </Button>
                 </>
               )}
+               <form onSubmit={() => handleAddComment(thread.id)}>
+                <input
+                  type="text"
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  placeholder="Add a comment"
+                />
+                <Button
+                    variant='contained'
+                    type='submit'
+                    sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
+                    Add Comment
+                  </Button>
+              </form>
+              {thread.comments && thread.comments.map(comment => (
+                <div key={comment.id}>
+                  <p>{comment.content}</p>
+                  <p>Author: {comment.author}</p>
+                  {/* Optionally, add delete button for comments */}
+                  {currentUser.id === comment.authorID && (
+                    <Button onClick={() => handleDeleteComment(thread.id, comment.id)}>
+                      Delete
+                    </Button>
+                  )}
+                </div>
+              ))}
             </Card>
           )}
         </div>
