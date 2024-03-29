@@ -81,7 +81,7 @@ function ForumApp() {
 
   return (
     <div>
-      <div style={{display: 'flex'}}>
+      <div style={{display: 'flex', justifyContent: 'space-between'}}>
        <TextField
             type='text'
             label='Search for a Thread '
@@ -91,9 +91,8 @@ function ForumApp() {
               maxLength: 50,
             }}
             onChange={handleSearchChange}
-           style={{justifyContent: 'flex-start'}}
       />
-        <FormControl style={{width: "30%", justifyContent: 'flex-end' }}>
+        <FormControl style={{width: "30%" }}>
             <InputLabel>Sort By</InputLabel>
             <Select value={sortBy} onChange={handleSortChange}>
               <MenuItem value="">None</MenuItem>
