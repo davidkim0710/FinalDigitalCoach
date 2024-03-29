@@ -14,7 +14,7 @@ function ForumApp() {
   const [isFormOpen, setIsFormOpen] = useState(false); // State to control form visibility
   const [searchQuery, setSearchQuery] = useState(''); // State to hold the search query
   const {currentUser} = useAuthContext();
-  console.log(currentUser._document.data.value.mapValue.fields.name);
+  let currentUserName = currentUser._document.data.value.mapValue.fields.name.stringValue;
 
   useEffect(() => {
     const fetchThreads = async () => {
@@ -35,7 +35,7 @@ function ForumApp() {
     try {
       setLoading(true);
       setIsFormOpen(false); // Close the form after submitting
-      await ForumService.createThread(title, content);
+      await ForumService.createThread(title, content, currentUserName);
     } catch (error) {
       console.error('Error creating or fetching threads:', error);
     } finally {
