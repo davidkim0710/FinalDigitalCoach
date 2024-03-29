@@ -4,16 +4,16 @@ import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 function NewThreadForm({ onSubmit, onClose }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [didCoachHelp, setDidCoachHelp] = useState(false); // State for checkbox
+  const [isAlumni, setIsAlumni] = useState(false); // State for checkbox
 
   const handleSubmit = (event) => {
     event.preventDefault();
     // Call onSubmit with form data
-    onSubmit(title, content, didCoachHelp);
+    onSubmit(title, content, isAlumni);
     // Reset form fields
     setTitle('');
     setContent('');
-    setDidCoachHelp(false);
+    setIsAlumni(false);
     // Close the form
     onClose();
   };
@@ -40,16 +40,16 @@ function NewThreadForm({ onSubmit, onClose }) {
       />
       <br />
       <br />
-      {/* Checkbox for "Did Digital Coach help you land a job" */}
+      {/* Checkbox for "Are you a Digital Coach alumni (practiced at least one interview)?" */}
       <FormControlLabel
         control={
           <Checkbox
-            checked={didCoachHelp}
-            onChange={(event) => setDidCoachHelp(event.target.checked)}
+            checked={isAlumni}
+            onChange={(event) => setIsAlumni(event.target.checked)}
             color="primary"
           />
         }
-        label="Did Digital Coach help you land a job?"
+        label="Are you a Digital Coach alumni (practiced at least 1 interview)?"
       />
       <br />
       <br />
