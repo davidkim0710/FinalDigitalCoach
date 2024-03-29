@@ -12,8 +12,10 @@ import Link from "next/link";
 import useGetUserAverageScore from "@App/lib/interviewQuestion/useGetUserAverageScore";
 import useFetchUserInterviews from "@App/lib/interview/useFetchUserInterviews";
 import useGetAnswersByUserId from "@App/lib/answer/useGetAnswerByUserId";
+import seed from "@App/pages/api/seed";
 
 const Home: NextPage = () => {
+  seed();
   const { currentUser } = useAuthContext();
 
   const {
