@@ -9,6 +9,7 @@ function ThreadList({ threads, setLoading}) {
   const [editThreadId, setEditThreadId] = useState(null);
   const { currentUser } = useAuthContext();
   const [newComment, setNewComment] = useState('');
+  let currentUserName = currentUser._document.data.value.mapValue.fields.name.stringValue;
 
   const handleEdit = (threadId) => {
     // Set the thread to be edited
@@ -47,7 +48,7 @@ function ThreadList({ threads, setLoading}) {
   const handleAddComment = async (threadId) => {
     try {
       setLoading(true);
-      await ForumService.addComment(threadId, newComment, currentUser.name, currentUser.id);
+      await ForumService.addComment(threadId, newComment, currentUserName, currentUser.id);
       setNewComment('');
       setLoading(false);
     } catch (error) {
