@@ -35,17 +35,17 @@ function NewThreadForm({ onSubmit, onClose }) {
               />
           <br />
           <TextField
-            label="Content"
+            type='text'
+            label='Thread Content'
             value={content}
-            onChange={(event) => setContent(event.target.value)}
             required
-            fullWidth
-            multiline
+            inputProps={{ minLength: 1,
+              maxLength: 1000,
+            }}
+            onChange={(e) => setContent(e.target.value)}
             rows={4}
           />
           <br />
-          <br />
-          {/* Checkbox for "Are you a Digital Coach alumni (practiced at least one interview)?" */}
           <FormControlLabel
             control={
               <Checkbox
