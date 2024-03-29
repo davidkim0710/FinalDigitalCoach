@@ -7,8 +7,7 @@ import useAuthContext from '@App/lib/auth/AuthContext';
 
 function ThreadList({ threads, setLoading}) {
   const [editThreadId, setEditThreadId] = useState(null);
-  const {currentUser} = useAuthContext();
-  const currUserID = currentUser!.id;
+  const { currentUser } = useAuthContext();
 
   const handleEdit = (threadId) => {
     // Set the thread to be edited
@@ -28,18 +27,17 @@ function ThreadList({ threads, setLoading}) {
     }
   };
 
-    const handleDelete = async (threadId) => {
-  try {
-    setLoading(true);
-    console.log(threadId);
-    await ForumService.deleteThread(threadId);
-    setLoading(true);
-  } catch (error) {
-    console.error('Error deleting thread:', error);
-  } finally {
-    setLoading(false);
-  }
-};
+  const handleDelete = async (threadId) => {
+    try {
+      setLoading(true);
+      await ForumService.deleteThread(threadId);
+      setLoading(true);
+    } catch (error) {
+      console.error('Error deleting thread:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleExitEdit = () => {
     setEditThreadId(null); // Function to exit edit mode
@@ -59,29 +57,32 @@ function ThreadList({ threads, setLoading}) {
               onExit={handleExitEdit} // Pass the function to exit edit mode
             />
           ) : (
-            // Render thread details with edit and delete buttons
-            <>
-              <Card title={thread.title}>
-                <p>{thread.content}</p>
-                <p>Last Updated on {(new Date(thread.createdAt.seconds * 1000 + thread.createdAt.nanoseconds / 1000000)).toLocaleString()}</p>
-                <p>Author: {thread.author}</p>
-                <Button
-                  variant='contained'
-                  type='submit'
-                  sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
-                  onClick={() => handleEdit(thread.id)}>
-                  Edit
-                </Button>
-                <br />
-                <Button
-                  variant='contained'
-                  type='submit'
-                  sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
-                  onClick={() => handleDelete(thread.id)}>
-                  Delete
-                </Button>
-              </Card>
-            </>
+            // Render thread details with edit and delete buttons if current user matches author
+            <Card title={thread.title}>
+              <p>{thread.content}</p>
+              <p>Last Updated on {(new Date(thread.createdAt.seconds * 1000 + thread.createdAt.nanoseconds / 1000000)).toLocaleString()}</p>
+              <p>Author: {thread.author}</p>
+              {/* Conditionally render edit and delete buttons */}
+              {currentUser.id === thread.authorID && (
+                <>
+                  <Button
+                    variant='contained'
+                    type='submit'
+                    sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
+                    onClick={() => handleEdit(thread.id)}>
+                    Edit
+                  </Button>
+                  <br />
+                  <Button
+                    variant='contained'
+                    type='submit'
+                    sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
+                    onClick={() => handleDelete(thread.id)}>
+                    Delete
+                  </Button>
+                </>
+              )}
+            </Card>
           )}
         </div>
       ))}
