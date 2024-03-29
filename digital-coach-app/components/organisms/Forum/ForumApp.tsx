@@ -14,7 +14,7 @@ function ForumApp() {
   const [isFormOpen, setIsFormOpen] = useState(false); // State to control form visibility
   const [searchQuery, setSearchQuery] = useState(''); // State to hold the search query
   const {currentUser} = useAuthContext();
-  console.log(currentUser._document);
+  console.log(currentUser._document.data.value.mapValue.fields.name);
 
   useEffect(() => {
     const fetchThreads = async () => {
