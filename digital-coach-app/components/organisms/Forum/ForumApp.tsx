@@ -91,7 +91,7 @@ function ForumApp() {
               maxLength: 50,
             }}
             onChange={handleSearchChange}
-           justifyContent: 'flex-start'
+           style={{justifyContent: 'flex-start'}}
       />
         <FormControl style={{width: "30%" }}>
             <InputLabel>Sort By</InputLabel>
