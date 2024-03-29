@@ -32,11 +32,11 @@ function ForumApp() {
     fetchThreads();
   }, [loading]); 
 
-  const handleNewThread = async (title, content) => {
+  const handleNewThread = async (title, content, isAlumni) => {
     try {
       setLoading(true);
       setIsFormOpen(false); // Close the form after submitting
-      await ForumService.createThread(title, content, currentUserName, currUserID);
+      await ForumService.createThread(title, content, currentUserName, currUserID, isAlumni);
     } catch (error) {
       console.error('Error creating or fetching threads:', error);
     } finally {
