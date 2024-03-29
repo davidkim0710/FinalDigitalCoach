@@ -1,66 +1,61 @@
 import React, { useState } from 'react';
-import Card from '@App/components/atoms/Card';
-import {
-  TextField,
-  FormControl,
-  Button
-} from '@mui/material';
+import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
 
 function NewThreadForm({ onSubmit, onClose }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [didCoachHelp, setDidCoachHelp] = useState(false); // State for checkbox
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(title, content);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    // Call onSubmit with form data
+    onSubmit(title, content, didCoachHelp);
+    // Reset form fields
     setTitle('');
     setContent('');
+    setDidCoachHelp(false);
+    // Close the form
+    onClose();
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <Card title="Create New Thread">
-        <FormControl fullWidth>
-          <TextField
-            type='text'
-            label='Title'
-            value={title}
-            required
-            inputProps={{ minLength: 1,
-              maxLength: 40,
-            }}
-            onChange={(e) => setTitle(e.target.value)}
+      <TextField
+        label="Title"
+        value={title}
+        onChange={(event) => setTitle(event.target.value)}
+        required
+        fullWidth
+      />
+      <br />
+      <br />
+      <TextField
+        label="Content"
+        value={content}
+        onChange={(event) => setContent(event.target.value)}
+        required
+        fullWidth
+        multiline
+        rows={4}
+      />
+      <br />
+      <br />
+      {/* Checkbox for "Did Digital Coach help you land a job" */}
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={didCoachHelp}
+            onChange={(event) => setDidCoachHelp(event.target.checked)}
+            color="primary"
           />
-          <br />
-          <TextField
-            type='text'
-            label='Thread Content'
-            value={content}
-            required
-            inputProps={{ minLength: 1,
-              maxLength: 1000,
-            }}
-            onChange={(e) => setContent(e.target.value)}
-          />
-          <br />
-          <Button
-            variant='contained'
-            type='submit'
-            sx={{ marginRight: '10px', backgroundColor: '#023047' }}
-          >
-            Submit
-          </Button>
-          <br />
-          <Button
-            variant='contained'
-            color='error'
-            sx={{ marginRight: '10px' }}
-            onClick={onClose}
-          >
-            Exit
-          </Button>
-        </FormControl>
-      </Card>
+        }
+        label="Did Digital Coach help you land a job?"
+      />
+      <br />
+      <br />
+      <Button variant="contained" type="submit">
+        Submit
+      </Button>
     </form>
   );
 }
