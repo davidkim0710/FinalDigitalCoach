@@ -28,7 +28,7 @@ class ForumService {
     return getDocs(threadsQuery);
   }
 
-  async createThread(title, content, name, id) {
+  async createThread(title, content, name, id, alumni) {
     const threadsCollectionRef = this.getThreadsCollectionRef();
 
     const newThread = {
@@ -36,7 +36,8 @@ class ForumService {
       content,
       createdAt: new Date(),
       author: name,
-      authorID: id
+      authorID: id,
+      alumni: alumni
     };
 
     return addDoc(threadsCollectionRef, newThread);
@@ -48,17 +49,6 @@ class ForumService {
     return getDocs(postsQuery);
   }
 
-  async addPost(threadId, content) {
-    const threadRef = collection(this.firestore, "threads", threadId);
-    const postsCollectionRef = collection(threadRef, "posts");
-
-    const newPost = {
-      content,
-      createdAt: new Date(),
-    };
-
-    return addDoc(postsCollectionRef, newPost);
-  }
 
   async editThread(threadId, title, content) {
     const threadRef = doc(collection(this.firestore, "threads"), threadId);
