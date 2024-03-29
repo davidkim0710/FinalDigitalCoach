@@ -91,15 +91,17 @@ function ForumApp() {
             }}
             onChange={handleSearchChange}
       />
-      <FormControl style={{ width: '30%' }}>
-          <InputLabel>Sort By</InputLabel>
-          <Select value={sortBy} onChange={handleSortChange}>
-            <MenuItem value="">None</MenuItem>
-            <MenuItem value="alumni">Digital Coach Alumni</MenuItem>
-            <MenuItem value="date-asc">Date (ascending)</MenuItem>
-            <MenuItem value="date-des">Date (descending)</MenuItem>
-          </Select>
-        </FormControl>
+      <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+        <FormControl style={{ width: '30%' }}>
+            <InputLabel>Sort By</InputLabel>
+            <Select value={sortBy} onChange={handleSortChange}>
+              <MenuItem value="">None</MenuItem>
+              <MenuItem value="alumni">Digital Coach Alumni</MenuItem>
+              <MenuItem value="date-asc">Date (ascending)</MenuItem>
+              <MenuItem value="date-des">Date (descending)</MenuItem>
+            </Select>
+          </FormControl>
+      </div>
       <br />
       <br />
       {isFormOpen ? (
