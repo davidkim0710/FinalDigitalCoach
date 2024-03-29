@@ -28,14 +28,15 @@ class ForumService {
     return getDocs(threadsQuery);
   }
 
-  async createThread(title, content, name) {
+  async createThread(title, content, name, id) {
     const threadsCollectionRef = this.getThreadsCollectionRef();
 
     const newThread = {
       title,
       content,
       createdAt: new Date(),
-      author: name
+      author: name,
+      authorID: id
     };
 
     return addDoc(threadsCollectionRef, newThread);
