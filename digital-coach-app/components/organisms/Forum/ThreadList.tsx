@@ -61,7 +61,7 @@ function ThreadList({ threads, setLoading}) {
               <Card title={thread.title}>
                 <p>{thread.content}</p>
                 <p>Last Updated on {(new Date(thread.createdAt.seconds * 1000 + thread.createdAt.nanoseconds / 1000000)).toLocaleString()}</p>
-                <p>Author: {thread.author} {thread.authorID}</p>
+                <p>Author: {thread.author}</p>
                 <Button
                   variant='contained'
                   type='submit'
