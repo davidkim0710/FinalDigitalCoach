@@ -15,7 +15,6 @@ import useGetAnswersByUserId from "@App/lib/answer/useGetAnswerByUserId";
 import seed from "@App/pages/api/seed";
 
 const Home: NextPage = () => {
-  seed();
   const { currentUser } = useAuthContext();
 
   const {
@@ -58,6 +57,8 @@ const Home: NextPage = () => {
       ];
     const randInd = Math.floor(Math.random() * tips.length);
     setTips(tips[randInd]);
+    
+    seed();
   }, []);
 
   if (
