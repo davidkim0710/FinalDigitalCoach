@@ -288,14 +288,14 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
       })
     );
 
-    //res.status(200).json({
-      //message: `Finished seeding in ${Date.now() - start}ms`
-    //});
+    res.status(200).json({
+      message: `Finished seeding in ${Date.now() - start}ms`
+    });
   } catch (error) {
     console.log(error);
-    //res.status(500).json({
-    //  Error: error,
-    //  Stack: error instanceof Error ? error.stack : undefined,
-    //});
+    res.status(500).json({
+      Error: error,
+      Stack: error instanceof Error ? error.stack : undefined,
+    });
   }
 }
