@@ -55,7 +55,15 @@ function BrowseQuestionsPage() {
     console.log("fired");
     async function fetchQuestions() {
       setLoading(true);
-      const questions = await QuestionService.getByPopularityDesc();
+      const questions = await QuestionService.getByFilters(
+      subjectSelect as TSubject,
+      typeSelect as TQuestionType,
+      experienceLevelSelect as TExperienceLevel,
+      popularityCheckbox,
+      searchText.toLowerCase().trim(),
+      RESULT_LIMIT,
+      lastVisible
+    );
       console.log(questions);
       setLastVisible(questions.docs[questions.docs.length - 1]);
       setQuestionsData(questions.docs.map((doc) => doc.data()));
