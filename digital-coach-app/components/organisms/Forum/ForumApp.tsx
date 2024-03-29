@@ -91,7 +91,7 @@ function ForumApp() {
             }}
             onChange={handleSearchChange}
       />
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <div style={{  justifyContent: 'flex-end' }}>
         <FormControl style={{ width: '30%' }}>
             <InputLabel>Sort By</InputLabel>
             <Select value={sortBy} onChange={handleSortChange}>
