@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ThreadList from './ThreadList';
 import {
   Button,
-  TextField
+  TextField, FormControl
 } from '@mui/material';
 import ForumService from './forumapi'; // Import ForumService
 import NewThreadForm from './NewThreadForm';
