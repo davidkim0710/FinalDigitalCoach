@@ -13,6 +13,7 @@ function ForumApp() {
   const [loading, setLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false); // State to control form visibility
   const [searchQuery, setSearchQuery] = useState(''); // State to hold the search query
+  const [sortBy, setSortBy] = useState(''); // State to hold the selected sorting option
   const {currentUser} = useAuthContext();
   let currentUserName = currentUser._document.data.value.mapValue.fields.name.stringValue;
   let currUserID = currentUser!.id;
@@ -48,11 +49,31 @@ function ForumApp() {
     setSearchQuery(event.target.value);
   };
 
+  const handleSortChange = (event) => {
+    setSortBy(event.target.value);
+  };
+
 
   const filteredThreads = threads.filter(thread =>
     thread.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     thread.content.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  if (sortBy === 'alumni') {
+    filteredThreads = filteredThreads.filter(thread => thread.alumni);
+  } else if (sortBy === 'date-asc') {
+    filteredThreads.sort((a, b) => {
+      const dateA = new Date(a.createdAt.seconds * 1000);
+      const dateB = new Date(b.createdAt.seconds * 1000);
+      return dateA - dateB;
+    });
+  } else if (sortBy === "date-des"){
+    filteredThreads.sort((a, b) => {
+      const dateA = new Date(a.createdAt.seconds * 1000);
+      const dateB = new Date(b.createdAt.seconds * 1000);
+      return dateB - dateA;
+    });
+  }
 
   return (
     <div>
@@ -70,8 +91,9 @@ function ForumApp() {
           <InputLabel>Sort By</InputLabel>
           <Select value={sortBy} onChange={handleSortChange}>
             <MenuItem value="">None</MenuItem>
-            <MenuItem value="alumni">Alumni</MenuItem>
-            <MenuItem value="date">Date</MenuItem>
+            <MenuItem value="alumni">Digital Coach Alumni</MenuItem>
+            <MenuItem value="date-asc">Date (ascending)</MenuItem>
+            <MenuItem value="date-des">Date (descending)</MenuItem>
           </Select>
         </FormControl>
       <br />
