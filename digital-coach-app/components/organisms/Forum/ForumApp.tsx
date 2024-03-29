@@ -91,7 +91,7 @@ function ForumApp() {
             }}
             onChange={handleSearchChange}
       />
-      <FormControl style={{ width: '40%' }}>
+      <FormControl style={{ width: '30%' }}>
           <InputLabel>Sort By</InputLabel>
           <Select value={sortBy} onChange={handleSortChange}>
             <MenuItem value="">None</MenuItem>
