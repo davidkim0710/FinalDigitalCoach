@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Checkbox, FormControlLabel, TextField } from '@mui/material';
+import Card from '@App/components/atoms/Card';
 
 function NewThreadForm({ onSubmit, onClose }) {
   const [title, setTitle] = useState('');
