@@ -16,7 +16,6 @@ function ForumApp() {
   const {currentUser} = useAuthContext();
   let currentUserName = currentUser._document.data.value.mapValue.fields.name.stringValue;
   let currUserID = currentUser!.id;
-  console.log(currUserID);
 
   useEffect(() => {
     const fetchThreads = async () => {
