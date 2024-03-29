@@ -3,9 +3,12 @@ import Card from '@App/components/atoms/Card';
 import ForumService from './forumapi'; // Import ForumService
 import { Button } from '@mui/material';
 import EditThreadForm from './EditThreadForm'; // Import EditThreadForm
+import useAuthContext from '@App/lib/auth/AuthContext';
 
 function ThreadList({ threads, setLoading}) {
   const [editThreadId, setEditThreadId] = useState(null);
+  const {currentUser} = useAuthContext();
+  const currUserID = currentUser!.id;
 
   const handleEdit = (threadId) => {
     // Set the thread to be edited
