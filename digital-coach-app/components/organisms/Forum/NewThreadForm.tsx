@@ -20,6 +20,7 @@ function NewThreadForm({ onSubmit, onClose }) {
 
   return (
     <form onSubmit={handleSubmit}>
+      <Card title="Edit Thread">
       <TextField
         label="Title"
         value={title}
@@ -56,6 +57,7 @@ function NewThreadForm({ onSubmit, onClose }) {
       <Button variant="contained" type="submit">
         Submit
       </Button>
+        </Card>
     </form>
   );
 }
