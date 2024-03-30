@@ -163,7 +163,7 @@ function BrowseQuestionsPage() {
                   </IconButton>
                 </ListItemIcon>
                 <div>
-                  <ListItemText primary={question.question} secondary={["Subject: " + question.subject, "Type: " + question.type, question.company ? "Company: " + question.companies[0] : null].filter(Boolean).join(" | ")} />
+                  <ListItemText primary={question.question} secondary={["Subject: " + question.subject, "Type: " + question.type, question.companies ? "Company: " + question.companies[0] : null].filter(Boolean).join(" | ")} />
                   <ListItemText secondary={"Experience: " + question.experienceLevel} />
                 </div>
               </ListItem>
