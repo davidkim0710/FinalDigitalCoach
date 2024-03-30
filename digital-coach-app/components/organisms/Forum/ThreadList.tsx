@@ -123,6 +123,7 @@ function ThreadList({ threads, setLoading}) {
                     Add Comment
                   </Button>
               </form>
+              <p>{thread.comments}</p>
               {thread.comments && thread.comments.map(comment => (
                 <div key={comment.id}>
                   <p>{comment.content}</p>
