@@ -46,11 +46,15 @@ function ThreadList({ threads, setLoading}) {
   };
 
   const handleAddComment = async (event, threadId) => {
+    console.log(event);
     event.preventDefault();
     try {
       setLoading(true);
+      console.log("calling addComment");
+      console.log(newComment);
       await ForumService.addComment(threadId, newComment, currentUserName, currentUser.id);
       setNewComment('');
+      console.log("finished addComment");
       setLoading(false);
     } catch (error) {
       console.error('Error adding comment:', error);
