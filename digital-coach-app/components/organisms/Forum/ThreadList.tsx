@@ -46,8 +46,8 @@ function ThreadList({ threads, setLoading}) {
   };
 
   const handleAddComment = async (event, threadId) => {
-    console.log(event);
-    event.preventDefault();
+    //console.log(event);
+    //event.preventDefault();
     try {
       setLoading(true);
       console.log("calling addComment");
@@ -113,7 +113,7 @@ function ThreadList({ threads, setLoading}) {
                   </Button>
                 </>
               )}
-               <form onSubmit={(event) => handleAddComment(event, thread.id)}>
+               <form onSubmit={() => handleAddComment(thread.id)}>
                 <input
                   type="text"
                   value={newComment}
