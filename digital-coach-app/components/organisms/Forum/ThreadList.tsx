@@ -117,7 +117,6 @@ function ThreadList({ threads, setLoading }) {
                     maxLength: 1000,
                   }}
                   onChange={(e) => setNewComment(e.target.value)}
-                  sx={{ maxWidth: '30%'}}
                 />
                 <Button
                   variant='contained'
