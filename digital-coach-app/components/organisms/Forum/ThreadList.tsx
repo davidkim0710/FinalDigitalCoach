@@ -45,7 +45,7 @@ function ThreadList({ threads, setLoading}) {
     setEditThreadId(null); // Function to exit edit mode
   };
 
-  const handleAddComment = async (event, threadId) => {
+  const handleAddComment = async (threadId) => {
     //console.log(event);
     //event.preventDefault();
     try {
