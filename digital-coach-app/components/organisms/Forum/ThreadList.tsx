@@ -5,14 +5,13 @@ import { Button } from '@mui/material';
 import EditThreadForm from './EditThreadForm'; // Import EditThreadForm
 import useAuthContext from '@App/lib/auth/AuthContext';
 
-function ThreadList({ threads, setLoading}) {
-  const [editThreadId, setEditThreadId] = useState(null);
+function ThreadList({ threads, setLoading }) {
   const { currentUser } = useAuthContext();
+  const [editThreadId, setEditThreadId] = useState(null);
   const [newComment, setNewComment] = useState('');
-  let currentUserName = currentUser._document.data.value.mapValue.fields.name.stringValue;
+  const currentUserName = currentUser._document.data.value.mapValue.fields.name.stringValue;
 
   const handleEdit = (threadId) => {
-    // Set the thread to be edited
     setEditThreadId(threadId);
   };
 
@@ -20,7 +19,6 @@ function ThreadList({ threads, setLoading}) {
     try {
       setLoading(true);
       await ForumService.editThread(threadId, title, content);
-      // Reset the editThread state to exit the edit mode
       setEditThreadId(null);
     } catch (error) {
       console.error('Error editing thread:', error);
@@ -33,7 +31,6 @@ function ThreadList({ threads, setLoading}) {
     try {
       setLoading(true);
       await ForumService.deleteThread(threadId);
-      setLoading(true);
     } catch (error) {
       console.error('Error deleting thread:', error);
     } finally {
@@ -42,22 +39,17 @@ function ThreadList({ threads, setLoading}) {
   };
 
   const handleExitEdit = () => {
-    setEditThreadId(null); // Function to exit edit mode
+    setEditThreadId(null);
   };
 
   const handleAddComment = async (threadId) => {
-    //console.log(event);
-    //event.preventDefault();
     try {
       setLoading(true);
-      console.log("calling addComment");
-      console.log(newComment);
       await ForumService.addComment(threadId, newComment, currentUserName, currentUser.id);
       setNewComment('');
-      console.log("finished addComment");
-      setLoading(false);
     } catch (error) {
       console.error('Error adding comment:', error);
+    } finally {
       setLoading(false);
     }
   };
@@ -66,9 +58,9 @@ function ThreadList({ threads, setLoading}) {
     try {
       setLoading(true);
       await ForumService.deleteComment(threadId, commentId);
-      setLoading(false);
     } catch (error) {
       console.error('Error deleting comment:', error);
+    } finally {
       setLoading(false);
     }
   };
@@ -79,26 +71,22 @@ function ThreadList({ threads, setLoading}) {
       {threads.map(thread => (
         <div key={thread.id}>
           {editThreadId === thread.id ? (
-            // Render EditThreadForm if editThread state matches the current thread
             <EditThreadForm
               initialTitle={thread.title}
               initialContent={thread.content}
               onSubmit={(title, content) => handleEditSubmit(thread.id, title, content)}
-              onExit={handleExitEdit} // Pass the function to exit edit mode
+              onExit={handleExitEdit}
             />
           ) : (
-            // Render thread details with edit and delete buttons if current user matches author
             <Card title={thread.title}>
               <p>{thread.content}</p>
               <p>Last Updated on {(new Date(thread.createdAt.seconds * 1000 + thread.createdAt.nanoseconds / 1000000)).toLocaleString()}</p>
               <p>Author: {thread.author}</p>
               {thread.alumni && (<p>Alumnus of Digital Coach</p>)}
-              {/* Conditionally render edit and delete buttons */}
               {currentUser.id === thread.authorID && (
                 <>
                   <Button
                     variant='contained'
-                    type='submit'
                     sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
                     onClick={() => handleEdit(thread.id)}>
                     Edit
@@ -106,14 +94,16 @@ function ThreadList({ threads, setLoading}) {
                   <br />
                   <Button
                     variant='contained'
-                    type='submit'
                     sx={{ maxWidth: '30%', backgroundColor: '#023047' }}
                     onClick={() => handleDelete(thread.id)}>
                     Delete
                   </Button>
                 </>
               )}
-               <form onSubmit={() => handleAddComment(thread.id)}>
+              <form onSubmit={(e) => {
+                e.preventDefault(); // Prevent default form submission
+                handleAddComment(thread.id); // Call handleAddComment with thread id
+              }}>
                 <input
                   type="text"
                   value={newComment}
@@ -121,18 +111,17 @@ function ThreadList({ threads, setLoading}) {
                   placeholder="Add a comment"
                 />
                 <Button
-                    variant='contained'
-                    type='submit'
-                    sx={{ maxWidth: '30%', backgroundColor: '#023047' }}>
-                    Add Comment
-                  </Button>
+                  variant='contained'
+                  type='submit'
+                  sx={{ maxWidth: '30%', backgroundColor: '#023047' }}>
+                  Add Comment
+                </Button>
               </form>
-              <p>{thread.comments}</p>
+              {/* Render comments */}
               {thread.comments && thread.comments.map(comment => (
                 <div key={comment.id}>
                   <p>{comment.content}</p>
                   <p>Author: {comment.author}</p>
-                  {/* Optionally, add delete button for comments */}
                   {currentUser.id === comment.authorID && (
                     <Button onClick={() => handleDeleteComment(thread.id, comment.id)}>
                       Delete
