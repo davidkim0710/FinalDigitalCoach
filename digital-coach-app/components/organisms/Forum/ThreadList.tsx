@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Card from '@App/components/atoms/Card';
 import ForumService from './forumapi'; // Import ForumService
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import EditThreadForm from './EditThreadForm'; // Import EditThreadForm
 import useAuthContext from '@App/lib/auth/AuthContext';
 
