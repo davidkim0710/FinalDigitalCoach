@@ -25,8 +25,8 @@ function ForumApp() {
   useEffect(() => {
     const fetchThreads = async () => {
       try {
-        const threadsData = await ForumService.getAllThreadsWithComments();
-        const threadsArray = await threadsData.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const threadsArray = await ForumService.getAllThreadsWithComments();
+        //const threadsArray = await threadsData.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setThreads(threadsArray);
         setLoading(false);
       } catch (error) {
