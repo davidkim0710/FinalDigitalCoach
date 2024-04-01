@@ -32,6 +32,24 @@ class ForumService {
     const threadsQuery = query(this.getThreadsCollectionRef());
     return getDocs(threadsQuery);
   }
+  async getAllThreadsWithComments() {
+    const threadsQuery = query(this.getThreadsCollectionRef());
+    const threadsSnapshot = await getDocs(threadsQuery);
+    const threadsWithComments = [];
+    for (const docRef of threadsSnapshot.docs) {
+        const thread = docRef.data();
+        const commentsQuery = query(this.getCommentsCollectionRef(docRef.id));
+        const commentsSnapshot = await getDocs(commentsQuery);
+        const comments = commentsSnapshot.docs.map(commentDoc => ({
+            id: commentDoc.id,
+            ...commentDoc.data()
+        }));
+        thread.comments = comments;
+        threadsWithComments.push(thread);
+    }
+    return threadsWithComments;
+}
+
 
   async createThread(title, content, name, id, alumni) {
     const threadsCollectionRef = this.getThreadsCollectionRef();
