@@ -40,9 +40,10 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit, onExit }) {
             }}
             onChange={(e) => setContent(e.target.value)}
           />
+          
+          <br />
+          <br />
           <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <br />
-          <br />
           <Button
             variant='contained'
             type='submit'
