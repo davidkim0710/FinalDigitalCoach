@@ -107,11 +107,15 @@ function ThreadList({ threads, setLoading }) {
                 e.preventDefault(); // Prevent default form submission
                 handleAddComment(thread.id); // Call handleAddComment with thread id
               }}>
-                <input
-                  type="text"
+                <TextField
+                  type='text'
+                  label='Add a comment'
                   value={newComment}
+                  required
+                  inputProps={{ minLength: 1,
+                    maxLength: 1000,
+                  }}
                   onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Add a comment"
                 />
                 <Button
                   variant='contained'
