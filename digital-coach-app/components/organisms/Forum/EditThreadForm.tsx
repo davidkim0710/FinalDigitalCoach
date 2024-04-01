@@ -52,7 +52,7 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit, onExit }) {
             variant='contained'
             color='error'
             onClick={onExit} // Call onClose function when the button is clicked
-            sx={{ marginRight: '500px', marginLeft: '500px'}}
+            sx={{ marginRight: '1000px'}}
           >
             Exit
           </Button>
