@@ -47,6 +47,7 @@ class ForumService {
         thread.comments = comments;
         threadsWithComments.push(thread);
     }
+    console.log(threadsWithComments)
     return threadsWithComments;
 }
 
