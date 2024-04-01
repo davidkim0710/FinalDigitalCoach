@@ -37,13 +37,15 @@ class ForumService {
     const threadsSnapshot = await getDocs(threadsQuery);
     const threadsWithComments = [];
     for (const docRef of threadsSnapshot.docs) {
+        const threadId = docRef.id; // Get the thread ID
         const thread = docRef.data();
-        const commentsQuery = query(this.getCommentsCollectionRef(docRef.id));
+        const commentsQuery = query(this.getCommentsCollectionRef(threadId));
         const commentsSnapshot = await getDocs(commentsQuery);
         const comments = commentsSnapshot.docs.map(commentDoc => ({
             id: commentDoc.id,
             ...commentDoc.data()
         }));
+        thread.id = threadId; // Add thread ID to thread data
         thread.comments = comments;
         threadsWithComments.push(thread);
     }
