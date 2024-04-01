@@ -40,6 +40,7 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit, onExit }) {
             }}
             onChange={(e) => setContent(e.target.value)}
           />
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
           <br />
           <Button
             variant='contained'
@@ -56,6 +57,7 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit, onExit }) {
           >
             Exit
           </Button>
+            </div>
         </FormControl>
       </Card>
     </form>
