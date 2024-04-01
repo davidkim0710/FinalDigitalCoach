@@ -133,7 +133,7 @@ function ThreadList({ threads, setLoading }) {
               {thread.comments && thread.comments.map(comment => (
                 <div key={comment.id}>
                   <p>{comment.content}</p>
-                  <p>Author: {comment.author}</p>
+                  <p>       {comment.author}</p>
                   {currentUser.id === comment.authorID && (
                     <Button onClick={() => handleDeleteComment(thread.id, comment.id)}>
                       Delete
