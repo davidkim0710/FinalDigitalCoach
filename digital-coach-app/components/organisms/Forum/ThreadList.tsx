@@ -104,7 +104,7 @@ function ThreadList({ threads, setLoading }) {
               )}
               <br />
               <br />
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: '100px', alignItems: 'center' }}>
               <form onSubmit={(e) => {
                 e.preventDefault(); // Prevent default form submission
                 handleAddComment(thread.id); // Call handleAddComment with thread id
