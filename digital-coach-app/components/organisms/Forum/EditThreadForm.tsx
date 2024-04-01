@@ -42,6 +42,7 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit, onExit }) {
           />
           <div style={{ display: 'flex', justifyContent: 'center' }}>
           <br />
+          <br />
           <Button
             variant='contained'
             type='submit'
