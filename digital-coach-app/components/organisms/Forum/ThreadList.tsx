@@ -104,7 +104,7 @@ function ThreadList({ threads, setLoading }) {
               )}
               <br />
               <br />
-              <div style={{ display: 'flex', gap: '100px', alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <form onSubmit={(e) => {
                 e.preventDefault(); // Prevent default form submission
                 handleAddComment(thread.id); // Call handleAddComment with thread id
@@ -117,7 +117,7 @@ function ThreadList({ threads, setLoading }) {
                   inputProps={{ minLength: 1,
                     maxLength: 1000,
                   }}
-                   style={{ flex: 1 }} 
+                   style={{ flex: 3 }} 
                   onChange={(e) => setNewComment(e.target.value)}
                 />
                 <Button
