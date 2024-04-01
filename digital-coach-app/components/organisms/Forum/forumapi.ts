@@ -24,6 +24,7 @@ class ForumService {
   }
   
   private getCommentsCollectionRef(threadId: string) {
+    console.log(threadId);
     return collection(this.firestore, "threads", threadId, "comments");
   }
 
