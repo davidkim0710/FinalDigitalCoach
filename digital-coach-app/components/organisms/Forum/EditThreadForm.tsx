@@ -18,15 +18,6 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit, onExit }) {
   return (
     <form onSubmit={handleSubmit}>
       <Card title="Edit Thread">
-        
-          <Button
-            variant='contained'
-            color='error'
-            onClick={onExit} // Call onClose function when the button is clicked
-            sx={{ marginLeft: '1000px'}}
-          >
-            Exit
-          </Button>
         <FormControl fullWidth>
           <TextField
             type='text'
@@ -56,6 +47,14 @@ function EditThreadForm({ initialTitle, initialContent, onSubmit, onExit }) {
             sx={{ marginRight: '1000px', backgroundColor: '#023047' }}
           >
             Submit
+          </Button>
+          <Button
+            variant='contained'
+            color='error'
+            onClick={onExit} // Call onClose function when the button is clicked
+            sx={{ marginLeft: '1000px'}}
+          >
+            Exit
           </Button>
         </FormControl>
       </Card>
