@@ -67,6 +67,7 @@ class ForumService {
   }
 
   async addComment(threadId, content, name, id) {
+    console.log(threadId);
     const commentsCollectionRef = this.getCommentsCollectionRef(threadId);
 
     const newComment = {
