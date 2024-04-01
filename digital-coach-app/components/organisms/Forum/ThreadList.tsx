@@ -116,6 +116,7 @@ function ThreadList({ threads, setLoading }) {
                   inputProps={{ minLength: 1,
                     maxLength: 1000,
                   }}
+                   style={{ flex: 1 }} 
                   onChange={(e) => setNewComment(e.target.value)}
                 />
                 <Button
