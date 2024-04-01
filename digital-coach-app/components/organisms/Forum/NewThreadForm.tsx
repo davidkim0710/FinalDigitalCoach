@@ -56,21 +56,23 @@ function NewThreadForm({ onSubmit, onClose }) {
             }
             label="Are you a Digital Coach alumni (practiced at least 1 interview)?"
           />
-          <br />
+         <br />
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
           <Button
             variant='contained'
             type='submit'
-            sx={{ marginRight: '10px', backgroundColor: '#023047' }}
+            sx={{ marginRight: '1000px', backgroundColor: '#023047' }}
           >
             Submit
           </Button>
           <Button
             variant='contained'
             color='error'
-            onClick={onClose} // Call onClose function when the button is clicked
+            onClick={onExit} // Call onClose function when the button is clicked
           >
             Exit
           </Button>
+            </div>
           </FormControl>
         </Card>
     </form>
