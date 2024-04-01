@@ -66,7 +66,6 @@ function ThreadList({ threads, setLoading }) {
       setLoading(false);
     }
   };
-  console.log(threads);
 
   return (
     <div>
