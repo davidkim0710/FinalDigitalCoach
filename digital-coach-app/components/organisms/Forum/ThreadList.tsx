@@ -125,8 +125,8 @@ function ThreadList({ threads, setLoading }) {
                 </Button>
               </form>
               {/* Render comments */}
+              {thread.comments && thread.comments.length > 0 && (<h3>Comments:</h3>)}
               {thread.comments && thread.comments.map(comment => (
-                <h3>Comments:</h3>
                 <div key={comment.id}>
                   <p>{comment.content}</p>
                   <p>Author: {comment.author}</p>
