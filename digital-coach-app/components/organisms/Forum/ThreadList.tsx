@@ -103,6 +103,7 @@ function ThreadList({ threads, setLoading }) {
                 </>
               )}
               <br />
+              <br />
               <form onSubmit={(e) => {
                 e.preventDefault(); // Prevent default form submission
                 handleAddComment(thread.id); // Call handleAddComment with thread id
