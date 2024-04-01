@@ -68,7 +68,7 @@ function NewThreadForm({ onSubmit, onClose }) {
           <Button
             variant='contained'
             color='error'
-            onClick={onExit} // Call onClose function when the button is clicked
+            onClick={onClose} // Call onClose function when the button is clicked
           >
             Exit
           </Button>
