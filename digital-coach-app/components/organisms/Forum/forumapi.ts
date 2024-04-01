@@ -46,6 +46,7 @@ class ForumService {
             ...commentDoc.data()
         }));
         thread.id = threadId; // Add thread ID to thread data
+        console.log(thread.id)
         thread.comments = comments;
         threadsWithComments.push(thread);
     }
