@@ -78,6 +78,8 @@ function BrowseQuestionsPage() {
         return { id: doc.id, ...doc.data() };
       });
       setUserQuestionSets(userQuestionSets);
+      let allqs = await QuestionSetsService.getAllQuestionSets();
+      console.log(allqs);
     }
 
     fetchQuestions();
