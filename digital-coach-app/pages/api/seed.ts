@@ -29,7 +29,7 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
       AuthService.signup("hamzah@test.com", "password"),
       AuthService.signup("steven@expo.com", "password"),
     ]);
-    const addQuestionCollection = await Promise.all([questionsData.map(async (qList) =>
+    const addQuestionCollection = questionsData.map(async (qList) =>
         qList.questions.map(
           async (question: string) =>
             await QuestionService.addQuestion({
@@ -45,7 +45,7 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
                 .split(" "),
             })
         )
-      )]),
+      ),
       addUserCollection = userCredentials.map(async ({ user }) => UserService.add(user.uid, new UserBuilder().with({ email: user.email!, name: user.email?.split("@")[0] }).build())),
       addInterviewCollection = userCredentials
         .map(({ user }, idx) =>
@@ -67,22 +67,21 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
     });
 
     const questions = await QuestionService.getAllQuestions();
-    console.log(questions);
 
-   // const addFeaturedQuestionSets = new Array(5).fill(0).map((_, idx) => {
-   //    const questionSet = {
-   //      title: "Featured Question Set " + idx,
-   //      description: "Description " + idx,
-   //      questions: [
-   //        questions.docs[getRandomInt(questions.docs.length)].id,
-   //        questions.docs[getRandomInt(questions.docs.length)].id,
-   //        questions.docs[getRandomInt(questions.docs.length)].id,
-   //        questions.docs[getRandomInt(questions.docs.length)].id,
-   //        questions.docs[getRandomInt(questions.docs.length)].id,
-   //      ],
-   //      isFeatured: true,
-   //      createdBy: null,
-   //    };
+    // const addFeaturedQuestionSets = new Array(5).fill(0).map((_, idx) => {
+    //   const questionSet = {
+    //     title: "Featured Question Set " + idx,
+    //     description: "Description " + idx,
+    //     questions: [
+    //       questions.docs[getRandomInt(questions.docs.length)].id,
+    //       questions.docs[getRandomInt(questions.docs.length)].id,
+    //       questions.docs[getRandomInt(questions.docs.length)].id,
+    //       questions.docs[getRandomInt(questions.docs.length)].id,
+    //       questions.docs[getRandomInt(questions.docs.length)].id,
+    //     ],
+    //     isFeatured: true,
+    //     createdBy: null,
+    //   };
     //   return QuestionSetsService.createQuestionSet(questionSet);
     // });
 
@@ -202,44 +201,44 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
 
 	const featuredQuestionSets = [accountingQuestionSet, engineeringQuestionSet, computerScienceQuestionSet, financeQuestionSet];
 
-	const addFeaturedQuestionSets = await featuredQuestionSets.map((questionSet) => {
+	const addFeaturedQuestionSets = featuredQuestionSets.map((questionSet) => {
 		return QuestionSetsService.createQuestionSet(questionSet);
 	});
 
-   // const addQuestionSets = userData.map((user, idx) => {
-     // const questionSet = {
-       // title: "Question Set " + idx,
-     //   description: "Description " + idx,
-    //    questions: [
-    //      questions.docs[getRandomInt(questions.docs.length)].id,
-    //      questions.docs[getRandomInt(questions.docs.length)].id,
-    //      questions.docs[getRandomInt(questions.docs.length)].id,
-    //      questions.docs[getRandomInt(questions.docs.length)].id,
-    //      questions.docs[getRandomInt(questions.docs.length)].id,
-    //    ],
-    //    isFeatured: false,
-    //    createdBy: user,
-    //  };
-    //  return QuestionSetsService.createQuestionSet(questionSet);
-   // });
+    const addQuestionSets = userData.map((user, idx) => {
+      const questionSet = {
+        title: "Question Set " + idx,
+        description: "Description " + idx,
+        questions: [
+          questions.docs[getRandomInt(questions.docs.length)].id,
+          questions.docs[getRandomInt(questions.docs.length)].id,
+          questions.docs[getRandomInt(questions.docs.length)].id,
+          questions.docs[getRandomInt(questions.docs.length)].id,
+          questions.docs[getRandomInt(questions.docs.length)].id,
+        ],
+        isFeatured: false,
+        createdBy: user,
+      };
+      return QuestionSetsService.createQuestionSet(questionSet);
+    });
 
-     const addQuestionSets = new Array(8).fill(0).map((_, idx) => {
-       const questionSet = {
-         title: 'Question Set ' + idx,
-         description: 'Description ' + idx,
-         questions: [
-           questions.docs[getRandomInt(questions.docs.length)].id,
-           questions.docs[getRandomInt(questions.docs.length)].id,
-           questions.docs[getRandomInt(questions.docs.length)].id,
-           questions.docs[getRandomInt(questions.docs.length)].id,
-           questions.docs[getRandomInt(questions.docs.length)].id,
-         ],
-         isFeatured: false,
-         createdBy: userData[getRandomInt(userData.length)],
-       };
+    // const addQuestionSets = new Array(8).fill(0).map((_, idx) => {
+    //   const questionSet = {
+    //     title: 'Question Set ' + idx,
+    //     description: 'Description ' + idx,
+    //     questions: [
+    //       questions.docs[getRandomInt(questions.docs.length)].id,
+    //       questions.docs[getRandomInt(questions.docs.length)].id,
+    //       questions.docs[getRandomInt(questions.docs.length)].id,
+    //       questions.docs[getRandomInt(questions.docs.length)].id,
+    //       questions.docs[getRandomInt(questions.docs.length)].id,
+    //     ],
+    //     isFeatured: false,
+    //     createdBy: userData[getRandomInt(userData.length)],
+    //   };
 
-       return QuestionSetsService.createQuestionSet(questionSet);
-     });
+    //   return QuestionSetsService.createQuestionSet(questionSet);
+    // });
 
     const addInterviewQuestions = interviewsCollectionRef
       .map((interviewDocRef) =>
@@ -259,28 +258,28 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
 
     const questionsRef = await InterviewQuestionService.getAllInterviewQuestions();
 
-    //const demoVideoFiles = ["assets/answer-1.mp4", "assets/answer-2.mp4"];
+    const demoVideoFiles = ["assets/answer-1.mp4", "assets/answer-2.mp4"];
 
-    //const video = await Promise.all(demoVideoFiles.map((filePath) => fs.readFile(filePath)));
+    const video = await Promise.all(demoVideoFiles.map((filePath) => fs.readFile(filePath)));
 
-    //const storageRef = await Promise.all(video.map((ref, idx) => StorageService.uploadAnswerVideo(ref, `answer-${idx}`)));
+    const storageRef = await Promise.all(video.map((ref, idx) => StorageService.uploadAnswerVideo(ref, `answer-${idx}`)));
 
-   // await Promise.all(
-   //   questionsRef.docs
-   //     .map(async (questionRef) => {
-   //       const question = questionRef.data();
-   //       const uid = questionRef.ref.path.split("/")[1];
+    await Promise.all(
+      questionsRef.docs
+        .map(async (questionRef) => {
+          const question = questionRef.data();
+          const uid = questionRef.ref.path.split("/")[1];
 
-   //       return new Array(question.retries).fill(null).map((_, i) =>
-   //         AnswerService.addAnswer(questionRef.ref, {
-   //           videoUrl: storageRef[getRandomInt(storageRef.length)].ref.toString(),
-   //           isSubmission: i === 0 ? true : false,
-   //           userId: uid,
-   //         })
-   //       );
-   //     })
-   //     .flat()
-   // );
+          return new Array(question.retries).fill(null).map((_, i) =>
+            AnswerService.addAnswer(questionRef.ref, {
+              videoUrl: storageRef[getRandomInt(storageRef.length)].ref.toString(),
+              isSubmission: i === 0 ? true : false,
+              userId: uid,
+            })
+          );
+        })
+        .flat()
+    );
 
     await Promise.all(
       questionsRef.docs.map((questionSnapshot) => {
@@ -289,7 +288,7 @@ export default async function seed(req: NextApiRequest, res: NextApiResponse<{}>
     );
 
     res.status(200).json({
-      message: `Finished seeding in ${Date.now() - start}ms`
+      message: `Finished seeding in ${Date.now() - start}ms`,
     });
   } catch (error) {
     console.log(error);
