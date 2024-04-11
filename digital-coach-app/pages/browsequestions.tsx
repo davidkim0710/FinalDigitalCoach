@@ -65,6 +65,8 @@ function BrowseQuestionsPage() {
       lastVisible
     );
       console.log(questions);
+      console.log(await QuestionService.getAllQuestions();
+      console.log(await QuestionService.getbySubject("Finance");
       setLastVisible(questions.docs[questions.docs.length - 1]);
       setQuestionsData(questions.docs.map((doc) => doc.data()));
       setLoading(false);
