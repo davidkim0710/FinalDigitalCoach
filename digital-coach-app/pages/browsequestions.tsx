@@ -67,7 +67,7 @@ function BrowseQuestionsPage() {
       console.log(questions);
       let allq = await QuestionService.getAllQuestions()
       console.log(allq);
-      let sub = await QuestionService.getBySubject("Finance")
+      let sub = await QuestionService.getByPopularityDesc()
       console.log(sub);
       setLastVisible(questions.docs[questions.docs.length - 1]);
       setQuestionsData(questions.docs.map((doc) => doc.data()));
