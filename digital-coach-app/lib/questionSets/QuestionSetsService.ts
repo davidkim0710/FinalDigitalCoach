@@ -72,7 +72,7 @@ class QuestionSetsService extends FirebaseService {
     return getDoc(questionSetRef);
   }
 
-  getAllQuestionSets() {
+  async getAllQuestionSets() {
     const collectionRef = this.getCollectionRef();
 
     return getDocs(collectionRef);
