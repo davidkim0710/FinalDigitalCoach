@@ -105,6 +105,7 @@ function ProfilePage() {
       const result = await InterviewService.fetchUserInterviews(
         currentUser!.id
       );
+	    console.log(result);
       setInterviews(result.docs.map((doc) => doc.data()));
     };
     getInterviews();
