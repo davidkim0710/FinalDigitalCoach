@@ -1,6 +1,6 @@
 import type { AppProps } from "next/app";
 import { useEffect } from 'react';
-import { seed } from './path/to/seedFile'; // Adjust the path to your seed file as needed
+import { seed } from '@App/pages/api/seed'; // Adjust the path to your seed file as needed
 
 import "@App/styles/globals.css";
 import "@fullcalendar/common/main.css";
