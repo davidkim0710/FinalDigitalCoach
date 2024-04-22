@@ -201,10 +201,6 @@ function BrowseQuestionsPage() {
           <h2>Filters</h2>
 
           {/* <FormControl size="small"> */}
-          <div>
-            <label htmlFor="popularity-check-box">Sort By Popularity</label>
-            <Checkbox id="popularity-check-box" checked={popularityCheckbox} onChange={(event) => setPopularityCheckbox(event.target.checked)}></Checkbox>
-          </div>
           <TextField variant="outlined" size="small" label="Question Keyword Search" onChange={handleTextFieldChange}></TextField>
           <label htmlFor="subject-select">Subject</label>
           <Select
