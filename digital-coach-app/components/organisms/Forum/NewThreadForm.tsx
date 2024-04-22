@@ -21,7 +21,7 @@ function NewThreadForm({ onSubmit, onClose }) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <Card title="Edit Thread">
+      <Card title="Create Thread">
         <FormControl fullWidth>
           <TextField
                 type='text'
