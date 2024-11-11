@@ -11,6 +11,8 @@ from helpers.download_url import download_video_link
 from helpers.score import create_answer
 from db_monitor import poll_connection
 
+from models.BigFiveScores import BigFiveScores
+
 # initalize the Flask object
 app = Flask(__name__)
 CORS(app)
@@ -62,6 +64,27 @@ def predict():
     job = q.enqueue(create_answer, content)
     message = "Task " + str(job.id) + " added to queue at " + str(job.enqueued_at) + "."
     return jsonify(message=message)
+
+@app.route('/big-five-feedback', methods=['POST'])
+def get_big_five_feedback():
+    data = request.get_json()
+    big_five = BigFiveScores(
+        data['big_five']['o'],
+        data['big_five']['c'],
+        data['big_five']['e'],
+        data['big_five']['a'],
+        data['big_five']['n']
+    )
+
+    user_feedback = []
+
+    # Ensure the correct mapping of traits to their attributes
+    for trait, attr in zip(['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism'], ['o', 'c', 'e', 'a', 'n']):
+        trait_level = big_five.determine_level(getattr(big_five, attr))
+        user_feedback.append(BigFiveScores.FEEDBACK[trait][trait_level])
+        
+
+    return jsonify({'feedback': user_feedback})
 
 
 @app.route("/", methods=["GET"])

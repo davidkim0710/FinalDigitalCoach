@@ -12,6 +12,7 @@ def get_results():
         # "answer_id": answer_id
     }
     result = create_answer(content)
+    
     print(result)
 
 

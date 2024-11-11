@@ -1,0 +1,15 @@
+services:
+  backend:
+    build: ./ml-api
+    ports:
+      - "5000:5000"
+      - "8000:8000"
+    volumes:
+      - ./ml-api:/app
+    depends_on:
+      - redis
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
