@@ -72,7 +72,7 @@ export default function VideoPage() {
         const feedbackResponse = await axios.post(
           "http://localhost:8000/big-five-feedback",
           {
-            big_five: response.data.result.evaluation.bigFive,
+            big_five: bigFive,
           }
         );
         // Output the feedback on the screen for the user

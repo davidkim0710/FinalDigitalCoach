@@ -69,14 +69,22 @@ def predict():
 def get_big_five_feedback():
     data = request.get_json()
     big_five = BigFiveScores(
-        data['big_five']['o'],
-        data['big_five']['c'],
-        data['big_five']['e'],
-        data['big_five']['a'],
-        data['big_five']['n']
+        data['o'],
+        data['c'],
+        data['e'],
+        data['a'],
+        data['n']
     )
 
     user_feedback = []
+    # Re add the users scores if we need
+    user_feedback.append({
+        "o": big_five.o,
+        "c": big_five.c,
+        "e": big_five.e,
+        "a": big_five.a,
+        "n": big_five.n
+    })
 
     # Ensure the correct mapping of traits to their attributes
     for trait, attr in zip(['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism'], ['o', 'c', 'e', 'a', 'n']):
