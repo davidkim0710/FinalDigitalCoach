@@ -18,7 +18,6 @@ def _update_all_jobs(redis_conn):
             if status["status"] == FINISHED_ENCODING:
                 ALL_JOBS.add(key)
 
-
 def _send_job_results(redis_conn):
     print(len(ALL_JOBS))
     for job in ALL_JOBS:

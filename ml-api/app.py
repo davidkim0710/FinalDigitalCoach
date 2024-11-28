@@ -12,7 +12,7 @@ from helpers.score import create_answer
 from db_monitor import poll_connection
 
 from models.BigFiveScores import BigFiveScores
-
+from models.StarMethod import predict_star_scores, percentageFeedback
 # initalize the Flask object
 app = Flask(__name__)
 CORS(app)
@@ -68,23 +68,16 @@ def predict():
 @app.route('/big-five-feedback', methods=['POST'])
 def get_big_five_feedback():
     data = request.get_json()
+    scores = data
     big_five = BigFiveScores(
-        data['o'],
-        data['c'],
-        data['e'],
-        data['a'],
-        data['n']
+        scores['o'],
+        scores['c'],
+        scores['e'],
+        scores['a'],
+        scores['n']
     )
 
-    user_feedback = []
-    # Re add the users scores if we need
-    user_feedback.append({
-        "o": big_five.o,
-        "c": big_five.c,
-        "e": big_five.e,
-        "a": big_five.a,
-        "n": big_five.n
-    })
+    user_feedback = [] 
 
     # Ensure the correct mapping of traits to their attributes
     for trait, attr in zip(['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism'], ['o', 'c', 'e', 'a', 'n']):
@@ -94,13 +87,25 @@ def get_big_five_feedback():
 
     return jsonify({'feedback': user_feedback})
 
+@app.route('/star-feedback', methods=['POST'])
+def get_star_feedback():
+    """
+    POST route that returns STAR feedback. Percentages of each part of the STAR method. And the breakdown of each sentence. 
+    """
+    # takes in evaluation.text_analysis.output_text
+    data = request.get_json()
+    star_scores = predict_star_scores(data)
+    percentages = star_scores["percentages"]
+    feedback = percentageFeedback(percentages)
+    
+    return jsonify({'feedback': feedback, "fufilledStar": star_scores["fufilledStar"]}) 
 
 @app.route("/", methods=["GET"])
 def index():
     """
     Home route.
     """
-    return "Welcome to the ML API for Digital Coach"
+    return "Welcome to the ML API for Digital Coach 2222"
 
 
 if __name__ == "___main__":
