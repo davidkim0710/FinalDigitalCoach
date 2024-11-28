@@ -23,11 +23,10 @@ def _score_text_structure(audio_answer):
     sentiments = audio_answer["sentiment_analysis"]
     text = ""
     for i in sentiments:
-        text += i["text"]
-    print(text)
+        text += i["text"] 
     cleaned = clean_text(text)
     predictions = predict_text_structure(cleaned)
-    return {"percent_prediction": predictions[0], "binary_prediction": predictions[1]}
+    return {"percent_prediction": predictions[0], "binary_prediction": predictions[1], "output_text": text}
 
 
 def _score_audio(content):
@@ -36,7 +35,7 @@ def _score_audio(content):
     """
     if "fname" not in content or "rename" not in content:
         return {"errors": "File name and rename does not exist"}
-    fname, rename = content["fname"], content["rename"]
+    fname, rename = content["fname"], content["rename"], 
     audio = extract_audio(fname, rename)
     if "errors" in audio:
         return {"errors": audio["errors"]}
@@ -119,8 +118,7 @@ def _score_bigFive(audio_answer, facial_stats, text_answer):
 def create_answer(content):
     print("creating answer...")
     facial_answer = _score_facial(content)
-    audio_answer = _score_audio(content)
-    print(audio_answer)
+    audio_answer = _score_audio(content)  
     text_answer = _score_text_structure(audio_answer)
     timeline = av_timeline_resolution(
         audio_answer["clip_length_seconds"],
@@ -152,6 +150,7 @@ def create_answer(content):
     result["aggregateScore"] = compute_aggregate_score(result)
     response = {}
     response["evaluation"] = result
+    response["text_analysis"] = text_answer 
     # response["userId"] = content["user_id"]
     # response["interviewId"] = content["interview_id"]
     # response["questionId"] = content["question_id"]

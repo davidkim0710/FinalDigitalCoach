@@ -13,7 +13,9 @@ def get_results():
     }
     result = create_answer(content)
     
-    print(result)
+    # Write result to log
+    with open("test.log", "w") as f:
+        f.write(str(result))
 
 
 get_results()

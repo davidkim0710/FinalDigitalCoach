@@ -35,7 +35,6 @@ def index():
     Home route.
     """
     return "Welcome to the ML API for Digital Coach"
-# 58f909b0-f7a5-4ffb-be09-ab64bd32a787
 
 
 @app.route("/results/<job_id>", methods=["GET"])

@@ -8,6 +8,7 @@ Setup at bottom of page
 
 - Note for team: Ensure env variable "FIREBASE_FUNCTIONS_ENDPOINT" exists (ml-api/db_monitor.py sends the results from redis to this specified Firebase database endpoint)
 
+
 # RUNNING THE PRODUCTION FLASK SERVER
 
 1. cd into ml-api folder

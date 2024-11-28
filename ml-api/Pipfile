@@ -99,9 +99,13 @@ ffmpeg-python = "*"
 flask-cors = "*"
 psutil = "*"
 rq = "*"
-pandas = "*"
 pytest = "*"
 requests-mock = "*"
+gunicorn = "*"
+pandas = "*"
+torch = "*"
+transformers = "==4.36.2"
+accelerate = "==0.28.0"
 
 [dev-packages]
 

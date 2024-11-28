@@ -7,14 +7,18 @@ from dotenv import load_dotenv
 from configs.definitions import ROOT_DIR
 from helpers.av_processing import read_audio_file
 from urllib.parse import urlparse
+import transformers
+import json
 
 TEXT_MODEL = pickle.load(open("models/text_model.pkl", "rb"))
 TFIDF_MODEL = pickle.load(open("models/tfidf_model.pkl", "rb"))
+LABEL_MAPPING = json.load(open("models/label_mapping.json", "r")) 
+STAR_MODEL, STAR_TOKENIZER = pickle.load(open("models/model_tokenizer.pkl", "rb"))
 
 env_path = os.path.join(ROOT_DIR, ".env")
 load_dotenv(env_path)
 
-
+# Use fer to detect emotions in a video
 def detect_emotions(video_fname, freq=10):
     videofile_path = os.path.join(ROOT_DIR, "data", video_fname)
     face_detection = FER(mtcnn=True)
@@ -56,6 +60,9 @@ def detect_emotions(video_fname, freq=10):
 
 
 def detect_audio_sentiment(fname):
+    """
+    Detects audio sentiment using AssemblyAI API
+    """
     headers = {
         "authorization": os.getenv("AAPI_KEY"),
         "content-type": "application/json",
