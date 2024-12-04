@@ -44,21 +44,31 @@ export default function VideoPage() {
     const dlURL = await StorageService.getDownloadUrlFromVideoUrlRef(
       "gs://" + url.ref._location.bucket + "/" + url.ref._location.path
     );
+    // console.log("testing api usage");
+    // try {
+    //   const response = await axios.get("http://localhost:8000/");
+    //   console.log(response.data);
+    // } catch (e) {
+    //   console.log(e);
+    // }
+
+    console.log("Predicting...");
     try {
       const response = await axios.post("http://localhost:8000/predict", {
-        //localhost:5000/predict ?
         videoUrl: dlURL,
       });
+      console.log(response.data);
       setJobId(response.data.message.split(" ")[1]);
     } catch (e) {
-      console.log(e);
+      console.log('Came up with error', e);
     }
   };
 
   const getResults = async () => {
     try {
+      console.log(jobId);
       const response = await axios.get(
-        "http://localhost:8000/results/" + jobId // localhost:5000/results/ ?
+        "http://localhost:8000/results/" + jobId
       );
       if (response.data.result) {
         setAggregateScore(response.data.result.evaluation.aggregateScore);
@@ -68,22 +78,22 @@ export default function VideoPage() {
           { title: "Test" } as IBaseInterview,
           response.data.result.evaluation
         );
-        // New Big Five Feedback endpoint
-        const feedbackResponse = await axios.post(
-          "http://localhost:8000/big-five-feedback",
-          {
-            big_five: bigFive,
-          }
-        );
-        // Output the feedback on the screen for the user
-        setFeedback(feedbackResponse.data.feedback);
-        console.log("userFeedback: " + feedbackResponse.data.feedback);
+        // // New Big Five Feedback endpoint
+        // const feedbackResponse = await axios.post(
+        //   "http://localhost:8000/big-five-feedback",
+        //   {
+        //     big_five: bigFive,
+        //   }
+        // );
+        // // Output the feedback on the screen for the user
+        // setFeedback(feedbackResponse.data.feedback);
+        // console.log("userFeedback: " + feedbackResponse.data.feedback);
       } else {
         alert(
           "The results are not ready yet. Please try again in a minute or so"
         );
       }
-    } catch (e) {}
+    } catch (e) { }
   };
   useEffect(() => {
     if (videoRef.current && previewStream) {
