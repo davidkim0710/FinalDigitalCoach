@@ -3,10 +3,13 @@ This is the ML API server for Digital Coach, written in Flask.
 Please install the Python package black on your machine. for linting purposes. More information here: https://github.com/psf/black
 
 Setup at bottom of page
-## ignore for now, issues with package manager cause this
+## Requirements to use GPU to run, significantly faster
 - If running using Nvidia GPU, Ctrl+C out of flask app and download all missing libraries mentioned in the Tensorflow console output.( Can be run without this but will be slower )
-Downloads are here: https://developer.nvidia.com/cuda-downloads?
-- You may need to set the env variable `export LD_LIBRARY_PATH=/usr/local/cuda-12/targets/x86_64-linux/lib/libcudart.so.12` as well
+Tensorflow version 2.8.4
+requires cuDNN 8.1 https://developer.nvidia.com/rdp/cudnn-archive
+requires cuda toolkit 11.2 https://developer.nvidia.com/cuda-11.2.0-download-archive?
+https://www.tensorflow.org/install/source?hl=en#gpu
+- You need to set the env variable `export LD_LIBRARY_PATH=/usr/local/cuda-11/lib64` as well, this example path may be incorrect
 ## important
 - Note ffmpeg must be installed, verify with `ffmpeg -version`
 # RUNNING THE PRODUCTION FLASK SERVER
@@ -43,7 +46,7 @@ Downloads are here: https://developer.nvidia.com/cuda-downloads?
 To test model output with specific video:
 
 1.  move your `.mp4` file to the `ml-api/data` folder and rename to `test.mp4`
-2.  cd into ml-api folder and run `pipenv shell` to activate the env and `python test.py` to run the test
+2.  cd into ml-api folder and run `poetry shell` to activate the env and `python test.py` to run the test
 3.  View the log file
 
 To test production server with specific video:
@@ -67,11 +70,12 @@ To test with Firebase video submission:
 To Test Big Five and Star Rating:
 
 1. Ensure the server, worker, and redis server are all running in the correct environment
-2. Ensure that the pipenv environment is activated `pipenv shell`
+2. Ensure that the pipenv environment is activated `poetry shell`
 3. Run `pytest -s test_app.py` to run tests and see the output, remove -s flag to hide print output
 
 # Setup
 Confirm that you are running on python 3.10\*
+Use `poetry env use python3.10` to change the version the environment uses if you do not want to replace your system version. 
 1. cd into ml-api folder
 2. Populate or create the .env file with the text below:
    - Note: Future groups must change `AAPI_KEY` variable
@@ -80,8 +84,8 @@ Confirm that you are running on python 3.10\*
      TRANSCRIPT_ENDPOINT = 'https://api.assemblyai.com/v2/transcript'
 3. Create an empty folder in ml-api called `data` if it does not exist yet
 4. Install gunicorn by entering `python -m pip install gunicorn` into console
-5. Enter `pipenv install` into console to install dependencies
-6. Enter `pipenv lock` into console to create Pipfile.lock file
+5. Enter `poetry install` into console to install dependencies
+6. Enter `poetry lock` into console to create Pipfile.lock file
 7. For any missing packages, run `python -m pip install *packageName*`
 
 Note: If you run into errors with finding `MutableMapping` when downloading missing packages, this is because post-Python3.8, they
