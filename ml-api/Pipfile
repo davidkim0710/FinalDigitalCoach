@@ -56,8 +56,6 @@ nest-asyncio = "==1.5.4"
 nltk = "==3.7"
 numpy = "==1.22.3"
 oauthlib = "==3.2.0"
-opencv-contrib-python = "==4.5.5.62"
-opencv-python = "==4.5.5.62"
 opt-einsum = "==3.3.0"
 parso = "==0.8.3"
 pathspec = "==0.9.0"
@@ -105,6 +103,8 @@ accelerate = "==0.28.0"
 moviepy = "*"
 click = "*"
 mutagen = "*"
+opencv-contrib-python = "*"
+opencv-python = "*"
 
 [dev-packages]
 

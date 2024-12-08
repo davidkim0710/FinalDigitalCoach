@@ -136,7 +136,7 @@ def index():
     """
     Home route.
     """
-    return "Welcome to the ML API for Digital Coach ayayay"
+    return "Welcome to the ML API for Digital Coach"
 
 
 if __name__ == "___main__":
