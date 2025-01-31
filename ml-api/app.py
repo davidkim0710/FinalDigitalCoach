@@ -1,6 +1,7 @@
 """
 Main Flask application as well as routes of the app.
 """
+
 import uuid
 import redis
 from threading import Thread
@@ -15,17 +16,22 @@ import json
 
 from models.BigFiveScores import BigFiveScores
 from models.StarMethod import predict_star_scores, percentageFeedback
-# initalize the Flask object
-app = Flask(__name__)
-CORS(app)
+
 r = redis.Redis()
 q = Queue(connection=r)
 
 
-@app.before_first_request
 def launch_polling_script():
     Thread(target=poll_connection, args=(r,), daemon=True).start()
     print("Launched polling script in different thread.")
+
+
+# initalize the Flask object
+app = Flask(__name__)
+with app.app_context():
+    launch_polling_script()
+CORS(app)
+
 
 @app.route("/results/<job_id>", methods=["GET"])
 def get_results(job_id):
@@ -35,18 +41,18 @@ def get_results(job_id):
     # Fetch job status from Redis hash
     job_status = r.hget(f"rq:job:{job_id}", "status")
     if job_status is None:
-        return jsonify(message="Job not found.") 
+        return jsonify(message="Job not found.")
     # Decode the job status
-    job_status = job_status.decode("utf-8") 
+    job_status = job_status.decode("utf-8")
     if job_status == "finished":
         # Fetch job result from Redis hash
         result = r.hget(f"rq:job:{job_id}", "result")
         if result is None:
-            return jsonify(message="Job result not found.") 
+            return jsonify(message="Job result not found.")
         # Decode and process the result
         try:
             result = result.decode("utf-8")  # Decode bytes to string
-            print(f"Raw result: {result}") 
+            print(f"Raw result: {result}")
             e_result = eval(result)  # Caution: Evaluate the result
             json_string = json.dumps(e_result)  # Serialize as JSON string
             return jsonify(result=json.loads(json_string))  # Parse and return JSON
@@ -55,81 +61,86 @@ def get_results(job_id):
     else:
         return jsonify(message="Job has not finished yet.")
 
+
 @app.route("/predict", methods=["POST"])
 def predict():
     """
     POST route that returns total text, audio and video predictions.
     """
-    req = request.get_json() # Video URL  
-    # Download the video from the firebase URL 
-    video_url = req['videoUrl'] 
+    req = request.get_json()  # Video URL
+    # Download the video from the firebase URL
+    video_url = req["videoUrl"]
     if not video_url:
-        return jsonify(errors="Required fields not in request body.") 
-    print("About to download video") 
-    download_video(video_url) # Download video from URL, returns path to video  
-    input_path = "data/video.mp4" 
-    output_path = "data/output.mp4" 
+        return jsonify(errors="Required fields not in request body.")
+    print("About to download video")
+    download_video(video_url)  # Download video from URL, returns path to video
+    input_path = "data/video.mp4"
+    output_path = "data/output.mp4"
     try:
         input_stream = ffmpeg.input(input_path)
         audio_stream = input_stream.audio
-        video_stream = input_stream.video.filter('fps', fps=30, round='up')
+        video_stream = input_stream.video.filter("fps", fps=30, round="up")
         output_stream = ffmpeg.output(video_stream, audio_stream, output_path)
         ffmpeg.run(output_stream)
     except Exception as e:
         return {"errors": e}
-    content = {
-        "fname": "output.mp4",
-        "rename": str(uuid.uuid4()) + ".mp3" 
-    }
+    content = {"fname": "output.mp4", "rename": str(uuid.uuid4()) + ".mp3"}
     job = q.enqueue(create_answer, content)
-    message = "Task " + str(job.get_id()) + " added to queue at " + str(job.enqueued_at) + "." 
-    print("this is the returned job id", job.get_id())
-    print("this is the stringified jobid", message.split(" ")[1])
-    result = job.latest_result(timeout=600) 
+    message = (
+        "Task " + str(job.get_id()) + " added to queue at " + str(job.enqueued_at) + "."
+    )
+    result = job.latest_result(timeout=600)
     if result.type == result.Type.SUCCESSFUL:
-        print("Return Value", result.return_value) 
-        job_key = f"rq:job:{job.get_id()}" 
+        print("Return Value", result.return_value)
+        job_key = f"rq:job:{job.get_id()}"
         r.hset(job_key, "result", result.return_value)
-        print(f"Result stored in {job_key}.") 
-        print("this is the returned job id", job.get_id())
-        print("this is the stringified jobid", message.split(" ")[1])
-    return jsonify(message=message) 
-	
+    return jsonify(message=message)
 
-@app.route('/big-five-feedback', methods=['POST'])
+
+@app.route("/big-five-feedback", methods=["POST"])
 def get_big_five_feedback():
     data = request.get_json()
     scores = data
     big_five = BigFiveScores(
-        scores['o'],
-        scores['c'],
-        scores['e'],
-        scores['a'],
-        scores['n']
+        scores["o"], scores["c"], scores["e"], scores["a"], scores["n"]
     )
-
-    user_feedback = [] 
-
+    user_feedback = []
     # Ensure the correct mapping of traits to their attributes
-    for trait, attr in zip(['openness', 'conscientiousness', 'extraversion', 'agreeableness', 'neuroticism'], ['o', 'c', 'e', 'a', 'n']):
+    for trait, attr in zip(
+        [
+            "openness",
+            "conscientiousness",
+            "extraversion",
+            "agreeableness",
+            "neuroticism",
+        ],
+        ["o", "c", "e", "a", "n"],
+    ):
         trait_level = big_five.determine_level(getattr(big_five, attr))
         user_feedback.append(BigFiveScores.FEEDBACK[trait][trait_level])
-        
+    return jsonify({"feedback": user_feedback})
 
-    return jsonify({'feedback': user_feedback})
 
-@app.route('/star-feedback', methods=['POST'])
+@app.route("/star-feedback", methods=["POST"])
 def get_star_feedback():
     """
-    POST route that returns STAR feedback. Percentages of each part of the STAR method. And the breakdown of each sentence. 
+    POST route that returns STAR feedback. Percentages of each part of the STAR method. And the breakdown of each sentence.
     """
     # takes in evaluation.text_analysis.output_text
     data = request.get_json()
     star_scores = predict_star_scores(data)
+    classifications = star_scores["classifications"]
     percentages = star_scores["percentages"]
     feedback = percentageFeedback(percentages)
-    
-    return jsonify({'feedback': feedback, "fufilledStar": star_scores["fufilledStar"]}) 
+    # added classifications.
+    return jsonify(
+        {
+            "feedback": feedback,
+            "fufilledStar": star_scores["fufilledStar"],
+            "classifications": classifications,
+        }
+    )
+
 
 @app.route("/", methods=["GET"])
 def index():
@@ -141,5 +152,3 @@ def index():
 
 if __name__ == "___main__":
     app.run(debug=True, host="0.0.0.0")
-
-

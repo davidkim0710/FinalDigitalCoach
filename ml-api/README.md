@@ -1,8 +1,29 @@
 This is the ML API server for Digital Coach, written in Flask.
+# IMPORTANT !! 
+- I recommend using the UV package manager to install dependencies. Is really fast.
+- Python version 3.12 is now used 
+- poetry env use python3.12 works as far as all of the test files go.
+
+# IMPORTANT!! 
+- Note ffmpeg must be installed, verify with `ffmpeg -version`
+
+## UV Package Manageer Setup
+Poetry will still work but I reccommend uv package manager because is really fast. 
+Poetry updates have changed some things recently so this should be easier.  
+1. Install uv package manager [link](https://docs.astral.sh/uv/getting-started/installation/)
+2. Run `uv install` if this doesn't work, run `uv add -r requirements.txt` 
+3. UV maintains a file called `.python-version` which can be used to set the version of python to use.
+4. To install python 3.12 do `uv install python 3.12`
+
+### Running 
+5. Do `source .venv/bin/activate` to activate the virtual environment, `deactivate` to deactivate once in use
+6. Should be able to run `python test_star.py` or `uv run test_star.py` if outside the virtual env to test if all packages are installed. If not try `uv add -r requirements.txt` or add missing packages using `uv add <package-name>`
+7. Run `uv sync` to sync the file with `pyproject.toml`
+8. Run `uv lock` to create a lock file with all the specific versions once everything works. 
+
 ## Linting for qol
 Please install the Python package black on your machine. for linting purposes. More information here: https://github.com/psf/black
 
-Setup at bottom of page
 ## Requirements to use GPU to run, significantly faster
 - If running using Nvidia GPU, Ctrl+C out of flask app and download all missing libraries mentioned in the Tensorflow console output.( Can be run without this but will be slower )
 Tensorflow version 2.8.4
@@ -10,8 +31,8 @@ requires cuDNN 8.1 https://developer.nvidia.com/rdp/cudnn-archive
 requires cuda toolkit 11.2 https://developer.nvidia.com/cuda-11.2.0-download-archive?
 https://www.tensorflow.org/install/source?hl=en#gpu
 - You need to set the env variable `export LD_LIBRARY_PATH=/usr/local/cuda-11/lib64` as well, this example path may be incorrect
-## important
-- Note ffmpeg must be installed, verify with `ffmpeg -version`
+
+
 # RUNNING THE PRODUCTION FLASK SERVER
 
 1. cd into ml-api folder
@@ -46,7 +67,7 @@ https://www.tensorflow.org/install/source?hl=en#gpu
 To test model output with specific video:
 
 1.  move your `.mp4` file to the `ml-api/data` folder and rename to `test.mp4`
-2.  cd into ml-api folder and run `poetry shell` to activate the env and `python test.py` to run the test
+2.  cd into ml-api folder and run `source .venv/bin/activate` to activate the env and `python test.py` to run the test
 3.  View the log file
 
 To test production server with specific video:
@@ -70,12 +91,12 @@ To test with Firebase video submission:
 To Test Big Five and Star Rating:
 
 1. Ensure the server, worker, and redis server are all running in the correct environment
-2. Ensure that the pipenv environment is activated `poetry shell`
+2. Ensure that the virtual environment is activated `source .venv/bin/activate`
 3. Run `pytest -s test_app.py` to run tests and see the output, remove -s flag to hide print output
 
-# Setup
-Confirm that you are running on python 3.10\*
-Use `poetry env use python3.10` to change the version the environment uses if you do not want to replace your system version. 
+# Setup for running on Python 3.12
+Confirm that you are running on python 3.12\*
+Use `poetry env use python3.12` or to change the version the environment uses if you do not want to replace your system version. 
 1. cd into ml-api folder
 2. Populate or create the .env file with the text below:
    - Note: Future groups must change `AAPI_KEY` variable

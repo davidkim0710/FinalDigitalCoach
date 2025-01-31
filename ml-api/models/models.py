@@ -12,11 +12,10 @@ import json
 
 TEXT_MODEL = pickle.load(open("models/text_model.pkl", "rb"))
 TFIDF_MODEL = pickle.load(open("models/tfidf_model.pkl", "rb"))
-LABEL_MAPPING = json.load(open("models/label_mapping.json", "r")) 
-STAR_MODEL, STAR_TOKENIZER = pickle.load(open("models/model_tokenizer.pkl", "rb"))
 
 env_path = os.path.join(ROOT_DIR, ".env")
 load_dotenv(env_path)
+
 
 # Use fer to detect emotions in a video
 def detect_emotions(video_fname, freq=10):
@@ -66,26 +65,26 @@ def detect_audio_sentiment(fname):
     Detects audio sentiment using AssemblyAI API
     """
     print(f"Starting sentiment detection for file: {fname}")
-    
+
     headers = {
         "authorization": os.getenv("AAPI_KEY"),
         "content-type": "application/json",
     }
     print(f"Headers: {headers}")
-    
+
     try:
         res_upload = requests.post(
             os.getenv("UPLOAD_ENDPOINT"), headers=headers, data=read_audio_file(fname)
         )
         print(f"Upload response: {res_upload.status_code}, {res_upload.text}")
-        
+
         upload_url = res_upload.json().get("upload_url")
         print(f"Upload URL: {upload_url}")
-        
+
         if not upload_url:
             print("Error: No upload URL returned")
             return {"errors": "No upload URL returned"}
-        
+
         res_transcript = requests.post(
             os.getenv("TRANSCRIPT_ENDPOINT"),
             headers=headers,
@@ -96,24 +95,26 @@ def detect_audio_sentiment(fname):
                 "iab_categories": True,
             },
         )
-        print(f"Transcript response: {res_transcript.status_code}, {res_transcript.text}")
+        print(
+            f"Transcript response: {res_transcript.status_code}, {res_transcript.text}"
+        )
 
         transcript_id = res_transcript.json().get("id")
         print(f"Transcript ID: {transcript_id}")
-        
+
         if not transcript_id:
             print("Error: No transcript ID returned")
             return {"errors": "No transcript ID returned"}
-        
+
         polling_endpoint = os.getenv("TRANSCRIPT_ENDPOINT") + "/" + transcript_id
         print(f"Polling endpoint: {polling_endpoint}")
-        
+
         status = ""
         while status != "completed":
             response_result = requests.get(polling_endpoint, headers=headers)
             status = response_result.json().get("status")
             print(f"Polling status: {status}")
-            
+
             if status == "error":
                 print("Error reached during polling")
                 return {"errors": "Status error reached"}
