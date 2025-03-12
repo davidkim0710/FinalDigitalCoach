@@ -1,4 +1,3 @@
-from nltk.parse import earleychart
 import numpy as np
 from .av_processing import build_timeline_interval_facial
 from heapq import nlargest
@@ -9,6 +8,7 @@ from .rubric import (
     OVERAL_FACIAL_POINTS,
     OVERALL_AUDIO_POINTS,
 )
+from .text_structure_ml import analyze_text_structure_ml
 
 
 def calculate_overall_facial_sentiment(facial_data):
@@ -78,9 +78,11 @@ def calculate_top_three_facial_with_count(facial_data):
         + top_three_with_count[1][1]
         + top_three_with_count[2][1]
     )
-    top_stat = top_three_with_count[0][1] / denominator
-    second_stat = top_three_with_count[1][1] / denominator
-    third_stat = top_three_with_count[2][1] / denominator
+    top_stat = round(float(top_three_with_count[0][1] / denominator), 2)
+    second_stat = round(float(top_three_with_count[1][1] / denominator), 2)
+    third_stat = round(float(top_three_with_count[2][1] / denominator), 2)
+    # Convert to string for consistency
+    top_three = [str(i) for i in top_three]
     return top_three, top_stat, second_stat, third_stat
 
 
@@ -88,7 +90,7 @@ def _compute_av_sentiment_matches(timeline):
     """
     > For each entry in the timeline, if the facial emotion matches the audio sentiment, add 2 points.
     If only one of the facial emotions matches the audio sentiment, add 1 point. Then, divide the total
-    points by the total possible points (2 points per entry) and multiply by 30 to get the final score
+    points by the total possible points (2 points per entry) and multiply by 10 to get the final score
 
     :param timeline: the timeline of the video
     :return: the percentage of matches between the audio and visual sentiment.
@@ -114,7 +116,7 @@ def _compute_av_sentiment_matches(timeline):
             pts += 1
         else:
             continue
-    av_matches = (pts / total_pts) * 30
+    av_matches = (pts / total_pts) * 10
     return av_matches
 
 
@@ -144,7 +146,7 @@ def compute_aggregate_score(result):
     """
     It takes the result of the API call and computes the aggregate score based on the following:
 
-    - Text score: 40% of the text score
+    - Text structure score
     - Overall facial emotion: the points associated with the overall facial emotion
     - Overall audio sentiment: the points associated with the overall audio sentiment
     - Average sentiment matches: the average sentiment matches
@@ -155,13 +157,24 @@ def compute_aggregate_score(result):
     :param result: The JSON response from the API
     :return: The aggregate score is being returned.
     """
-    text_score = 40
+    text_structure_score = result["isStructuredPercent"]
     overall_facial = OVERAL_FACIAL_POINTS[result["overallFacialEmotion"]]
     overall_audio = OVERALL_AUDIO_POINTS[result["overallSentiment"]]
-    av_matches = _compute_av_sentiment_matches(result["timeline"])
-    emotion_occurences = _compute_pts_for_emotion_occurences(result["timeline"])
-    print(text_score, overall_facial, overall_audio, av_matches, emotion_occurences)
+    av_matches = round(_compute_av_sentiment_matches(result["timeline"]), 2)
+    emotion_occurences = round(
+        _compute_pts_for_emotion_occurences(result["timeline"]), 2
+    )
+    print(f"COMPUTING AGGREGATE SCORE: text structure score: {text_structure_score}")
+    print(f"COMPUTING AGGREGATE SCORE: overall facial score: {overall_facial}")
+    print(f"COMPUTING AGGREGATE SCORE: overall audio score: {overall_audio}")
+    print(f"COMPUTING AGGREGATE SCORE: av_matches: {av_matches}")
+    print(f"COMPUTING AGGREGATE SCORE: emotion_occurences: {emotion_occurences}")
+
     aggregate = (
-        text_score + overall_facial + overall_audio + av_matches + emotion_occurences
+        text_structure_score
+        + overall_facial
+        + overall_audio
+        + av_matches
+        + emotion_occurences
     )
     return round(aggregate, 2)

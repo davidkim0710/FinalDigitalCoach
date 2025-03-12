@@ -150,7 +150,7 @@ def get_results(job_id):
         # If job_id doesn't exist, Job.fetch will raise an exception
         logger.warning(f"Job not found: {job_id}. Error: {str(e)}")
         return jsonify({"message": "Job not found.", "status": "error"}), 404
-    
+
     if not job.is_finished:
         logger.info(f"Job is not finished yet: {job_id}")
         return jsonify({"message": "Job is not finished yet.", "status": "pending"})
@@ -163,11 +163,16 @@ def get_results(job_id):
         return jsonify({"result": json.loads(json_string), "status": "success"})
     except Exception as e:
         logger.error(f"Error processing job result for job_id {job_id}: {str(e)}")
-        return jsonify({
-            "message": "Error processing job result",
-            "error": str(e),
-            "status": "error"
-        }), 500
+        return (
+            jsonify(
+                {
+                    "message": "Error processing job result",
+                    "error": str(e),
+                    "status": "error",
+                }
+            ),
+            500,
+        )
 
 
 @bp.route("/star-feedback", methods=["POST"])
@@ -245,3 +250,4 @@ def get_big_five_feedback():
     big_five = add_task_to_queue(big_five_feedback, data)
     logger.info(f"Job enqueued for Big Five feedback: {big_five.get_id()}")
     return jsonify(big_five.get_id())
+

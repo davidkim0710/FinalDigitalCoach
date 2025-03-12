@@ -27,6 +27,7 @@ Take a look at the `.env.example` file for a list of all the environment variabl
     - Setting this to True will call the model from hugging face and change the `overall_score` in the response. Haven't tested this yet right now the structured score is just a flat value. 
 ## RECOMMENDED: Running with Docker
 Pull the latest images from Docker Hub:
+NOTE: Some issue with docker-desktop:4.38.0 and wsl make sure to use docker-desktop:4.39.0 bc they fixed the issue. [link](https://github.com/docker/for-win/issues/14583)
 ```bash
 docker pull testmecs/digitalcoach-mlapi:latest
 docker pull testmecs/digitalcoach-worker:latest
@@ -34,9 +35,7 @@ docker pull redis:7.0.8-bullseye
 ```
 Create your own `.env` file in `/mlapi`  and run:
 ```bash
-docker run --env-file .env digitalcoach-mlapi:latest
-docker run --env-file .env digitalcoach-worker:latest
-docker run -p 6379:6379 redis:7.0.8-bullseye 
+docker-compose --env-file .env up -d
 ```
 ## Development
 ### Installation

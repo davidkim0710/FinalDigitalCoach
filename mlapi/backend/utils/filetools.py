@@ -18,8 +18,10 @@ class TempFileManager:
     Manages temporary files for the application, ensuring consistent locations
     and proper cleanup.
     """
+
     # Singleton instance
     _instance = None
+
     def __new__(cls):
         if cls._instance is None:
             cls._instance = super(TempFileManager, cls).__new__(cls)

@@ -3,8 +3,12 @@ import logging
 import moviepy.editor as mp
 import pandas as pd
 from backend.utils import (
-    get_audio_path, get_video_path, get_output_path,
-    get_video_dir, get_output_dir, get_audio_dir
+    get_audio_path,
+    get_video_path,
+    get_output_path,
+    get_video_dir,
+    get_output_dir,
+    get_audio_dir,
 )
 
 # Configure logger
@@ -49,8 +53,12 @@ def _emotion_sentiment_match(start, end, interval_length, facial_timeline):
     except Exception as e:
         logger.error("Error in sentiment matching")
         logger.error(f"Facial timeline: {facial_timeline}")
-        logger.error(f"Parameters: start={start}, end={end}, interval_length={interval_length}")
-        logger.error(f"Calculations: start//interval={start // interval_length}, end//interval={end // interval_length}")
+        logger.error(
+            f"Parameters: start={start}, end={end}, interval_length={interval_length}"
+        )
+        logger.error(
+            f"Calculations: start//interval={start // interval_length}, end//interval={end // interval_length}"
+        )
         return [-1, -1]
 
 
@@ -102,26 +110,28 @@ def extract_audio(fname, des_fname):
         # Check in output directory first, then in video directory
         path_output = os.path.join(get_output_dir(), fname)
         path_video = os.path.join(get_video_dir(), fname)
-        
+
         if os.path.exists(path_output):
             path = path_output
         elif os.path.exists(path_video):
             path = path_video
         else:
             # Try test directory if file might be a test resource
-            tests_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "tests")
+            tests_dir = os.path.join(
+                os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "tests"
+            )
             test_file_path = os.path.join(tests_dir, "data", fname)
             if os.path.exists(test_file_path):
                 path = test_file_path
             else:
                 return {"errors": f"File {fname} not found in any expected locations"}
-    
+
     # Generate the output audio path
     if des_fname:
         des_path = get_audio_path(des_fname)
     else:
         des_path = get_audio_path()
-    
+
     # Verify input file existence
     if not os.path.exists(path):
         return {"errors": f"File {path} does not exist"}
@@ -152,3 +162,4 @@ def read_audio_file(file_path):
             if not data:
                 break
             yield data
+

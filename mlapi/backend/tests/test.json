@@ -1,0 +1,121 @@
+{
+    "evaluation": {
+        "timeline": [
+            {
+                "start": 1680,
+                "end": 2504,
+                "audioSentiment": "NEUTRAL",
+                "facialEmotion": [
+                    "neutral",
+                    "neutral"
+                ]
+            },
+            {
+                "start": 2552,
+                "end": 3528,
+                "audioSentiment": "NEUTRAL",
+                "facialEmotion": [
+                    "neutral",
+                    "neutral"
+                ]
+            },
+            {
+                "start": 3584,
+                "end": 4280,
+                "audioSentiment": "POSITIVE",
+                "facialEmotion": [
+                    "neutral",
+                    "neutral"
+                ]
+            }
+        ],
+        "isStructured": 0,
+        "isStructuredPercent": 8.874111771583557,
+        "facialStatistics": {
+            "topThreeEmotions": [
+                "neutral",
+                "angry",
+                "surprise"
+            ],
+            "frequencyOfTopEmotion": 0.93,
+            "frequencyOfSecondEmotion": 0.03,
+            "frequencyOfThirdEmotion": 0.03
+        },
+        "overallFacialEmotion": "neutral",
+        "overallSentiment": "NEUTRAL",
+        "topFiveKeywords": [
+            {
+                "text": "Testing",
+                "rank": 0.27,
+                "count": 2,
+                "timestamps": [
+                    {
+                        "start": 1680,
+                        "end": 2064
+                    },
+                    {
+                        "start": 2072,
+                        "end": 2504
+                    }
+                ]
+            },
+            {
+                "text": "mic",
+                "rank": 0.14,
+                "count": 1,
+                "timestamps": [
+                    {
+                        "start": 2976,
+                        "end": 3224
+                    }
+                ]
+            }
+        ],
+        "bigFive": {
+            "o": 0,
+            "c": -1,
+            "e": -1,
+            "a": 0,
+            "n": 0,
+            "_disclaimer": "This is a weak approximation of Big Five traits and should not be used for serious assessments."
+        },
+        "competencyFeedback": {
+            "communication_clarity": {
+                "score": 0.5324467062950134,
+                "strengths": [
+                    "Well-structured and organized response"
+                ],
+                "areas_for_improvement": [],
+                "recommendations": []
+            },
+            "confidence": {
+                "score": 0.0,
+                "strengths": [],
+                "areas_for_improvement": [
+                    "Confidence level appears lower than optimal"
+                ],
+                "recommendations": [
+                    "Practice power posing before interviews and maintain eye contact"
+                ]
+            },
+            "engagement": {
+                "score": 4.0,
+                "strengths": [],
+                "areas_for_improvement": [],
+                "recommendations": []
+            },
+            "overall_score": 1.51,
+            "summary": "Your response needs development in several key areas to increase interview effectiveness.",
+            "key_recommendations": [
+                "Practice power posing before interviews and maintain eye contact"
+            ]
+        },
+        "bigFiveDerivedCompetencies": {
+            "communication_clarity": 4.17,
+            "confidence": 4.17,
+            "engagement": 4.44,
+            "adaptability": 5.0
+        },
+        "aggregateScore": 31.1
+    }
+}

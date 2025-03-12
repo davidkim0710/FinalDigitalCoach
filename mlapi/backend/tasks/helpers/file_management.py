@@ -3,7 +3,14 @@ import shutil
 import glob
 
 from backend.utils.filetools import get_temp_dir
-from . import ROOT_DIR, get_data_dir, get_video_dir, get_audio_dir, get_output_dir, get_temp_dir 
+from . import (
+    ROOT_DIR,
+    get_data_dir,
+    get_video_dir,
+    get_audio_dir,
+    get_output_dir,
+    get_temp_dir,
+)
 
 TEMP_DIR = get_temp_dir()
 DATA_DIR = get_data_dir()
@@ -11,12 +18,13 @@ VIDEO_DIR = get_video_dir()
 AUDIO_DIR = get_audio_dir()
 OUTPUT_DIR = get_output_dir()
 
+
 def move_cv_files():
     """
     If the data.csv file exists in the root directory, move it to the data directory. If the output
     directory exists in the root directory, move it to the data directory
     """
-    data_csv_path = os.path.join(ROOT_DIR, "data.csv")
+    data_csv_path = os.path.join(OUTPUT_DIR, "data.csv")
     if os.path.exists(data_csv_path):
         shutil.move(data_csv_path, DATA_DIR)
 
@@ -43,7 +51,7 @@ def cleanup_temp_files():
     Cleans up all temporary directories
     """
     dirs_to_clean = [DATA_DIR, OUTPUT_DIR, AUDIO_DIR, VIDEO_DIR]
-    
+
     for dir_path in dirs_to_clean:
         if os.path.exists(dir_path):
             for item in os.listdir(dir_path):

@@ -20,12 +20,13 @@ def create_answer(content):
     facial_answer = score_facial(content)
     if "errors" in facial_answer:
         return {"errors": facial_answer["errors"]}
-        
+
     audio_answer = score_audio(content)
     if "errors" in audio_answer:
         return {"errors": audio_answer["errors"]}
-        
+
     text_answer = score_text_structure(audio_answer)
+    # text_answer['output_text'] contains the transcript
     timeline = av_timeline_resolution(
         audio_answer["clip_length_seconds"],
         facial_answer,
@@ -37,21 +38,19 @@ def create_answer(content):
         second_stat,
         third_stat,
     ) = calculate_top_three_facial_with_count(facial_answer)
-    
+
     # Generate both traditional Big5 scoring and new competency feedback
     bigFive = score_bigFive(audio_answer, facial_stats, text_answer)
-    
+
     # New competency-based feedback
     competency_feedback = generate_competency_feedback(
-        facial_answer, 
-        audio_answer,
-        text_answer
+        facial_answer, audio_answer, text_answer
     )
-    
+
     # Also include a transition mapping from Big Five to competencies
     # This helps with backward compatibility and shows how the two relate
     bigfive_derived_competencies = map_bigfive_to_competencies(bigFive)
-    
+
     result = {
         "timeline": timeline,
         "isStructured": text_answer["binary_prediction"],
