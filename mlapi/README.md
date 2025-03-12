@@ -10,55 +10,73 @@ backend/
 │   └── models/     # ML models
 └── tests/          # Test suite
 ```
+## NOTE: GPU Support
+If you have a GPU check out installing the versions of `torch` that work for your machine. https://pytorch.org/get-started/locally/
+Will allow the facial recognition model to run faster. You can see the versions I'm using in the `requirements.txt` or `pyproject.toml` file. Different versions for machines and GPUs afaik.
+## Environment Variables (.env)
+All you should have to do is set the `AAPI_KEY` and `REDIS_PASSWORD` if building docker locally.
+Take a look at the `.env.example` file for a list of all the environment variables that can be set. 
+- `REDIS_HOST`: Redis host (default: localhost)
+- `REDIS_PORT`: Redis port (default: 6379)
+- `REDIS_PASSWORD`: Redis password 
+    - (Optional for building. can be taken out of `.env` file nd removed from docker-compose)
+- `REDIS_URL`: Redis URL  
+    - default: redis://redis:6379, this is what the worker will use when the docker container is run. I've put a fallback for a local redis instance in `worker.py` if this env varaible is not set but may not work on your machine if "localhost" or the port is different. 
+- `AAPI_KEY`: Assembly AI API key for speech processing
+- `ENABLE-ML-STRUCTURE-ANALYSIS`=False 
+    - Setting this to True will call the model from hugging face and change the `overall_score` in the response. Haven't tested this yet right now the structured score is just a flat value. 
+## RECOMMENDED: Running with Docker
+Pull the latest images from Docker Hub:
+```bash
+docker pull testmecs/digitalcoach-mlapi:latest
+docker pull testmecs/digitalcoach-worker:latest
+docker pull redis:7.0.8-bullseye 
+```
+Create your own `.env` file in `/mlapi`  and run:
+```bash
+docker run --env-file .env digitalcoach-mlapi:latest
+docker run --env-file .env digitalcoach-worker:latest
+docker run -p 6379:6379 redis:7.0.8-bullseye 
+```
 ## Development
 ### Installation
 To set up the development environment:
+NOTE: Poetry will still work afaik you can use `poetry install` and `poetry shell`
+**RECOMMENDED**: use [uv](https://docs.astral.sh/uv/getting-started/installation) package manager
 ```bash
-# Clone the repository
-`git clone <repository-url> && cd mlapi`
-# Install dependencies
-`cd backend && pip install -r requirements.txt`
+uv sync # Installs all dependencies and creates .venv
 ```
-or using [uv](https://docs.astral.sh/uv/getting-started/installation)
+Then run: 
 ```bash
-uv sync
+source .venv/bin/activate 
 ```
-or poetry or by running `python setup.py` which just does `pip install -r requirements.txt` 
-### Running the Server
+Activates the virtual environment, deactivate with `deactivate`
+#### Running the Server
 ```bash
 # Run the Flask server
 cd backend && python main.py
 ```
-### Running the Worker
+#### Running the Worker in a seperate terminal
 ```bash
 # Run the Redis worker
 rq worker high default low
 ```
-### Running Tests
+#### Running Tests
 ```bash
 # Run all tests
 pytest
 # Run specific tests
 pytest backend/tests/test_processing.py
 ```
-## Docker
-To run the full stack download docker-desktop then run:
+#### Building with Docker
+After creating the `.env` file run, use the scripts I've created to rebuild the docker images on your machine. This could be useful maybe if you downloaded different GPU drivers but you still want to use docker or if you have added another dependency and want to use docker. 
 ```bash
-docker-compose up -d
+scripts/buildnrun # Builds the docker images and runs the server
 ```
-## Environment Variables
-- `REDIS_HOST`: Redis host (default: localhost)
-- `REDIS_PORT`: Redis port (default: 6379)
-- `REDIS_PASSWORD`: Redis password
-- `REDIS_URL`: Redis URL (alternative to host/port/password)
-- `AAPI_KEY`: Assembly AI API key for speech processing
-## Temporary Files
-Temporary files are managed in standardized locations(not atm):
-- `/backend/tmp/data`: General temporary data files
-- `/backend/tmp/audio`: Audio files (.mp3)
-- `/backend/tmp/video`: Video files (.mp4)
-- `/backend/tmp/output`: Processed output files
-## Feedback Systems
+Go get a coffee or something. This will take a while.
+```bash
+scripts/cleanup # Cleans up the docker images
+```
 
 ### Competency-Based Feedback
 The system now implements a competency-based feedback approach that provides:
