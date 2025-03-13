@@ -3,7 +3,7 @@ from typing import Dict, List, Union, TypedDict, Optional, Any
 class Error(TypedDict):
     """Dict with error message"""
     errors: str
-
+"""Sub-types for EmotionDetectionResult"""
 class EmotionTotals(TypedDict):
     angry: float
     disgust: float
@@ -33,6 +33,8 @@ class EmotionDetectionResult(TypedDict):
     emotion_sums: EmotionTotals   # Sum of emotion scores across all frames
     timeline: EmotionTimelines    # Per-frame emotion score data
 
+
+"""Sub-types for AudioSentimentResult from AssemblyAI"""
 class SentimentResult(TypedDict):
     """Individual sentiment analysis result for a text segment"""
     text: str
@@ -76,6 +78,11 @@ class AudioSentimentResult(TypedDict):
     sentiment_analysis: List[SentimentResult]    # Sentiment analysis per segment
     highlights: List[HighlightData]              # Auto-detected key phrases
     iab_results: Union[IABResult, Dict[str, Any]]  # Category detection results
-    clip_length_seconds: Optional[int]  # Audio duration in seconds
+    clip_length_seconds: Optional[float]  # Audio duration in seconds
 
-
+class ExtractedAudio(TypedDict):
+    """
+        Result of audio extraction by MoviePy
+    """
+    path_to_file: str
+    clip_length_seconds: float

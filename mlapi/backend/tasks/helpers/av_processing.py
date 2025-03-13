@@ -4,14 +4,11 @@ import moviepy.editor as mp
 import pandas as pd
 from backend.utils import (
     get_audio_path,
-    get_video_path,
-    get_output_path,
     get_video_dir,
     get_output_dir,
-    get_audio_dir,
 )
+from backend.tasks.types import ExtractedAudio, Error
 
-# Configure logger
 logger = logging.getLogger(__name__)
 
 
@@ -50,7 +47,7 @@ def _emotion_sentiment_match(start, end, interval_length, facial_timeline):
             facial_timeline[start // interval_length],
             facial_timeline[end // interval_length],
         ]
-    except Exception as e:
+    except Exception:
         logger.error("Error in sentiment matching")
         logger.error(f"Facial timeline: {facial_timeline}")
         logger.error(
@@ -94,10 +91,10 @@ def av_timeline_resolution(clip_length, facial_data, audio_sentiments):
     return timeline
 
 
-def extract_audio(fname, des_fname):
+def extract_audio(fname, des_fname) -> ExtractedAudio | Error:
     """
-    It takes a video file, extracts the audio, and returns the path to the audio file and the length of
-    the video clip. Converting video.mp4 to mp3. Ensure ffmpeg is installed and the video path is correct.
+    It takes a video file, extracts the audio to mp3, and returns the path to the audio file and the length of
+    the video clip. Ensure ffmpeg is installed and the video path is correct if this is causing issues.
 
     :param fname: The name of the file you want to extract audio from
     :param des_fname: The name of the file you want to save the audio as
@@ -125,21 +122,17 @@ def extract_audio(fname, des_fname):
                 path = test_file_path
             else:
                 return {"errors": f"File {fname} not found in any expected locations"}
-
     # Generate the output audio path
     if des_fname:
         des_path = get_audio_path(des_fname)
     else:
         des_path = get_audio_path()
-
-    # Verify input file existence
     if not os.path.exists(path):
         return {"errors": f"File {path} does not exist"}
-
     logger.info(f"Processing file: {path}")
     try:
         mv_clip = mp.VideoFileClip(path)
-        mv_clip.audio.write_audiofile(des_path)
+        mv_clip.audio.write_audiofile(des_path)  # type: ignore
         logger.info(f"Clip length: {mv_clip.duration}")
         return {
             "path_to_file": str(des_path),

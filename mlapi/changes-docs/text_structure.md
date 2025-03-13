@@ -8,13 +8,7 @@ The system uses a hybrid approach:
    - Transition words and phrases
    - Introduction and conclusion presence
    - Sentence variety and length
-2. **ML-based Analysis**: Can be enabled to supplement the rule-based approach.
-## Configuration
-The ML component is disabled by default. To enable it:
-```bash
-# Set this environment variable
-export ENABLE_ML_STRUCTURE_ANALYSIS=True
-```
+2. **ML-based Analysis**: Is enabled to supplement the rule-based approach and is a weighted combination of the two both as the ML model is not fine-tuned. 
 ## Recommendations for Future Development
 ### Option 1: Enhanced Rule-based System 
 - Add more sophisticated linguistic rules

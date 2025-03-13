@@ -8,6 +8,7 @@ from backend.utils import (
     get_output_dir,
 )
 from typing import cast, Any
+from backend.tasks.types import EmotionDetectionResult, EmotionTotals, EmotionTimelines, AudioSentimentResult, Error
 
 logger = logging.getLogger(__name__)
 

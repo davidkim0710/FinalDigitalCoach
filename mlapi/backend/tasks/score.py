@@ -13,6 +13,7 @@ from .helpers.score_helpers import (
     map_bigfive_to_competencies,
 )
 from .helpers.competency_analysis import generate_competency_feedback
+from backend.tasks.types import AudioSentimentResult, Error
 
 
 def create_answer(content):
@@ -21,7 +22,7 @@ def create_answer(content):
     if "errors" in facial_answer:
         return {"errors": facial_answer["errors"]}
 
-    audio_answer = score_audio(content)
+    audio_answer: AudioSentimentResult | Error = score_audio(content)
     if "errors" in audio_answer:
         return {"errors": audio_answer["errors"]}
 

@@ -11,6 +11,7 @@ from .statistics import (
 from typing import Dict, Any
 import re
 from .text_structure_ml import analyze_text_structure_ml
+from backend.tasks.types import AudioSentimentResult, Error, ExtractedAudio
 
 
 def score_text_structure(audio_answer):
@@ -150,7 +151,7 @@ def analyze_text_structure(text: str) -> tuple[float, Dict[str, Any]]:
     return final_score, metrics
 
 
-def score_audio(content):
+def score_audio(content) -> AudioSentimentResult | Error:
     """
     score user's audio.
     """
@@ -160,14 +161,15 @@ def score_audio(content):
         content["fname"],
         content["rename"],
     )
-    audio = extract_audio(fname, rename)
+    audio: ExtractedAudio | Error = extract_audio(fname, rename)
     if "errors" in audio:
         return {"errors": audio["errors"]}
     audio_file_path = audio["path_to_file"]
-    sentiment = detect_audio_sentiment(audio_file_path)
-    sentiment["clip_length_seconds"] = audio["clip_length_seconds"]
-    if "errors" in sentiment:
+    sentiment: AudioSentimentResult | Error = detect_audio_sentiment(audio_file_path)
+    if type(sentiment) == Error:
         return {"errors": sentiment["errors"]}
+    if type(sentiment) == AudioSentimentResult:
+        sentiment["clip_length_seconds"] = audio["clip_length_seconds"]
     return sentiment
 
 
