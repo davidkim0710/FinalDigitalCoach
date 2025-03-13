@@ -139,4 +139,6 @@ venv
 /ml-api/.env
 /ml-api/backend/__pycache__/
 **/__pycache__/
+/ml-api/backend/output/
+/ml-api/backend/tasks/__pycache__/
 
