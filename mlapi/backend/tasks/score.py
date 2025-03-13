@@ -13,18 +13,17 @@ from .helpers.score_helpers import (
     map_bigfive_to_competencies,
 )
 from .helpers.competency_analysis import generate_competency_feedback
-from backend.tasks.types import AudioSentimentResult, Error
+from rq.decorators import job
+from backend.redisStore.myConnection import get_redis_con
 
 
+@job("default", connection=get_redis_con())
 def create_answer(content):
-    """Accessed by the create an answer."""
+    """
+    Creates feedback answer. 
+    """
     facial_answer = score_facial(content)
-    if "errors" in facial_answer:
-        return {"errors": facial_answer["errors"]}
-
-    audio_answer: AudioSentimentResult | Error = score_audio(content)
-    if "errors" in audio_answer:
-        return {"errors": audio_answer["errors"]}
+    audio_answer = score_audio(content)
 
     text_answer = score_text_structure(audio_answer)
     timeline = av_timeline_resolution(
@@ -41,13 +40,10 @@ def create_answer(content):
 
     bigFive = score_bigFive(audio_answer, facial_stats, text_answer)
 
-    # New competency-based feedback
     competency_feedback = generate_competency_feedback(
         facial_answer, audio_answer, text_answer
     )
 
-    # Also include a transition mapping from Big Five to competencies
-    # This helps with backward compatibility and shows how the two relate
     bigfive_derived_competencies = map_bigfive_to_competencies(bigFive)
 
     result = {
@@ -71,10 +67,4 @@ def create_answer(content):
     result["aggregateScore"] = compute_aggregate_score(result)
     response = {}
     response["evaluation"] = result
-    # response["text_analysis"] = text_answer
-    # response["audio_analysis"] = audio_answer
-    # response["userId"] = content["user_id"]
-    # response["interviewId"] = content["interview_id"]
-    # response["questionId"] = content["question_id"]
-    # response["answerId"] = content["answer_id"]
     return str(response)

@@ -7,7 +7,8 @@ from backend.utils import (
     get_video_dir,
     get_output_dir,
 )
-from backend.tasks.types import ExtractedAudio, Error
+from backend.tasks.types import ExtractedAudio
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -91,7 +92,7 @@ def av_timeline_resolution(clip_length, facial_data, audio_sentiments):
     return timeline
 
 
-def extract_audio(fname, des_fname) -> ExtractedAudio | Error:
+def extract_audio(fname, des_fname) -> ExtractedAudio:
     """
     It takes a video file, extracts the audio to mp3, and returns the path to the audio file and the length of
     the video clip. Ensure ffmpeg is installed and the video path is correct if this is causing issues.
@@ -101,6 +102,7 @@ def extract_audio(fname, des_fname) -> ExtractedAudio | Error:
     :return: A dictionary with the path to the file and the clip length in seconds.
     """
     # Check if fname is a full path or just a filename
+    result: Any = {}
     if os.path.isabs(fname):
         path = fname
     else:
@@ -121,38 +123,23 @@ def extract_audio(fname, des_fname) -> ExtractedAudio | Error:
             if os.path.exists(test_file_path):
                 path = test_file_path
             else:
-                return {"errors": f"File {fname} not found in any expected locations"}
+                logger.error(f"File {fname} not found in any expected locations")
     # Generate the output audio path
     if des_fname:
         des_path = get_audio_path(des_fname)
     else:
         des_path = get_audio_path()
     if not os.path.exists(path):
-        return {"errors": f"File {path} does not exist"}
+        logger.error(f"File {path} does not exist")
     logger.info(f"Processing file: {path}")
     try:
         mv_clip = mp.VideoFileClip(path)
         mv_clip.audio.write_audiofile(des_path)  # type: ignore
         logger.info(f"Clip length: {mv_clip.duration}")
-        return {
-            "path_to_file": str(des_path),
-            "clip_length_seconds": mv_clip.duration,
-        }
+        result["path_to_file"] = str(des_path)
+        result["clip_length_seconds"] = mv_clip.duration
     except OSError as exception:
         logger.error(f"Error extracting audio: {str(exception)}")
-        return {"errors": str(exception)}
+    return result
 
-
-def read_audio_file(file_path):
-    """
-    It reads the audio file in chunks of 5MB and yields the data
-
-    :param file_path: The path to the audio file
-    """
-    with open(file_path, "rb") as f:
-        while True:
-            data = f.read(5242880)
-            if not data:
-                break
-            yield data
 

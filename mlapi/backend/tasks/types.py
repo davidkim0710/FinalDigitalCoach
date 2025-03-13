@@ -1,8 +1,4 @@
-from typing import Dict, List, Union, TypedDict, Optional, Any
-
-class Error(TypedDict):
-    """Dict with error message"""
-    errors: str
+from typing import Dict, List, Union, TypedDict, Any
 """Sub-types for EmotionDetectionResult"""
 class EmotionTotals(TypedDict):
     angry: float
@@ -78,7 +74,7 @@ class AudioSentimentResult(TypedDict):
     sentiment_analysis: List[SentimentResult]    # Sentiment analysis per segment
     highlights: List[HighlightData]              # Auto-detected key phrases
     iab_results: Union[IABResult, Dict[str, Any]]  # Category detection results
-    clip_length_seconds: Optional[float]  # Audio duration in seconds
+    clip_length_seconds: float  # Audio duration in seconds
 
 class ExtractedAudio(TypedDict):
     """
@@ -86,3 +82,9 @@ class ExtractedAudio(TypedDict):
     """
     path_to_file: str
     clip_length_seconds: float
+class Content(TypedDict):
+    """
+        Content to be processed by `create_answer`
+    """
+    fname: str # Full path to the video file
+    rename: str # Filename to be used for audio file

@@ -145,6 +145,8 @@ def get_results(job_id):
         return jsonify({"message": "Job is not finished yet.", "status": "pending"})
     try:
         result = job.result
+        if "errors" in result:
+            return jsonify({"errors": result["errors"]}), 400
         json_string = json.dumps(result)
         logger.info(f"Job finished successfully: {job_id}")
         return jsonify({"result": json.loads(json_string), "status": "success"})

@@ -8,14 +8,14 @@ from backend.utils import (
     get_output_dir,
 )
 from typing import cast, Any
-from backend.tasks.types import EmotionDetectionResult, EmotionTotals, EmotionTimelines, AudioSentimentResult, Error
+from backend.tasks.types import EmotionDetectionResult, EmotionTotals, EmotionTimelines, AudioSentimentResult 
 
 logger = logging.getLogger(__name__)
 
 AAPI_KEY = os.getenv("AAPI_KEY")
 
 # Use fer to detect emotions in a video
-def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult | Error:
+def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult:
     """
     Detect emotions in a video using FER
 
@@ -27,13 +27,13 @@ def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult | Error:
         dict: Dictionary with emotion detection results
     """
     # Check if video_fname is a full path or just a filename
+    response: Any = {}
     if os.path.isabs(video_fname):
         videofile_path = video_fname
     else:
         # Look in standard locations - check video dir first since that's where files are uploaded
         path_video = os.path.join(get_video_dir(), video_fname)
         path_output = os.path.join(get_output_dir(), video_fname)
-
         if os.path.exists(path_video):
             videofile_path = path_video
         elif os.path.exists(path_output):
@@ -48,10 +48,7 @@ def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult | Error:
                 videofile_path = test_file_path
             else:
                 logger.error(f"Could not find video file {video_fname} in any location")
-                return {"errors": f"Video file {video_fname} not found"}
-
     logger.info(f"Detecting emotions from video file: {videofile_path}")
-
     face_detection = FER(mtcnn=True) # type: ignore
     try:
         input_video = Video(videofile_path)
@@ -59,20 +56,14 @@ def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult | Error:
             processed_data = input_video.analyze(
                 face_detection, display=False, frequency=freq
             ) # type: ignore
-
             if not processed_data:
                 logger.error("No facial data detected in video")
-                return {"errors": "No facial expressions detected in video"}
-
             # Convert to pandas DataFrame and ensure proper type
             vid_df = cast(DataFrame, input_video.to_pandas(processed_data))
             if vid_df.empty:
                 logger.error("No data in video analysis DataFrame")
-                return {"errors": "Failed to process video data"}
-
             vid_df = cast(DataFrame, input_video.get_first_face(vid_df))
             vid_df = cast(DataFrame, input_video.get_emotions(vid_df))
-
             # Verify DataFrame structure
             emotion_cols = [
                 "angry",
@@ -85,8 +76,6 @@ def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult | Error:
             ]
             if not all(col in vid_df.columns for col in emotion_cols):
                 logger.error("Missing required emotion columns in DataFrame")
-                return {"errors": "Failed to detect emotion data in video"}
-
             # Calculate emotion sums and timelines
             sum_emotions: EmotionTotals | Any = {}
             timelines: EmotionTimelines | Any = {}
@@ -95,20 +84,18 @@ def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult | Error:
                 timelines[emotion] = vid_df[emotion].values.tolist()
         except Exception as e:
             logger.error(f"Error calculating emotion scores: {str(e)}")
-            return {"errors": f"Failed to process emotion data: {str(e)}"}
-        response: EmotionDetectionResult = {
+            response["errors"] = f"Failed to process emotion data: {str(e)}"
+        response = {
             "total_frames": len(list(vid_df.loc[:, "angry"])),
             "frame_inference_rate": freq,
             "emotion_sums": sum_emotions,
             "timeline": timelines,
         }
-        return response
     except OSError as exception:
         logger.error(f"Error detecting emotions: {str(exception)}")
-        return {"errors": str(exception)}
+    return response
 
-
-def detect_audio_sentiment(fname) -> AudioSentimentResult | Error:
+def detect_audio_sentiment(fname) -> AudioSentimentResult:
     """
     Detects audio sentiment using the AssemblyAI API package
 
@@ -118,11 +105,12 @@ def detect_audio_sentiment(fname) -> AudioSentimentResult | Error:
     Returns:
         dict: Dictionary with sentiment analysis results
     """
+    response: Any = {}
     try:
         # Initialize the AssemblyAI client
         if not AAPI_KEY:
             logger.error("No AssemblyAI API key found in environment")
-            return {"errors": "No AssemblyAI API key configured"}
+            response["errors"] = "No AssemblyAI API key configured"
         aai.settings.api_key = AAPI_KEY
         transcriber = aai.Transcriber()
         config = aai.TranscriptionConfig(
@@ -138,11 +126,11 @@ def detect_audio_sentiment(fname) -> AudioSentimentResult | Error:
         if transcript.error:
             raise Exception(transcript.error)
         # Create response dictionary
-        response: AudioSentimentResult = {
+        response = {
             "sentiment_analysis": [],
             "highlights": [],
             "iab_results": {},
-            "clip_length_seconds": 0,
+            "clip_length_seconds": 0.0,
         }
         # Sentiment Analysis
         if transcript.sentiment_analysis:
@@ -203,7 +191,7 @@ def detect_audio_sentiment(fname) -> AudioSentimentResult | Error:
         response["clip_length_seconds"] = transcript.audio_duration
         logger.info(f"Transcript processing completed for {fname}")
         logger.info(f"transcript: {transcript.text}")
-        return response
     except Exception as e:
         logger.error(f"Exception in audio sentiment detection: {str(e)}")
-        return {"errors": str(e)}
+        response["errors"] = str(e)
+    return response

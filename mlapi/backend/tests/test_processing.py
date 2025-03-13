@@ -1,4 +1,3 @@
-import pytest
 import uuid
 import os
 import logging
@@ -6,11 +5,10 @@ import shutil
 import json
 import ast
 from backend.tasks.score import create_answer
-from backend.utils import get_video_dir, get_audio_path, get_output_dir
+from backend.utils import get_video_dir, get_output_dir
 
 DIR_NAME = os.path.dirname(__file__)
 OUTPUT_DIR = get_output_dir()
-# Configure logger
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
@@ -30,7 +28,7 @@ def test_video_output():
 
     # Generate a unique audio filename
     audio_filename = f"{uuid.uuid4()}.mp3"
-    _audio_path = get_audio_path(audio_filename)
+    # _audio_path = get_audio_path(audio_filename)
 
     # Create content dictionary with the temp paths
     content = {
@@ -38,7 +36,6 @@ def test_video_output():
         "rename": audio_filename,
     }
 
-    # Run the processing
     result = create_answer(content)
     logger.info(f"Processing result: {result}")
 

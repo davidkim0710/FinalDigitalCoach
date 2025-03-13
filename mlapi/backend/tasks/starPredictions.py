@@ -1,6 +1,3 @@
-from torch._tensor import Tensor
-
-
 from transformers import pipeline
 from typing import Any, TypedDict
 

@@ -11,7 +11,7 @@ from .statistics import (
 from typing import Dict, Any
 import re
 from .text_structure_ml import analyze_text_structure_ml
-from backend.tasks.types import AudioSentimentResult, Error, ExtractedAudio
+from backend.tasks.types import AudioSentimentResult,  EmotionDetectionResult
 
 
 def score_text_structure(audio_answer):
@@ -151,40 +151,25 @@ def analyze_text_structure(text: str) -> tuple[float, Dict[str, Any]]:
     return final_score, metrics
 
 
-def score_audio(content) -> AudioSentimentResult | Error:
+def score_audio(content) -> AudioSentimentResult:
     """
-    score user's audio.
+    Score user's audio.
     """
-    if "fname" not in content or "rename" not in content:
-        return {"errors": "File name and rename does not exist"}
-    fname, rename = (
-        content["fname"],
-        content["rename"],
-    )
-    audio: ExtractedAudio | Error = extract_audio(fname, rename)
-    if "errors" in audio:
-        return {"errors": audio["errors"]}
-    audio_file_path = audio["path_to_file"]
-    sentiment: AudioSentimentResult | Error = detect_audio_sentiment(audio_file_path)
-    if type(sentiment) == Error:
-        return {"errors": sentiment["errors"]}
-    if type(sentiment) == AudioSentimentResult:
-        sentiment["clip_length_seconds"] = audio["clip_length_seconds"]
+    fname, rename = content["fname"], content["rename"]
+    audio = extract_audio(fname, rename)
+    clip_length_seconds = audio["clip_length_seconds"] # type: ignore
+    sentiment = detect_audio_sentiment(audio["path_to_file"]) # type: ignore
+    sentiment["clip_length_seconds"] = clip_length_seconds # type: ignore
     return sentiment
 
-
-def score_facial(content):
+def score_facial(content) -> EmotionDetectionResult:
     """
     score user's facial expressions
     """
-    if "fname" not in content:
-        return {"errors": "Video file name does not exist"}
     video_fname = content["fname"]
-    total_emotion_score = detect_emotions(video_fname)
+    res = detect_emotions(video_fname)
     move_cv_files()
-    if "errors" in total_emotion_score:
-        return {"errors": total_emotion_score["errors"]}
-    return total_emotion_score
+    return res 
 
 
 def score_bigFive(audio_answer, facial_stats, text_answer):

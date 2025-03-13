@@ -229,7 +229,10 @@ def get_video_path(filename: Optional[str] = None) -> str:
 
 
 def get_audio_path(filename: Optional[str] = None) -> str:
-    """Get a path for an audio file"""
+    """
+    Get a path for temp audio file
+    NOTE: Doesn't work atm 
+    """
     return temp_manager.get_audio_path(filename)
 
 
