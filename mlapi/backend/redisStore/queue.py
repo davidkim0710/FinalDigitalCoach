@@ -41,4 +41,4 @@ def add_task_to_queue(task: Callable, *args, depends_on=None) -> Job:
         return job
     except Exception as e:
         logger.error(f"Failed to enqueue task: {str(e)}")
-        raise
+        raise e

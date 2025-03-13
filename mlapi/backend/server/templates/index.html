@@ -139,8 +139,10 @@
         <li><strong>redis/:</strong> Contains modules for Redis queue management and connection.</li>
         <li><strong>server/:</strong> Contains the main server application logic, including routes and templates.</li>
         <li><strong>src/:</strong> Contains source code, including database monitoring and routes.</li>
-        <li><strong>tasks/:</strong> Contains modules for various tasks such as video processing, scoring, and feedback generation.</li>
-        <li><strong>tasks/helpers/:</strong> Contains helper modules for tasks, such as file management, text processing, and scoring.</li>
+        <li><strong>tasks/:</strong> Contains modules for various tasks such as video processing, scoring, and feedback
+          generation.</li>
+        <li><strong>tasks/helpers/:</strong> Contains helper modules for tasks, such as file management, text
+          processing, and scoring.</li>
         <li><strong>tasks/models/:</strong> Contains data models used by the tasks.</li>
         <li><strong>utils/:</strong> Contains utility modules, such as file tools.</li>
       </ul>
@@ -219,50 +221,83 @@
       <pre class="json">{
         "result": {
         "evaluation": {
-        "timeline": [...],
-        "isStructured": 1,
-        "isStructuredPercent": 0.577,
-        "facialStatistics": {...},
-        "overallFacialEmotion": "string",
-        "overallSentiment": "string",
+        "timeline": [
+        {
+        "start": "number", // Start time in milliseconds
+        "end": "number", // End time in milliseconds
+        "audioSentiment": "string", // e.g. "NEUTRAL", "POSITIVE", "NEGATIVE"
+        "facialEmotion": [
+        "string", // Primary emotion
+        "string" // Secondary emotion
+        ]
+        }
+        ],
+        "isStructured": "number", // Binary value: 0 or 1
+        "isStructuredPercent": "number", // 0-100 score
+        "facialStatistics": {
+        "topThreeEmotions": [
+        "string", // Most frequent emotion
+        "string", // Second most frequent emotion
+        "string" // Third most frequent emotion
+        ],
+        "frequencyOfTopEmotion": "number", // 0-1 ratio
+        "frequencyOfSecondEmotion": "number", // 0-1 ratio
+        "frequencyOfThirdEmotion": "number" // 0-1 ratio
+        },
+        "overallFacialEmotion": "string", // Most common facial emotion
+        "overallSentiment": "string", // Overall audio sentiment
+        "topFiveKeywords": [
+        {
+        "text": "string", // Keyword or phrase
+        "rank": "number", // Importance ranking (0-1)
+        "count": "number", // Occurrence count
+        "timestamps": [
+        {
+        "start": "number", // Start time in milliseconds
+        "end": "number" // End time in milliseconds
+        }
+        ]
+        }
+        ],
+        "transcript": "string", // Full transcript of speech
         "bigFive": {
-          "o": number,  // Openness
-          "c": number,  // Conscientiousness
-          "e": number,  // Extraversion
-          "a": number,  // Agreeableness
-          "n": number,  // Neuroticism
-          "_disclamier": "string"
+        "o": "number", // Openness score (-3 to 3)
+        "c": "number", // Conscientiousness score (-3 to 3)
+        "e": "number", // Extraversion score (-3 to 3)
+        "a": "number", // Agreeableness score (-3 to 3)
+        "n": "number", // Neuroticism score (-3 to 3)
+        "_disclaimer": "string" // Disclaimer about accuracy
         },
         "competencyFeedback": {
-          "communication_clarity": {
-            "score": number,  // 0-10 rating
-            "strengths": ["string"],
-            "areas_for_improvement": ["string"],
-            "recommendations": ["string"]
-          },
-          "confidence": {
-            "score": number,  // 0-10 rating
-            "strengths": ["string"],
-            "areas_for_improvement": ["string"],
-            "recommendations": ["string"]
-          }, 
-          "engagement": {
-            "score": number,  // 0-10 rating
-            "strengths": ["string"],
-            "areas_for_improvement": ["string"],
-            "recommendations": ["string"]
-          },
-          "overall_score": number,  // Average of competency scores
-          "summary": "string",
-          "key_recommendations": ["string"]
+        "communication_clarity": {
+        "score": "number", // 0-10 score
+        "strengths": ["string"], // Array of strength points
+        "areas_for_improvement": ["string"], // Areas needing work
+        "recommendations": ["string"] // Specific advice
+        },
+        "confidence": {
+        "score": "number", // 0-10 score
+        "strengths": ["string"],
+        "areas_for_improvement": ["string"],
+        "recommendations": ["string"]
+        },
+        "engagement": {
+        "score": "number", // 0-10 score
+        "strengths": ["string"],
+        "areas_for_improvement": ["string"],
+        "recommendations": ["string"]
+        },
+        "overall_score": "number", // 0-10 aggregate score
+        "summary": "string", // Overall assessment
+        "key_recommendations": ["string"] // Top recommendations
         },
         "bigFiveDerivedCompetencies": {
-          "communication_clarity": number,  // 0-10 rating
-          "confidence": number,  // 0-10 rating
-          "engagement": number,  // 0-10 rating
-          "adaptability": number  // 0-10 rating
+        "communication_clarity": "number", // 0-10 score
+        "confidence": "number", // 0-10 score
+        "engagement": "number", // 0-10 score
+        "adaptability": "number" // 0-10 score
         },
-        "aggregateScore": number
+        "aggregateScore": "number" // Overall score (0-100)
         }
         }
         }</pre>
@@ -298,7 +333,7 @@
       <h4>Returns:</h4>
       <pre class="json">"job_id" // String identifier for the feedback job</pre>
     </div>
-    
+
     <div class="endpoint">
       <h3><span class="method">POST</span> <span class="route">/competency-feedback</span></h3>
       <p class="description">Get actionable competency-based interview feedback</p>
@@ -325,8 +360,9 @@
         <li><strong>Confidence:</strong> Projected self-assurance and comfort with the material</li>
         <li><strong>Engagement:</strong> Ability to maintain interest and connect with the interviewer</li>
       </ul>
-      <p>This approach provides more actionable feedback for interview improvement than personality trait assessment.</p>
-      
+      <p>This approach provides more actionable feedback for interview improvement than personality trait assessment.
+      </p>
+
       <h3>Legacy: Big Five Personality Traits</h3>
       <p>
         The system also provides Big Five personality trait approximations:
@@ -339,14 +375,14 @@
         <li><strong>N (Neuroticism):</strong> Emotional stability/instability and anxiety</li>
       </ul>
       <p>
-        <em>Note: Big Five scores from brief video analysis have significant limitations 
-        and should not be considered valid personality assessments.</em>
+        <em>Note: Big Five scores from brief video analysis have significant limitations
+          and should not be considered valid personality assessments.</em>
       </p>
     </div>
   </div>
 
   <script>
-    document.getElementById('toggleBackendSummary').addEventListener('click', function() {
+    document.getElementById('toggleBackendSummary').addEventListener('click', function () {
       var backendSummary = document.getElementById('backendSummary');
       if (backendSummary.style.display === 'none') {
         backendSummary.style.display = 'block';

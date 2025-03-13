@@ -1,28 +1,20 @@
 import os
 import logging
 import assemblyai as aai
-import pandas as pd
-import numpy as np
 from fer import Video, FER
-from typing import Any, Dict, List, Optional, Union, cast
 from pandas import DataFrame
 from backend.utils import (
-    get_video_path,
-    get_output_path,
     get_video_dir,
     get_output_dir,
-    get_audio_dir,
 )
+from typing import cast, Any
 
-# Configure logger
 logger = logging.getLogger(__name__)
 
-# Get AssemblyAI API key from environment
 AAPI_KEY = os.getenv("AAPI_KEY")
 
-
 # Use fer to detect emotions in a video
-def detect_emotions(video_fname, freq=10):
+def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult | Error:
     """
     Detect emotions in a video using FER
 
@@ -59,13 +51,13 @@ def detect_emotions(video_fname, freq=10):
 
     logger.info(f"Detecting emotions from video file: {videofile_path}")
 
-    face_detection = FER(mtcnn=True)
+    face_detection = FER(mtcnn=True) # type: ignore
     try:
         input_video = Video(videofile_path)
         try:
             processed_data = input_video.analyze(
                 face_detection, display=False, frequency=freq
-            )
+            ) # type: ignore
 
             if not processed_data:
                 logger.error("No facial data detected in video")
@@ -95,15 +87,15 @@ def detect_emotions(video_fname, freq=10):
                 return {"errors": "Failed to detect emotion data in video"}
 
             # Calculate emotion sums and timelines
-            sum_emotions = {}
-            timelines = {}
+            sum_emotions: EmotionTotals | Any = {}
+            timelines: EmotionTimelines | Any = {}
             for emotion in emotion_cols:
                 sum_emotions[emotion] = float(vid_df[emotion].sum())
                 timelines[emotion] = vid_df[emotion].values.tolist()
         except Exception as e:
             logger.error(f"Error calculating emotion scores: {str(e)}")
             return {"errors": f"Failed to process emotion data: {str(e)}"}
-        response = {
+        response: EmotionDetectionResult = {
             "total_frames": len(list(vid_df.loc[:, "angry"])),
             "frame_inference_rate": freq,
             "emotion_sums": sum_emotions,
@@ -115,7 +107,7 @@ def detect_emotions(video_fname, freq=10):
         return {"errors": str(exception)}
 
 
-def detect_audio_sentiment(fname):
+def detect_audio_sentiment(fname) -> AudioSentimentResult | Error:
     """
     Detects audio sentiment using the AssemblyAI API package
 
@@ -130,16 +122,13 @@ def detect_audio_sentiment(fname):
         if not AAPI_KEY:
             logger.error("No AssemblyAI API key found in environment")
             return {"errors": "No AssemblyAI API key configured"}
-
         aai.settings.api_key = AAPI_KEY
         transcriber = aai.Transcriber()
-
         config = aai.TranscriptionConfig(
             sentiment_analysis=True,
             auto_highlights=True,
             iab_categories=True,
         )
-
         logger.info(f"Transcribing audio file: {fname}")
         transcript: aai.Transcript = transcriber.transcribe(
             fname,
@@ -147,15 +136,13 @@ def detect_audio_sentiment(fname):
         )
         if transcript.error:
             raise Exception(transcript.error)
-
         # Create response dictionary
-        response: Dict[str, Any] = {
+        response: AudioSentimentResult = {
             "sentiment_analysis": [],
             "highlights": [],
             "iab_results": {},
             "clip_length_seconds": 0,
         }
-
         # Sentiment Analysis
         if transcript.sentiment_analysis:
             response["sentiment_analysis"] = [
@@ -168,7 +155,6 @@ def detect_audio_sentiment(fname):
                 }
                 for result in transcript.sentiment_analysis
             ]
-
         # Auto Highlights (Key Phrases)
         if transcript.auto_highlights and transcript.auto_highlights.results:
             response["highlights"] = [
@@ -182,10 +168,8 @@ def detect_audio_sentiment(fname):
                 }
                 for result in transcript.auto_highlights.results
             ]
-
         # Initialize empty IAB results
         response["iab_results"] = {}
-
         # IAB Categories (Topic Detection)
         try:
             categories = transcript.iab_categories
@@ -215,12 +199,10 @@ def detect_audio_sentiment(fname):
                             ]
         except Exception as e:
             logger.warning(f"Failed to process IAB categories: {str(e)}")
-        # Audio Duration
         response["clip_length_seconds"] = transcript.audio_duration
         logger.info(f"Transcript processing completed for {fname}")
         logger.info(f"transcript: {transcript.text}")
         return response
-
     except Exception as e:
         logger.error(f"Exception in audio sentiment detection: {str(e)}")
         return {"errors": str(e)}

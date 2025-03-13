@@ -26,7 +26,6 @@ def create_answer(content):
         return {"errors": audio_answer["errors"]}
 
     text_answer = score_text_structure(audio_answer)
-    # text_answer['output_text'] contains the transcript
     timeline = av_timeline_resolution(
         audio_answer["clip_length_seconds"],
         facial_answer,
@@ -39,7 +38,6 @@ def create_answer(content):
         third_stat,
     ) = calculate_top_three_facial_with_count(facial_answer)
 
-    # Generate both traditional Big5 scoring and new competency feedback
     bigFive = score_bigFive(audio_answer, facial_stats, text_answer)
 
     # New competency-based feedback
@@ -64,6 +62,7 @@ def create_answer(content):
         "overallFacialEmotion": facial_stats[0],
         "overallSentiment": calculate_overall_audio_sentiment(audio_answer),
         "topFiveKeywords": grab_top_five_keywords(audio_answer),
+        "transcript": text_answer["output_text"],
         "bigFive": bigFive,
         "competencyFeedback": competency_feedback,
         "bigFiveDerivedCompetencies": bigfive_derived_competencies,

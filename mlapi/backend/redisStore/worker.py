@@ -2,9 +2,9 @@ from rq import Worker
 from .myConnection import get_redis_con
 
 # List of queues to listen for jobs on
-listen = ["default"]
+listen = ["default", "high", "low"]
 
-
+# Not really needed. Just use `rq worker high default low in terminal`
 def create_worker():
     """Create and return a worker instance"""
     conn = get_redis_con()

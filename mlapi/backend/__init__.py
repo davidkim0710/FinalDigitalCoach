@@ -14,6 +14,7 @@ from backend.utils import (
     load_environment,
 )
 
+
 __all__ = [
     "app",
     "create_app",

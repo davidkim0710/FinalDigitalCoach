@@ -71,17 +71,18 @@
                 ]
             }
         ],
+        "transcript": "0    test test use mic hopefully work",
         "bigFive": {
-            "o": 0,
-            "c": -1,
-            "e": -1,
-            "a": 0,
-            "n": 0,
+            "o": 3.5,
+            "c": 2.7,
+            "e": 3.0,
+            "a": 3.2,
+            "n": 3.8,
             "_disclaimer": "This is a weak approximation of Big Five traits and should not be used for serious assessments."
         },
         "competencyFeedback": {
             "communication_clarity": {
-                "score": 0.5324467062950134,
+                "score": 0.53,
                 "strengths": [
                     "Well-structured and organized response"
                 ],
@@ -111,10 +112,10 @@
             ]
         },
         "bigFiveDerivedCompetencies": {
-            "communication_clarity": 4.17,
-            "confidence": 4.17,
-            "engagement": 4.44,
-            "adaptability": 5.0
+            "communication_clarity": 10.17,
+            "confidence": 4.33,
+            "engagement": 10.39,
+            "adaptability": 4.75
         },
         "aggregateScore": 31.1
     }

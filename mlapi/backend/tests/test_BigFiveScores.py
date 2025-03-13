@@ -1,10 +1,10 @@
-import pytest
 from backend.tasks.bigFiveScores import big_five_feedback
 
 
 def test_big_five_feedback():
     scores = {"o": 2.5, "c": 4.2, "e": -1.8, "a": 3.1, "n": -2.7}
     feedback = big_five_feedback(scores)
+    print(feedback)
     assert (
         "With an Openness score between -3 and 3, you are somewhat open to new experiences and creative, but you still enjoy some structure and consistency."
         in feedback[0]

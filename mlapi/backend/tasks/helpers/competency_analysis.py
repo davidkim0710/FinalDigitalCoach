@@ -18,7 +18,7 @@ def analyze_communication_clarity(text_analysis, audio_analysis):
     clarity_score = (speech_rate * 0.4 + text_structure * 0.6) / 100
 
     feedback = {
-        "score": min(clarity_score * 10, 10),  # Scale to 0-10
+        "score": round(min(clarity_score * 10, 10), 2),  # Scale to 0-10
         "strengths": [],
         "areas_for_improvement": [],
         "recommendations": [],

@@ -187,11 +187,9 @@ def score_facial(content):
 
 def score_bigFive(audio_answer, facial_stats, text_answer):
     """
-    Attempts to approximate Big Five personality traits.
-
+    Attempts to approximate Big Five personality traits on a scale of 0-7.
     NOTE: This method has significant limitations and should not be considered
     validated for personality assessment. We recommend using the competency-based feedback instead.
-
     The Big Five traits are:
     - O: Openness to experience
     - C: Conscientiousness
@@ -199,10 +197,9 @@ def score_bigFive(audio_answer, facial_stats, text_answer):
     - A: Agreeableness
     - N: Neuroticism (emotional stability)
     """
-    # Return normalized scores that avoid extreme values
-    # Range constraint between -3 and 3 for each trait to avoid misinterpretation
-    # Default base scores (neutral starting points)
-    o_score, c_score, e_score, a_score, n_score = 0, 0, 0, 0, 0
+    # Default base scores (neutral starting points at middle of scale)
+    o_score, c_score, e_score, a_score, n_score = 3.5, 3.5, 3.5, 3.5, 3.5
+    
     # Get relevant signals from the analysis
     sentiment_score = 0
     overall_sentiment = calculate_overall_audio_sentiment(audio_answer)
@@ -211,15 +208,15 @@ def score_bigFive(audio_answer, facial_stats, text_answer):
     elif overall_sentiment == "NEGATIVE":
         sentiment_score = -1
     elif overall_sentiment == "NEUTRAL":
-        sentiment_score = -1
+        sentiment_score = -0.5
+    
     # Adjust scores based on keyword complexity (weak signal)
     keywords = grab_top_five_keywords(audio_answer)
     avg_keyword_length = 0
     if keywords:
-        avg_keyword_length = sum(min(len(kw["text"]), 10) for kw in keywords) / len(
-            keywords
-        )
-        o_score += (avg_keyword_length - 5) / 5  # normalize to roughly -1 to 1 range
+        avg_keyword_length = sum(min(len(kw["text"]), 10) for kw in keywords) / len(keywords)
+        o_score += (avg_keyword_length - 5) / 5 * 2  # Scale adjusted for 0-7 range
+    
     # Facial expression adjustments (weak signal)
     if facial_stats and len(facial_stats) > 0:
         top_emotion = facial_stats[0]
@@ -228,25 +225,26 @@ def score_bigFive(audio_answer, facial_stats, text_answer):
             a_score += 1
             n_score -= 0.5
         elif top_emotion == "neutral":
-            # Neutral doesn't tell us much
             pass
         elif top_emotion in ["sad", "fear", "disgust", "angry"]:
             n_score += 1
             e_score -= 0.5
             a_score -= 0.5
-    # Text structure adjustments (weak signal)
+    
+    # Adjust based on text structure
     structure_score = text_answer.get("percent_prediction", 50) / 100
-    c_score += (structure_score - 0.5) * 2  # normalize to roughly -1 to 1
-    # Sentiment adjustments
+    c_score += (structure_score - 0.5) * 2  # normalized to roughly -1 to 1
+    
+    # Sentiment affects extraversion, agreeableness, and neuroticism
     e_score += sentiment_score
     a_score += sentiment_score * 0.5
     n_score -= sentiment_score * 0.5
-
-    # Final normalization to ensure scores are within reasonable bounds
+    
+    # Final normalization to ensure scores are within 0-7 scale
     def normalize_score(score):
-        return max(min(round(score), 3), -3)
-
-    # Return the scores.
+        return max(min(round(score * 10) / 10, 7), 0)
+    
+    # Return the scores
     bigFive = {
         "o": normalize_score(o_score),
         "c": normalize_score(c_score),
@@ -255,9 +253,8 @@ def score_bigFive(audio_answer, facial_stats, text_answer):
         "n": normalize_score(n_score),
         "_disclaimer": "This is a weak approximation of Big Five traits and should not be used for serious assessments.",
     }
-
+    
     return bigFive
-
 
 def map_bigfive_to_competencies(bigfive_scores):
     """

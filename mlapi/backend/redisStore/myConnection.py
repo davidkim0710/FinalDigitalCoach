@@ -32,5 +32,5 @@ def get_redis_con() -> Redis:
         return redis_conn
     except Exception as e:
         logger.error(f"Redis connection error: {str(e)}")
-        raise
+        raise e
 

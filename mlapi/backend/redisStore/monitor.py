@@ -38,4 +38,3 @@ def poll_connection(redis_connection) -> Never:
         except Exception as e:
             logger.error(f"Error in poll_connection: {str(e)}")
             time.sleep(5)
-
