@@ -17,8 +17,10 @@ DATA_DIR = get_data_dir()
 VIDEO_DIR = get_video_dir()
 AUDIO_DIR = get_audio_dir()
 OUTPUT_DIR = get_output_dir()
+from backend.utils.logger_config import get_logger
+logging = get_logger(__name__)
 
-
+# TODO: move_cv_files() is not used anywhere. Remove 
 def move_cv_files():
     """
     If the data.csv file exists in the root directory, move it to the data directory. If the output
@@ -27,11 +29,13 @@ def move_cv_files():
     data_csv_path = os.path.join(OUTPUT_DIR, "data.csv")
     if os.path.exists(data_csv_path):
         shutil.move(data_csv_path, DATA_DIR)
+        logging.info("Moved data.csv file to data directory")
 
     # Check for misplaced output files in root dir
     root_output_path = os.path.join(ROOT_DIR, "output")
     if os.path.exists(root_output_path):
         shutil.move(root_output_path, TEMP_DIR)
+        logging.info("Moved output directory to temporary directory")
 
     # Also check for any misplaced temporary files in current directory
     for ext in ["*.mp3", "*.mp4", "*.csv"]:
@@ -44,6 +48,7 @@ def move_cv_files():
             else:
                 dest = os.path.join(DATA_DIR, filename)
             shutil.move(file_path, dest)
+            logging.info(f"Moved misplaced file: {file_path} → {dest}")
 
 
 def cleanup_temp_files():
@@ -65,9 +70,3 @@ def cleanup_temp_files():
                     print(f"Error while deleting {item_path}: {e}")
 
 
-# Keep for backward compatibility
-def cleanup_data_folder():
-    """
-    It deletes all the files and folders in the data folder (deprecated, use cleanup_temp_files instead)
-    """
-    cleanup_temp_files()

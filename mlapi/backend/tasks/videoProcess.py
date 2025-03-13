@@ -1,13 +1,12 @@
 import os
-import uuid
-import logging
 from typing import Optional
 import ffmpeg
 import requests
 from backend.utils import get_video_path, get_output_path, get_audio_path
+from backend.utils.logger_config import get_logger
 
 # Configure logger
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def _download_video(video_url) -> Optional[str]:
@@ -45,12 +44,12 @@ def _preprocess_video(video_file, output_name) -> str:
 def output_video(video_url):
     """Transcribe the video using AssemblyAI. Exported to package."""
     video_file = None
-    output_file = None
+    _output_file = None
 
     try:
         video_file = _download_video(video_url)
         output_name = "output.mp4"
-        output_file = _preprocess_video(video_file, output_name)
+        _output_file = _preprocess_video(video_file, output_name)
         rename_path = get_audio_path()  # Generates a unique audio path
 
         content = {"fname": output_name, "rename": os.path.basename(rename_path)}

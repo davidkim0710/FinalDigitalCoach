@@ -1,11 +1,10 @@
 import urllib.request
-import os
-import logging
 import requests
 from backend.utils import get_video_path
+from backend.utils.logger_config import get_logger
 
 # Configure logger
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def download_video_link(url):

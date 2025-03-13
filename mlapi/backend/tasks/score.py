@@ -10,23 +10,34 @@ from .helpers.score_helpers import (
     score_facial,
     score_text_structure,
     score_bigFive,
-    map_bigfive_to_competencies,
 )
 from .helpers.competency_analysis import generate_competency_feedback
 from rq.decorators import job
 from backend.redisStore.myConnection import get_redis_con
+from typing import List
+from backend.tasks.types import (
+    EmotionDetectionResult, 
+    AudioSentimentResult, 
+    TextStructureResult, 
+    TimelineStructure, 
+    BigFiveScoreResult, 
+    OverallCompetencyFeedback,
+    CreateAnswerResult,
+    CreateAnswerEvaluation
+)
 
 
 @job("default", connection=get_redis_con())
-def create_answer(content):
+def create_answer(content) -> CreateAnswerResult:
     """
     Creates feedback answer. 
     """
-    facial_answer = score_facial(content)
-    audio_answer = score_audio(content)
-
-    text_answer = score_text_structure(audio_answer)
-    timeline = av_timeline_resolution(
+    # errors could occur here
+    facial_answer: EmotionDetectionResult = score_facial(content)
+    audio_answer: AudioSentimentResult = score_audio(content)
+    text_answer: TextStructureResult = score_text_structure(audio_answer)
+    #  
+    timeline: List[TimelineStructure] = av_timeline_resolution(
         audio_answer["clip_length_seconds"],
         facial_answer,
         audio_answer["sentiment_analysis"],
@@ -37,19 +48,14 @@ def create_answer(content):
         second_stat,
         third_stat,
     ) = calculate_top_three_facial_with_count(facial_answer)
-
-    bigFive = score_bigFive(audio_answer, facial_stats, text_answer)
-
-    competency_feedback = generate_competency_feedback(
+    bigFive: BigFiveScoreResult = score_bigFive(audio_answer, facial_stats, text_answer)
+    competency_feedback: OverallCompetencyFeedback = generate_competency_feedback(
         facial_answer, audio_answer, text_answer
     )
-
-    bigfive_derived_competencies = map_bigfive_to_competencies(bigFive)
-
-    result = {
+    result: CreateAnswerEvaluation = {
         "timeline": timeline,
         "isStructured": text_answer["binary_prediction"],
-        "isStructuredPercent": text_answer["percent_prediction"],
+        "predictionScore": text_answer["prediction_score"],
         "facialStatistics": {
             "topThreeEmotions": facial_stats,
             "frequencyOfTopEmotion": top_stat,
@@ -62,9 +68,11 @@ def create_answer(content):
         "transcript": text_answer["output_text"],
         "bigFive": bigFive,
         "competencyFeedback": competency_feedback,
-        "bigFiveDerivedCompetencies": bigfive_derived_competencies,
+        "aggregateScore": 0.0,
     }
     result["aggregateScore"] = compute_aggregate_score(result)
-    response = {}
-    response["evaluation"] = result
-    return str(response)
+    response: CreateAnswerResult = {
+        "evaluation": result
+    }
+    # str(response) ???
+    return response

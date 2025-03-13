@@ -1,16 +1,15 @@
 import uuid
 import os
-import logging
 import shutil
 import json
 import ast
 from backend.tasks.score import create_answer
 from backend.utils import get_video_dir, get_output_dir
+from backend.utils.logger_config import get_logger
 
 DIR_NAME = os.path.dirname(__file__)
 OUTPUT_DIR = get_output_dir()
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger = get_logger(__name__) 
 
 
 def test_video_output():
@@ -47,7 +46,7 @@ def test_video_output():
     # to make sure the json file is correct, cat test.json | jq to pretty print
     with open(test_path, "r") as f:
         result = ast.literal_eval(f.read())
-    with open(os.path.join(DIR_NAME, "test.json"), "w") as f:
+    with open(os.path.join(DIR_NAME, "example_response.json"), "w") as f:
         json.dump(result, f, indent=4)
 
     # Assert that we have a valid result

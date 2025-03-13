@@ -1,10 +1,10 @@
 from flask import Blueprint, render_template, request, jsonify, Response, abort
 import json
 import uuid
-import logging
 from rq.job import Job
 from redisStore import add_task_to_queue, get_redis_con
-logger = logging.getLogger(__name__)
+from backend.utils.logger_config import get_logger
+logger = get_logger(__name__)
 
 bp = Blueprint("main", __name__) # type: ignore
 

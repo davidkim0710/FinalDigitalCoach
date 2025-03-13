@@ -1,10 +1,10 @@
-import logging
 from typing import Callable
 from rq.job import Job
 from rq.queue import Queue
 from .myConnection import get_redis_con
+from backend.utils.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 def get_queue(queue_name="default") -> Queue:
     """

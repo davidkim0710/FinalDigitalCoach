@@ -1,8 +1,8 @@
 import os
-import logging
 from redis import Redis, from_url
+from backend.utils.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def get_redis_con() -> Redis:

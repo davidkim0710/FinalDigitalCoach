@@ -1,5 +1,27 @@
-from typing import Dict, List, Union, TypedDict, Any
-"""Sub-types for EmotionDetectionResult"""
+from typing import Dict, List, Union, TypedDict, Any, Optional
+from enum import Enum
+
+class FER_Emotions(Enum):
+    """
+        Unused just for reference
+    """
+    angry = "angry"
+    disgust = "disgust"
+    fear = "fear"
+    happy = "happy"
+    sad = "sad"
+    surprise = "surprise"
+    neutral = "neutral"
+
+
+class ASM_Sentiments(Enum):
+    """
+        Unused just for reference
+    """
+    POSITIVE = "POSITIVE"
+    NEGATIVE = "NEGATIVE"
+    NEUTRAL = "NEUTRAL"
+
 class EmotionTotals(TypedDict):
     angry: float
     disgust: float
@@ -28,9 +50,10 @@ class EmotionDetectionResult(TypedDict):
     frame_inference_rate: int     # Frequency of frame sampling
     emotion_sums: EmotionTotals   # Sum of emotion scores across all frames
     timeline: EmotionTimelines    # Per-frame emotion score data
+    clip_length_seconds: float    # Audio duration in seconds
+    errors: Optional[str]
 
 
-"""Sub-types for AudioSentimentResult from AssemblyAI"""
 class SentimentResult(TypedDict):
     """Individual sentiment analysis result for a text segment"""
     text: str
@@ -49,7 +72,7 @@ class TimestampData(TypedDict):
 class HighlightData(TypedDict):
     """Data for auto-highlighted keywords/phrases"""
     text: str                     # The highlighted word or phrase
-    rank: float                   # Importance ranking (0-1)
+    rank: float                   # Importance ranking (0-1), words relevant to the content.
     count: int                    # Number of occurrences
     timestamps: List[TimestampData]  # When this word appears in the audio
 
@@ -68,13 +91,14 @@ class IABResult(TypedDict):
 
 class AudioSentimentResult(TypedDict):
     """
-    Result of audio sentiment analysis by AssemblyAI
-    
+        Result of audio sentiment analysis by AssemblyAI
     """
     sentiment_analysis: List[SentimentResult]    # Sentiment analysis per segment
     highlights: List[HighlightData]              # Auto-detected key phrases
     iab_results: Union[IABResult, Dict[str, Any]]  # Category detection results
     clip_length_seconds: float  # Audio duration in seconds
+    errors: Optional[str]       # Error message if any
+
 
 class ExtractedAudio(TypedDict):
     """
@@ -82,9 +106,109 @@ class ExtractedAudio(TypedDict):
     """
     path_to_file: str
     clip_length_seconds: float
+
+
 class Content(TypedDict):
     """
         Content to be processed by `create_answer`
     """
     fname: str # Full path to the video file
     rename: str # Filename to be used for audio file
+
+
+class StructureDetails(TypedDict):
+    """
+        Metrics for text structure analysis
+    """
+    paragraph_count: int
+    avg_paragraph_length: int
+    transition_words: int
+    has_intro: bool
+    has_conclusion: bool
+    sentence_variety: int
+
+
+class TextStructureResult(TypedDict):
+    """
+        Text Structure Analysis
+    """
+    prediction_score: float
+    binary_prediction: int
+    output_text: str
+    details: StructureDetails
+
+
+class TimelineStructure(TypedDict):
+    """
+        Timeline Structure Analysis
+    """
+    start: int # in milliseconds
+    end: int # in milliseconds
+    audioSentiment: str
+    facialEmotion: List[str]
+
+
+class BigFiveScoreResult(TypedDict):
+    """
+        Big Five Score Analysis
+    """
+    o: float
+    c: float
+    e: float
+    a: float
+    n: float
+    _disclaimer: str
+
+
+class CompetencyFeedback(TypedDict):
+    """
+        Competency Feedback
+    """
+    score: float
+    strengths: List[str]
+    areas_for_improvement: List[str]
+    recommendations: List[str]
+
+class OverallCompetencyFeedback(TypedDict):
+    """
+        Overall Competency Competency Feedback
+    """
+    communication_clarity: CompetencyFeedback
+    confidence: CompetencyFeedback
+    engagement: CompetencyFeedback
+    overall_score: float
+    summary: str
+    key_recommendations: List[str]
+
+class FacialStatistics(TypedDict):
+    """
+    Result of facial emotion detection processing by FER
+    """
+    topThreeEmotions: List[str]  # Most frequent emotion
+    frequencyOfTopEmotion: float  # 0-100 % of total response
+    frequencyOfSecondEmotion: float  # 0-100 % of total response
+    frequencyOfThirdEmotion: float  # 0-1 ratio % of total response
+
+class CreateAnswerEvaluation(TypedDict):
+    """
+    Result of creating an answer
+    """
+    timeline: List[TimelineStructure]
+    isStructured: int # 1 or 0
+    predictionScore: float # 0-100
+    facialStatistics: FacialStatistics 
+    overallFacialEmotion: str # Most common facial emotion
+    overallSentiment: str # Overall audio sentiment from assemblyAI
+    topFiveKeywords: List[HighlightData] # Top 5 keywords
+    transcript: str # Full transcript of speech
+    bigFive: BigFiveScoreResult
+    competencyFeedback: OverallCompetencyFeedback
+    aggregateScore: float # Overall score (0-100)
+
+
+class CreateAnswerResult(TypedDict):
+    """
+    Result of creating an answer
+    """
+    evaluation: CreateAnswerEvaluation
+

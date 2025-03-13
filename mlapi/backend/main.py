@@ -2,15 +2,11 @@
 Main entry point for the backend application running dev server.
 """
 
-import logging
 from backend.server.app import app
 from backend.utils import move_misplaced_files
+from backend.utils.logger_config import get_logger 
 
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Check for and move misplaced temporary files on startup
 move_misplaced_files()

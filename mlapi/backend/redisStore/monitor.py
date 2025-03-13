@@ -1,8 +1,8 @@
 import time
-import logging
 from typing import Never
+from backend.utils.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 ALL_JOBS = set()
 RESULT_ENCODING = "result".encode("utf-8")

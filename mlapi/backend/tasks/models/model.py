@@ -1,5 +1,4 @@
 import os
-import logging
 import assemblyai as aai
 from fer import Video, FER
 from pandas import DataFrame
@@ -9,8 +8,9 @@ from backend.utils import (
 )
 from typing import cast, Any
 from backend.tasks.types import EmotionDetectionResult, EmotionTotals, EmotionTimelines, AudioSentimentResult 
+from backend.utils.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 AAPI_KEY = os.getenv("AAPI_KEY")
 
@@ -27,11 +27,12 @@ def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult:
         dict: Dictionary with emotion detection results
     """
     # Check if video_fname is a full path or just a filename
-    response: Any = {}
+    result: Any = {}
     if os.path.isabs(video_fname):
+        logger.info(f"Setting videofile_path to absolute path: {video_fname}")
         videofile_path = video_fname
     else:
-        # Look in standard locations - check video dir first since that's where files are uploaded
+        # TODO: handle files donwload from URL 
         path_video = os.path.join(get_video_dir(), video_fname)
         path_output = os.path.join(get_output_dir(), video_fname)
         if os.path.exists(path_video):
@@ -48,6 +49,7 @@ def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult:
                 videofile_path = test_file_path
             else:
                 logger.error(f"Could not find video file {video_fname} in any location")
+                result["error"] = "Could not find video file"
     logger.info(f"Detecting emotions from video file: {videofile_path}")
     face_detection = FER(mtcnn=True) # type: ignore
     try:
@@ -58,10 +60,12 @@ def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult:
             ) # type: ignore
             if not processed_data:
                 logger.error("No facial data detected in video")
+                result["error"] = "No facial data detected in video"
             # Convert to pandas DataFrame and ensure proper type
             vid_df = cast(DataFrame, input_video.to_pandas(processed_data))
             if vid_df.empty:
                 logger.error("No data in video analysis DataFrame")
+                result["error"] = "No data in video analysis DataFrame"
             vid_df = cast(DataFrame, input_video.get_first_face(vid_df))
             vid_df = cast(DataFrame, input_video.get_emotions(vid_df))
             # Verify DataFrame structure
@@ -76,6 +80,7 @@ def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult:
             ]
             if not all(col in vid_df.columns for col in emotion_cols):
                 logger.error("Missing required emotion columns in DataFrame")
+                result["error"] = "Missing required emotion columns in DataFrame"
             # Calculate emotion sums and timelines
             sum_emotions: EmotionTotals | Any = {}
             timelines: EmotionTimelines | Any = {}
@@ -84,8 +89,8 @@ def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult:
                 timelines[emotion] = vid_df[emotion].values.tolist()
         except Exception as e:
             logger.error(f"Error calculating emotion scores: {str(e)}")
-            response["errors"] = f"Failed to process emotion data: {str(e)}"
-        response = {
+            result["errors"] = f"Failed to process emotion data: {str(e)}"
+        result = {
             "total_frames": len(list(vid_df.loc[:, "angry"])),
             "frame_inference_rate": freq,
             "emotion_sums": sum_emotions,
@@ -93,7 +98,8 @@ def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult:
         }
     except OSError as exception:
         logger.error(f"Error detecting emotions: {str(exception)}")
-    return response
+        result["error"] = f"Error detecting emotions: {str(exception)}"
+    return result
 
 def detect_audio_sentiment(fname) -> AudioSentimentResult:
     """
@@ -105,12 +111,12 @@ def detect_audio_sentiment(fname) -> AudioSentimentResult:
     Returns:
         dict: Dictionary with sentiment analysis results
     """
-    response: Any = {}
+    result: Any = {}
     try:
         # Initialize the AssemblyAI client
         if not AAPI_KEY:
             logger.error("No AssemblyAI API key found in environment")
-            response["errors"] = "No AssemblyAI API key configured"
+            result["errors"] = "No AssemblyAI API key configured"
         aai.settings.api_key = AAPI_KEY
         transcriber = aai.Transcriber()
         config = aai.TranscriptionConfig(
@@ -125,16 +131,10 @@ def detect_audio_sentiment(fname) -> AudioSentimentResult:
         )
         if transcript.error:
             raise Exception(transcript.error)
-        # Create response dictionary
-        response = {
-            "sentiment_analysis": [],
-            "highlights": [],
-            "iab_results": {},
-            "clip_length_seconds": 0.0,
-        }
+        
         # Sentiment Analysis
         if transcript.sentiment_analysis:
-            response["sentiment_analysis"] = [
+            result["sentiment_analysis"] = [
                 {
                     "text": result.text,
                     "sentiment": result.sentiment.value,
@@ -146,7 +146,7 @@ def detect_audio_sentiment(fname) -> AudioSentimentResult:
             ]
         # Auto Highlights (Key Phrases)
         if transcript.auto_highlights and transcript.auto_highlights.results:
-            response["highlights"] = [
+            result["highlights"] = [
                 {
                     "text": result.text,
                     "rank": result.rank,
@@ -157,8 +157,7 @@ def detect_audio_sentiment(fname) -> AudioSentimentResult:
                 }
                 for result in transcript.auto_highlights.results
             ]
-        # Initialize empty IAB results
-        response["iab_results"] = {}
+        result["iab_results"] = {}
         # IAB Categories (Topic Detection)
         try:
             categories = transcript.iab_categories
@@ -169,13 +168,13 @@ def detect_audio_sentiment(fname) -> AudioSentimentResult:
                     if hasattr(first_result, "text") and hasattr(
                         first_result, "labels"
                     ):
-                        response["iab_results"] = {
+                        result["iab_results"] = {
                             "text": str(first_result.text),
                             "labels": [],
                         }
                         labels = getattr(first_result, "labels", None)
                         if labels and isinstance(labels, (list, tuple)):
-                            response["iab_results"]["labels"] = [
+                            result["iab_results"]["labels"] = [
                                 {
                                     "label": str(getattr(label, "label", "")),
                                     "relevance": float(
@@ -188,10 +187,9 @@ def detect_audio_sentiment(fname) -> AudioSentimentResult:
                             ]
         except Exception as e:
             logger.warning(f"Failed to process IAB categories: {str(e)}")
-        response["clip_length_seconds"] = transcript.audio_duration
         logger.info(f"Transcript processing completed for {fname}")
         logger.info(f"transcript: {transcript.text}")
     except Exception as e:
         logger.error(f"Exception in audio sentiment detection: {str(e)}")
-        response["errors"] = str(e)
-    return response
+        result["errors"] = str(e)
+    return result 

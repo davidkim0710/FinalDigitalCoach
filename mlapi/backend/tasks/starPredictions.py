@@ -43,7 +43,7 @@ def predict_star_scores(*args) -> dict[str, Any]:
             "LABEL_2": "Situation",
             "LABEL_3": "Task",
         }
-        classifier = pipeline("text-classification", model="dnttestmee/starclass_bert")
+        classifier = pipeline("text-classification", model="dnttestmee/starclass_bert") # type: ignore
         model_output: Any = classifier(sentence)
         # Single Label output.
         result: str = labels[str(model_output[0]["label"])]

@@ -1,14 +1,13 @@
 import os
 import nltk
-import logging
 from backend.utils import get_temp_dir, get_data_dir, get_video_dir, get_audio_dir, get_output_dir
 from backend.utils.env_loader import load_environment
+from backend.utils.logger_config import get_logger
 
-# Load environment variables when helpers are imported
 load_environment()
 
 # Configure logger
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Use absolute path from the current file
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__)) # helpers/

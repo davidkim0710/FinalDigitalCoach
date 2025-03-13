@@ -8,7 +8,7 @@ from .rubric import (
     OVERAL_FACIAL_POINTS,
     OVERALL_AUDIO_POINTS,
 )
-from .text_structure_ml import analyze_text_structure_ml
+from typing import Tuple, List
 
 
 def calculate_overall_facial_sentiment(facial_data):
@@ -49,14 +49,14 @@ def grab_top_five_keywords(audio_data):
     return top_five
 
 
-def calculate_top_three_facial_with_count(facial_data):
+def calculate_top_three_facial_with_count(facial_data) -> Tuple[List[str], float, float, float]:
     """
     It takes a list of facial data, builds a timeline interval, gets the emotions per interval, gets the
     frequency distribution of the emotions per interval, gets the top three emotions, and then returns
     the top three emotions, the top emotion's frequency, the second emotion's frequency, and the third
     emotion's frequency
 
-    :param facial_data: a list of dictionaries, each dictionary containing the following keys:
+    :param facial_data: a list of dictionaries, each dictionary containing the following keys
     :return: The top three emotions, and the percentage of time spent in each of the top three emotions.
     """
     timeline_interval = build_timeline_interval_facial(facial_data)
@@ -157,7 +157,7 @@ def compute_aggregate_score(result):
     :param result: The JSON response from the API
     :return: The aggregate score is being returned.
     """
-    text_structure_score = result["isStructuredPercent"]
+    text_structure_score = result["predictionScore"]
     overall_facial = OVERAL_FACIAL_POINTS[result["overallFacialEmotion"]]
     overall_audio = OVERALL_AUDIO_POINTS[result["overallSentiment"]]
     av_matches = round(_compute_av_sentiment_matches(result["timeline"]), 2)
@@ -169,7 +169,6 @@ def compute_aggregate_score(result):
     print(f"COMPUTING AGGREGATE SCORE: overall audio score: {overall_audio}")
     print(f"COMPUTING AGGREGATE SCORE: av_matches: {av_matches}")
     print(f"COMPUTING AGGREGATE SCORE: emotion_occurences: {emotion_occurences}")
-
     aggregate = (
         text_structure_score
         + overall_facial

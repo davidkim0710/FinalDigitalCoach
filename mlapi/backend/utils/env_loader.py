@@ -1,13 +1,12 @@
 """
 Environment variable loader utility.
-Provides consistent environment loading from anywhere in the project.
+Provides consistent environment loading.
 """
-
 import os
 from dotenv import load_dotenv
-import logging
+from backend.utils.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 _ENVIRONMENT_LOADED = False
 

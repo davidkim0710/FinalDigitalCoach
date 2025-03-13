@@ -3,11 +3,11 @@ import tempfile
 import shutil
 import glob
 import uuid
-import logging
 from typing import Optional, List
+from backend.utils.logger_config import get_logger
 
 # Configure logging
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Project name for temp directory naming
 PROJECT_NAME = "mlapi"

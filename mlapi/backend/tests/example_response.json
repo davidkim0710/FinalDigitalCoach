@@ -30,7 +30,7 @@
             }
         ],
         "isStructured": 0,
-        "isStructuredPercent": 8.874111771583557,
+        "predictionScore": 8.874111771583557,
         "facialStatistics": {
             "topThreeEmotions": [
                 "neutral",
@@ -82,40 +82,42 @@
         },
         "competencyFeedback": {
             "communication_clarity": {
-                "score": 0.53,
-                "strengths": [
-                    "Well-structured and organized response"
+                "score": 1.57,
+                "strengths": [],
+                "areas_for_improvement": [
+                    "Response structure could be improved"
                 ],
-                "areas_for_improvement": [],
-                "recommendations": []
+                "recommendations": [
+                    "Try using the STAR method (Situation, Task, Action, Result) for structuring your answers"
+                ]
             },
             "confidence": {
-                "score": 0.0,
+                "score": 2.39,
                 "strengths": [],
                 "areas_for_improvement": [
                     "Confidence level appears lower than optimal"
                 ],
                 "recommendations": [
-                    "Practice power posing before interviews and maintain eye contact"
+                    "Practice maintaining eye contact and speaking clearly"
                 ]
             },
             "engagement": {
-                "score": 4.0,
+                "score": 2.0,
                 "strengths": [],
-                "areas_for_improvement": [],
-                "recommendations": []
+                "areas_for_improvement": [
+                    "Try to use more keywords related to the content."
+                ],
+                "recommendations": [
+                    "Practice adding emphasis to key points in your responses"
+                ]
             },
-            "overall_score": 1.51,
+            "overall_score": 1.99,
             "summary": "Your response needs development in several key areas to increase interview effectiveness.",
             "key_recommendations": [
-                "Practice power posing before interviews and maintain eye contact"
+                "Try using the STAR method (Situation, Task, Action, Result) for structuring your answers",
+                "Practice maintaining eye contact and speaking clearly",
+                "Practice adding emphasis to key points in your responses"
             ]
-        },
-        "bigFiveDerivedCompetencies": {
-            "communication_clarity": 10.17,
-            "confidence": 4.33,
-            "engagement": 10.39,
-            "adaptability": 4.75
         },
         "aggregateScore": 31.1
     }

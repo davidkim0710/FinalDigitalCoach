@@ -23,7 +23,7 @@ The system uses a hybrid approach:
 ## Integration Guidelines
 When implementing the ML approach:
 1. Start with a pre-trained model with good generalization
-2. Create a small, high-quality labeled dataset specific to your domain
+2. Create a small, high-quality labeled dataset specific to domain
 3. Fine-tune the model on this dataset
 4. Maintain the rule-based system as a fallback
 5. Use a weighted combination of both approaches initially

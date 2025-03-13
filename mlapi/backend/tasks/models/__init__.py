@@ -1,4 +1,1 @@
-import logging
-
-# Configure logger
-logger = logging.getLogger(__name__)
+# for models package

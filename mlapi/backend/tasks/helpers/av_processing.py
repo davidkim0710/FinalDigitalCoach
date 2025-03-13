@@ -1,5 +1,4 @@
 import os
-import logging
 import moviepy.editor as mp
 import pandas as pd
 from backend.utils import (
@@ -7,10 +6,11 @@ from backend.utils import (
     get_video_dir,
     get_output_dir,
 )
-from backend.tasks.types import ExtractedAudio
-from typing import Any
+from backend.tasks.types import ExtractedAudio, TimelineStructure
+from typing import Any, List
+from backend.utils.logger_config import get_logger
 
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 
 def _build_timeline_intervals_sentiment(sent_analysis_lst):
@@ -43,6 +43,9 @@ def build_timeline_interval_facial(facial_data):
 
 
 def _emotion_sentiment_match(start, end, interval_length, facial_timeline):
+    """
+        Finds the facial emotion for a given audio segment
+    """
     try:
         return [
             facial_timeline[start // interval_length],
@@ -60,7 +63,7 @@ def _emotion_sentiment_match(start, end, interval_length, facial_timeline):
         return [-1, -1]
 
 
-def av_timeline_resolution(clip_length, facial_data, audio_sentiments):
+def av_timeline_resolution(clip_length, facial_data, audio_sentiments) -> List[TimelineStructure]:
     """
     It takes the audio and facial data, and creates a timeline of the emotions and sentiments of the
     video
@@ -87,7 +90,6 @@ def av_timeline_resolution(clip_length, facial_data, audio_sentiments):
             ),
         }
         timeline.append(entry)
-
     timeline = list(filter(lambda x: x["facialEmotion"] != [-1, -1], timeline))
     return timeline
 

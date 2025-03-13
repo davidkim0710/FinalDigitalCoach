@@ -1,18 +1,18 @@
 # ML API Backend
 ## Structure
-The project has been reorganized into logical packages:
+The project has been reorganized:
 ```
 backend/
 ├── redisStore/          # Redis connection, queue management and worker
 ├── server/         # Flask server, routes and API endpoints
-├── tasks/          # ML processing tasks and modules
+├── tasks/          # ML processing, rq tasks, and modules
 │   ├── helpers/    # Helper functions for tasks
 │   └── models/     # ML models
 └── tests/          # Test suite
 ```
 ## NOTE: GPU Support
 If you have a GPU check out installing the versions of `torch` that work for your machine. https://pytorch.org/get-started/locally/
-Will allow the facial recognition model to run faster. You can see the versions I'm using in the `requirements.txt` or `pyproject.toml` file. Different versions for machines and GPUs afaik.
+Will allow the facial recognition model (FER) to run faster. You can see the versions I'm using in the `requirements.txt` or `pyproject.toml` file. Different versions for machines and GPUs afaik.
 ## Environment Variables (.env)
 All you should have to do is set the `AAPI_KEY` and `REDIS_PASSWORD` if building docker locally.
 Take a look at the `.env.example` file for a list of all the environment variables that can be set. 
@@ -21,9 +21,8 @@ Take a look at the `.env.example` file for a list of all the environment variabl
 - `REDIS_PASSWORD`: Redis password 
     - (Optional for building. can be taken out of `.env` file nd removed from docker-compose)
 - `REDIS_URL`: Redis URL  
-    - default: redis://redis:6379, this is what the worker will use when the docker container is run. I've put a fallback for a local redis instance in `worker.py` if this env varaible is not set but may not work on your machine if "localhost" or the port is different. 
+    - default: redis://redis:6379, this is what the worker will use when the docker container is run. I've put a fallback for a local redis instance in `worker.py` if this env varaible is not set but may not work on your machine if "localhost" or the port number is different.
 - `AAPI_KEY`: Assembly AI API key for speech processing
-- `ENABLE-ML-STRUCTURE-ANALYSIS`=False 
     - Setting this to True will call the model from hugging face and change the `overall_score` in the response. Haven't tested this yet right now the structured score is just a flat value. 
 ## RECOMMENDED: Running with Docker
 Pull the latest images from Docker Hub:
@@ -76,17 +75,10 @@ Go get a coffee or something. This will take a while.
 ```bash
 scripts/cleanup # Cleans up the docker images
 ```
-
-### Competency-Based Feedback
-The system now implements a competency-based feedback approach that provides:
-- Practical, actionable feedback on interview skills
-- Analysis of communication clarity, confidence, and engagement
-- Specific recommendations for improvement
-- Numerical scores for each competency area
-
-This approach replaces the previous Big 5 personality trait scoring with more directly applicable feedback for interview preparation.
-
 ## TODO
-- Recreate the structured score NLP model. The results show a 62% validation ON THE TEST SET. That is barely better than a coinflip...
-- Enhance competency feedback with more specialized metrics for different interview types
-- Add benchmark comparison to successful interviews in similar roles
+### known issues
+- When running with a test video, the data.csv file is not moved to output dir. `move_cv_files()` tries to fix this but doesn't work...
+- Frontend videos might not work. 
+### Improvements
+- Make the `overall_score` more accurate. Requires lots of testing with example videos to see what feels right. If we want to use what we had before, ignore the `text-structure` feedback in the calculation and set it to a flat value of `40` and it will be same as before. 
+- Better feedback sentences. Generate with AI?

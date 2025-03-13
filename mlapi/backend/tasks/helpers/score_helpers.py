@@ -1,6 +1,3 @@
-from .file_management import (
-    move_cv_files,
-)
 from .text_processor import clean_text
 from ..models.model import detect_emotions, detect_audio_sentiment
 from .av_processing import extract_audio
@@ -8,20 +5,20 @@ from .statistics import (
     calculate_overall_audio_sentiment,
     grab_top_five_keywords,
 )
-from typing import Dict, Any
 import re
 from .text_structure_ml import analyze_text_structure_ml
-from backend.tasks.types import AudioSentimentResult,  EmotionDetectionResult
+from backend.tasks.types import (AudioSentimentResult,  EmotionDetectionResult, ExtractedAudio, StructureDetails, TextStructureResult, BigFiveScoreResult)
+from typing import Tuple
 
 
-def score_text_structure(audio_answer):
+def score_text_structure(audio_answer) -> TextStructureResult:
     """
     Score how structured the user's answers are using a hybrid approach:
     1. Rule-based analysis for basic structure indicators
     2. Optional pre-trained model integration (if configured)
 
     Returns dict with:
-    - percent_prediction: 0-100 score indicating structure quality
+    - prediction_score: 0-100 score indicating structure quality
     - binary_prediction: 1 if structured, 0 if not
     - output_text: processed text
     - details: Additional information about the structure assessment
@@ -33,22 +30,19 @@ def score_text_structure(audio_answer):
         text += i["text"]
     cleaned_text: str = clean_text(answer=text)
 
-    # Apply rule-based structure analysis
-    structure_score, structure_details = analyze_text_structure(text=cleaned_text)
+    structure_score, structure_details = _analyze_text_structure(text=cleaned_text)
 
-    # Convert to binary prediction (threshold at 50%)
     binary_prediction = 1 if structure_score >= 50 else 0
 
     return {
-        "percent_prediction": structure_score,
+        "prediction_score": structure_score,
         "binary_prediction": binary_prediction,
         "output_text": cleaned_text,
         "details": structure_details,
     }
 
 
-# TODO use ML model to create weighted Average of the two scores. Make sure to use rq worker for the model.
-def analyze_text_structure(text: str) -> tuple[float, Dict[str, Any]]:
+def _analyze_text_structure(text: str) -> Tuple[float, StructureDetails]: 
     """
     Analyzes text structure using rule-based heuristics.
 
@@ -61,7 +55,7 @@ def analyze_text_structure(text: str) -> tuple[float, Dict[str, Any]]:
         - dict: Detailed breakdown of structure components
     """
     # Initialize structure metrics
-    metrics = {
+    metrics: StructureDetails = {
         "paragraph_count": 0,
         "avg_paragraph_length": 0,
         "transition_words": 0,
@@ -80,8 +74,7 @@ def analyze_text_structure(text: str) -> tuple[float, Dict[str, Any]]:
             sentences = re.split(r"[.!?]+", p)
             sentences = [s.strip() for s in sentences if s.strip()]
             total_sentences += len(sentences)
-        metrics["avg_paragraph_length"] = total_sentences / metrics["paragraph_count"]
-
+        metrics["avg_paragraph_length"] = total_sentences // metrics["paragraph_count"]
     # Check for transition words/phrases
     transition_words = [
         "first",
@@ -155,28 +148,24 @@ def score_audio(content) -> AudioSentimentResult:
     """
     Score user's audio.
     """
-    fname, rename = content["fname"], content["rename"]
-    audio = extract_audio(fname, rename)
-    clip_length_seconds = audio["clip_length_seconds"] # type: ignore
-    sentiment = detect_audio_sentiment(audio["path_to_file"]) # type: ignore
-    sentiment["clip_length_seconds"] = clip_length_seconds # type: ignore
+    audio: ExtractedAudio = extract_audio(content["fname"], content["rename"])
+    sentiment = detect_audio_sentiment(audio["path_to_file"]) 
+    sentiment["clip_length_seconds"] = audio["clip_length_seconds"] 
     return sentiment
+
 
 def score_facial(content) -> EmotionDetectionResult:
     """
     score user's facial expressions
     """
-    video_fname = content["fname"]
-    res = detect_emotions(video_fname)
-    move_cv_files()
+    res = detect_emotions(content["fname"])
+    # TODO: handle data.csv file
     return res 
 
 
-def score_bigFive(audio_answer, facial_stats, text_answer):
+def score_bigFive(audio_answer, facial_stats, text_answer) -> BigFiveScoreResult:
     """
     Attempts to approximate Big Five personality traits on a scale of 0-7.
-    NOTE: This method has significant limitations and should not be considered
-    validated for personality assessment. We recommend using the competency-based feedback instead.
     The Big Five traits are:
     - O: Openness to experience
     - C: Conscientiousness
@@ -219,7 +208,7 @@ def score_bigFive(audio_answer, facial_stats, text_answer):
             a_score -= 0.5
     
     # Adjust based on text structure
-    structure_score = text_answer.get("percent_prediction", 50) / 100
+    structure_score = text_answer.get("prediction_score", 50) / 100
     c_score += (structure_score - 0.5) * 2  # normalized to roughly -1 to 1
     
     # Sentiment affects extraversion, agreeableness, and neuroticism
@@ -231,8 +220,7 @@ def score_bigFive(audio_answer, facial_stats, text_answer):
     def normalize_score(score):
         return max(min(round(score * 10) / 10, 7), 0)
     
-    # Return the scores
-    bigFive = {
+    return {
         "o": normalize_score(o_score),
         "c": normalize_score(c_score),
         "e": normalize_score(e_score),
@@ -240,41 +228,3 @@ def score_bigFive(audio_answer, facial_stats, text_answer):
         "n": normalize_score(n_score),
         "_disclaimer": "This is a weak approximation of Big Five traits and should not be used for serious assessments.",
     }
-    
-    return bigFive
-
-def map_bigfive_to_competencies(bigfive_scores):
-    """
-    Maps Big Five trait scores to interview competencies as a transitional approach.
-
-
-    Returns:
-        dict: Mapped competency scores on a 0-10 scale
-    """
-    # Extract scores
-    o_score = bigfive_scores.get("o", 0)
-    c_score = bigfive_scores.get("c", 0)
-    e_score = bigfive_scores.get("e", 0)
-    a_score = bigfive_scores.get("a", 0)
-    n_score = bigfive_scores.get("n", 0)
-
-    # Convert from -3 to 3 scale to 0-10 scale
-    normalize = lambda score: (score + 3) / 6 * 10
-
-    # Map traits to competencies
-    competencies = {
-        "communication_clarity": round(
-            normalize((c_score + o_score) / 2), 2
-        ),  # Structure (C) and articulation (O)
-        "confidence": round(
-            normalize((e_score - n_score) / 2), 2
-        ),  # Extraversion boosts, neuroticism reduces confidence
-        "engagement": round(
-            normalize((e_score + o_score + a_score) / 3), 2
-        ),  # Engagement combines multiple factors
-        "adaptability": round(
-            normalize((o_score - n_score) / 2), 2
-        ),  # Openness and emotional stability
-    }
-
-    return competencies

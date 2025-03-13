@@ -1,12 +1,9 @@
 from flask import Flask
 from threading import Thread
-import logging
 from backend.redisStore.myConnection import get_redis_con
+from backend.utils.logger_config import get_logger
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
+logger = get_logger(__name__)
 
 # Create the Flask application
 app = Flask(__name__)

@@ -8,14 +8,9 @@ import logging
 
 from backend.utils import move_misplaced_files
 from backend.utils.env_loader import load_environment
-# TODO
-# from types import EmotionDetectionResult, AudioSentimentResult, Error
+from backend.utils.logger_config import get_logger
+logger = get_logger(__name__)
 
-logging.basicConfig(
-    level=logging.INFO, 
-    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
-logger = logging.getLogger(__name__)
 
 __all__ = [
     "starPredictions",
