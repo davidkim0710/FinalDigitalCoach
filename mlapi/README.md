@@ -1,5 +1,5 @@
 # ML API Backend
-## Project Structure
+## Structure
 The project has been reorganized into logical packages:
 ```
 backend/
