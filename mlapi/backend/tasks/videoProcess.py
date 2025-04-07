@@ -62,3 +62,18 @@ def output_video(video_url):
                 logger.debug(f"Cleaned up temporary video file: {video_file}")
             except OSError as e:
                 logger.error(f"Error deleting temporary video file: {e}")
+
+def output_video(video_path):
+    try:
+        output_file = _preprocess_video(video_path, "output.mp4")
+        rename_path = get_audio_path()  # Generates a unique audio path
+        content = {"fname": "output.mp4", "rename": os.path.basename(rename_path)}
+        return content
+    finally:
+        # Clean up temporary files
+        if video_path and os.path.exists(video_path):
+            try:
+                os.remove(video_path)
+                logger.debug(f"Cleaned up temporary video file: {video_path}")
+            except OSError as e:
+                logger.error(f"Error deleting temporary video file: {e}")

@@ -15,8 +15,9 @@ VALID_ROUTES = {
     "star-feedback",
     "predict",
     "big-five-feedback",
+    "record-video",
+    "record",  # new recording interface
 }
-
 
 @bp.app_errorhandler(404)
 def not_found_error(error):
@@ -36,7 +37,6 @@ def not_found_error(error):
         404,
     )
 
-
 @bp.app_errorhandler(500)
 def internal_error(error):
     """
@@ -54,7 +54,6 @@ def internal_error(error):
         ),
         500,
     )
-
 
 @bp.app_errorhandler(Exception)
 def handle_exception(error):
@@ -74,7 +73,6 @@ def handle_exception(error):
         500,
     )
 
-
 def init_app(app):
     """
     Initialize the application with all routes.
@@ -86,7 +84,6 @@ def init_app(app):
         app (Flask): The Flask application instance to which the blueprint will be registered.
     """
     app.register_blueprint(bp)
-
 
 @bp.route("/", defaults={"path": ""})
 @bp.route("/<path:path>")
@@ -108,14 +105,14 @@ def catch_all(path):
     if path == "":
         path = "Home Route Accessed"
     logger.info(f"Route accessed: {path}")
+    if path == "record":
+        return render_template("record.html")
     return render_template("index.html")
-
 
 @bp.route("/api/routes", methods=["GET"])
 def test():
     logger.info("Test route accessed")
     return render_template("index.html")
-
 
 @bp.route("/results/<job_id>", methods=["GET"])
 def get_results(job_id):
@@ -163,7 +160,6 @@ def get_results(job_id):
             500,
         )
 
-
 @bp.route("/star-feedback", methods=["POST"])
 def get_star_feedback():
     """
@@ -184,35 +180,65 @@ def get_star_feedback():
     logger.info(f"Job enqueued for STAR feedback: {job.get_id()}")
     return jsonify(job.get_id())
 
-
 @bp.route("/predict", methods=["POST"])
 def predict() -> Response:
     """
     POST route that processes video predictions.
 
-    This endpoint receives JSON data containing a video URL, enqueues a task to process the video,
-    and subsequently enqueues another task to create an answer based on the processed video.
-    It returns the job ID of the enqueued task for answer creation.
+    This endpoint can handle both JSON data with a video URL and direct file uploads.
+    For JSON data, it expects a videoUrl field.
+    For file uploads, it expects a video file in the request.files.
 
     Returns:
         Response: A JSON response containing the job ID of the enqueued task for answer creation.
     """
     from ..tasks.videoProcess import output_video
     from ..tasks.score import create_answer
+    import os
 
-    req = request.get_json()
-    logger.info("Received data for prediction")
-    video_url = req.get("videoUrl")
-    if not video_url:
-        logger.warning("Required fields missing in prediction request")
-        return jsonify(errors="Required fields missing.")
-    process_video = add_task_to_queue(output_video, video_url)
+    if request.is_json:
+        # Handle JSON request with video URL
+        req = request.get_json()
+        logger.info("Received JSON data for prediction")
+        video_url = req.get("videoUrl")
+        if not video_url:
+            logger.warning("Required fields missing in prediction request")
+            return jsonify({"error": "Required fields missing."}), 400
+        video_path = video_url
+
+    else:
+        # Handle direct file upload
+        logger.info("Received file upload for prediction")
+        if 'video' not in request.files:
+            logger.warning("No video file in request")
+            return jsonify({"error": "No video file provided."}), 400
+
+        video_file = request.files['video']
+        if not video_file.filename:
+            logger.warning("Empty video filename provided")
+            return jsonify({"error": "Invalid video file."}), 400
+
+        # Save uploaded file
+        video_filename = f"{str(uuid.uuid4())}.webm"
+        temp_path = os.path.join("/tmp", video_filename)
+        try:
+            video_file.save(temp_path)
+            logger.info(f"Saved uploaded video to {temp_path}")
+            video_path = temp_path
+        except Exception as e:
+            logger.error(f"Failed to save video: {str(e)}")
+            return jsonify({"error": f"Error saving video file: {str(e)}"}), 500
+
+    # Process video
+    process_video = add_task_to_queue(output_video, video_path)
     logger.info(f"Job enqueued for video processing: {process_video.get_id()}")
+    
+    # Create answer
     content = {"fname": "output.mp4", "rename": str(uuid.uuid4()) + ".mp3"}
     answer = add_task_to_queue(create_answer, content, depends_on=[process_video])
     logger.info(f"Job enqueued for answer creation: {answer.get_id()}")
-    return jsonify(answer.get_id())
-
+    
+    return jsonify({"job_id": answer.get_id()})
 
 @bp.route("/big-five-feedback", methods=["POST"])
 def get_big_five_feedback():
@@ -234,3 +260,53 @@ def get_big_five_feedback():
     logger.info(f"Job enqueued for Big Five feedback: {big_five.get_id()}")
     return jsonify(big_five.get_id())
 
+@bp.route("/record-video", methods=["POST"])
+def record_video() -> Response:
+    """
+    POST route that handles video recording and creates an answer.
+
+    This endpoint receives binary video data from the request, saves it temporarily,
+    and then processes it through the video processing and answer creation pipeline.
+
+    Returns:
+        Response: A JSON response containing the job ID for answer creation.
+    """
+    import os
+    from ..tasks.videoProcess import output_video
+    from ..tasks.score import create_answer
+
+    logger.info("Received recorded video data")
+    
+    if not request.files or 'video' not in request.files:
+        logger.warning("No video file in request")
+        return jsonify({"error": "No video file provided."}), 400
+        
+    video_file = request.files['video']
+    if not video_file.filename:
+        logger.warning("Empty video filename provided")
+        return jsonify({"error": "Invalid video file."}), 400
+    
+    # Generate unique filename for the video
+    video_filename = f"{str(uuid.uuid4())}.webm"
+    temp_path = os.path.join("/data", video_filename)
+    
+    # Save uploaded file
+    try:
+        video_file.save(temp_path)
+        logger.info(f"Saved uploaded video to {temp_path}")
+    except Exception as e:
+        logger.error(f"Failed to save video: {str(e)}")
+        return jsonify({"error": f"Error saving video file: {str(e)}"}), 500
+
+    try:
+        # Create answer
+        process_video = add_task_to_queue(output_video, temp_path)
+        logger.info(f"Job enqueued for video processing: {process_video.get_id()}")
+        content = {"fname": temp_path, "rename": str(uuid.uuid4()) + ".mp3"}
+        answer = add_task_to_queue(create_answer, content)
+        logger.info(f"Job enqueued for answer creation: {answer.get_id()}")
+        
+        return jsonify({"job_id": answer.get_id()})
+    except Exception as e:
+        logger.error(f"Failed to process video: {str(e)}")
+        return jsonify({"error": f"Error processing video: {str(e)}"}), 500

@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Digital Coach - Video Recording</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background-color: #f5f5f5;
+    }
+
+    .container {
+      background: white;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #2c3e50;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .video-section {
+      margin: 2rem auto;
+      text-align: center;
+    }
+
+    #video-preview {
+      width: 100%;
+      max-width: 640px;
+      margin: 1rem auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      display: none;
+      /* Initially hidden */
+    }
+
+    .controls {
+      margin: 1.5rem 0;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background-color: #3498db;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #2980b9;
+    }
+
+    .btn-danger {
+      background-color: #e74c3c;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #c0392b;
+    }
+
+    .btn:disabled {
+      background-color: #95a5a6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    #status {
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 6px;
+      background-color: #f8f9fa;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    #results {
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      border-radius: 6px;
+      background-color: #f8f9fa;
+      white-space: pre-wrap;
+      display: none;
+      text-align: left;
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #dee2e6;
+    }
+
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .timer {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #2c3e50;
+      margin: 1rem 0;
+    }
+
+    /* Add a permission request section */
+    #permission-request {
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #dee2e6;
+      display: none;
+    }
+
+    /* Add a back link */
+    .back-link {
+      display: block;
+      margin-top: 1rem;
+      color: #3498db;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Digital Coach Recording Studio</h1>
+
+    <div id="permission-request">
+      <p>This application needs access to your camera and microphone to record video.</p>
+      <button id="request-permissions" class="btn btn-primary">Allow Camera & Microphone</button>
+    </div>
+
+    <div class="video-section">
+      <video id="video-preview" autoplay muted playsinline></video>
+      <div class="timer" id="timer">00:00</div>
+      <div class="controls">
+        <button id="start-recording" class="btn btn-primary" disabled>Start Recording</button>
+        <button id="stop-recording" class="btn btn-danger" disabled>Stop Recording</button>
+        <button id="repoll-results" class="btn btn-primary" style="display: none">Check Results</button>
+      </div>
+      <div id="status">Camera initializing...</div>
+      <div id="results"></div>
+    </div>
+
+    <a href="/" class="back-link">← Back to Documentation</a>
+  </div>
+
+  <script>
+    let mediaRecorder;
+    let recordedChunks = [];
+    let timerInterval;
+    let startTime;
+    let pollingInterval;
+
+    const videoPreview = document.getElementById('video-preview');
+    const startButton = document.getElementById('start-recording');
+    const stopButton = document.getElementById('stop-recording');
+    const repollButton = document.getElementById('repoll-results');
+    const statusDiv = document.getElementById('status');
+    const resultsDiv = document.getElementById('results');
+    const timerDiv = document.getElementById('timer');
+    const permissionRequestDiv = document.getElementById('permission-request');
+    const requestPermissionsButton = document.getElementById('request-permissions');
+    let jobId = null;
+
+    function updateTimer() {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      const minutes = Math.floor(elapsed / 60).toString().padStart(2, '0');
+      const seconds = (elapsed % 60).toString().padStart(2, '0');
+      timerDiv.textContent = `${minutes}:${seconds}`;
+    }
+
+    // Check if the browser supports getUserMedia
+    function checkMediaSupport() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        statusDiv.textContent = 'Your browser does not support camera access';
+        permissionRequestDiv.style.display = 'block';
+        return false;
+      }
+      return true;
+    }
+
+    async function setupCamera() {
+      if (!checkMediaSupport()) return;
+
+      try {
+        statusDiv.textContent = 'Requesting camera access...';
+
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: {width: 1280, height: 720},
+          audio: true
+        });
+
+        // Video is now visible with stream attached
+        videoPreview.srcObject = stream;
+        videoPreview.style.display = 'block';
+
+        mediaRecorder = new MediaRecorder(stream, {
+          mimeType: 'video/webm;codecs=vp8,opus'
+        });
+
+        mediaRecorder.ondataavailable = (event) => {
+          if (event.data.size > 0) {
+            recordedChunks.push(event.data);
+          }
+        };
+
+        mediaRecorder.onstop = async () => {
+          clearInterval(timerInterval);
+          timerDiv.textContent = '00:00';
+          const blob = new Blob(recordedChunks, {type: 'video/webm'});
+          await sendVideoToServer(blob);
+        };
+
+        startButton.disabled = false;
+        statusDiv.textContent = 'Ready to record';
+      } catch (error) {
+        console.error('Camera error:', error);
+        videoPreview.style.display = 'none';
+        statusDiv.textContent = `Camera error: ${error.message}`;
+        permissionRequestDiv.style.display = 'block';
+      }
+    }
+
+    async function sendVideoToServer(blob) {
+      try {
+        statusDiv.innerHTML = '<div class="loading"></div>Uploading video...';
+
+        const formData = new FormData();
+        formData.append('video', blob, 'recording.webm');
+
+        const response = await fetch('/record-video', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) throw new Error('Failed to upload video');
+
+        const data = await response.json();
+        if (data.job_id) {
+          jobId = data.job_id;
+          statusDiv.textContent = 'Video uploaded and processing...';
+          enableRepollButton();
+          // Start polling automatically
+          pollResults();
+        } else {
+          throw new Error('No job ID received from server');
+        }
+      } catch (error) {
+        statusDiv.textContent = `Error: ${error.message}`;
+        startButton.disabled = false;
+      }
+    }
+
+    async function pollResults() {
+      try {
+        disableRepollButton();
+        statusDiv.innerHTML = '<div class="loading"></div>Checking results...';
+
+        const response = await fetch(`/results/${jobId}`);
+        const data = await response.json();
+
+        if (response.status === 202) {
+          statusDiv.textContent = 'Still processing... Click "Check Results" to check again.';
+          enableRepollButton();
+          return;
+        }
+
+        if (response.ok) {
+          statusDiv.textContent = 'Analysis complete!';
+          resultsDiv.style.display = 'block';
+          resultsDiv.textContent = JSON.stringify(data.result, null, 2);
+          enableRepollButton();
+        } else {
+          throw new Error('Failed to get results');
+        }
+      } catch (error) {
+        statusDiv.textContent = `Error: ${error.message}. Click "Check Results" to try again.`;
+        enableRepollButton();
+      }
+    }
+
+    startButton.addEventListener('click', () => {
+      recordedChunks = [];
+      mediaRecorder.start(1000); // Collect data every second
+      startTime = Date.now();
+      timerInterval = setInterval(updateTimer, 1000);
+      startButton.disabled = true;
+      stopButton.disabled = false;
+      repollButton.style.display = 'none';
+      statusDiv.textContent = 'Recording...';
+      resultsDiv.style.display = 'none';
+    });
+
+    stopButton.addEventListener('click', () => {
+      mediaRecorder.stop();
+      startButton.disabled = false;
+      stopButton.disabled = true;
+      statusDiv.textContent = 'Processing...';
+    });
+
+    requestPermissionsButton.addEventListener('click', () => {
+      permissionRequestDiv.style.display = 'none';
+      setupCamera();
+    });
+
+    const disableRepollButton = () => {
+      repollButton.disabled = true;
+      repollButton.style.cursor = 'not-allowed';
+    };
+
+    const enableRepollButton = () => {
+      repollButton.style.display = 'block';
+      repollButton.disabled = false;
+      repollButton.style.cursor = 'pointer';
+    };
+
+    repollButton.addEventListener('click', () => {
+      if (jobId) {
+        pollResults();
+      }
+    });
+
+    // Initialize camera when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      setupCamera();
+    });
+  </script>
+</body>
+
+</html>

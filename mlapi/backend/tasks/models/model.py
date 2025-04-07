@@ -2,10 +2,6 @@ import os
 import assemblyai as aai
 from fer import Video, FER
 from pandas import DataFrame
-from backend.utils import (
-    get_video_dir,
-    get_output_dir,
-)
 from typing import cast, Any
 from backend.tasks.types import EmotionDetectionResult, EmotionTotals, EmotionTimelines, AudioSentimentResult 
 from backend.utils.logger_config import get_logger
@@ -28,29 +24,21 @@ def detect_emotions(video_fname, freq=10) -> EmotionDetectionResult:
     """
     # Check if video_fname is a full path or just a filename
     result: Any = {}
-    if os.path.isabs(video_fname):
-        logger.info(f"Setting videofile_path to absolute path: {video_fname}")
+    logger.info(f"Detecting emotions from video file: {video_fname}")
+    videofile_path = os.path.abspath(video_fname)
+    if os.path.isabs(video_fname) and os.path.exists(video_fname):
         videofile_path = video_fname
     else:
-        # TODO: handle files donwload from URL 
-        path_video = os.path.join(get_video_dir(), video_fname)
-        path_output = os.path.join(get_output_dir(), video_fname)
-        if os.path.exists(path_video):
-            videofile_path = path_video
-        elif os.path.exists(path_output):
-            videofile_path = path_output
+        # Try test directory if this might be a test file
+        tests_dir = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "tests"
+        )
+        test_file_path = os.path.join(tests_dir, "data", video_fname)
+        if os.path.exists(test_file_path):
+            videofile_path = test_file_path
         else:
-            # Try test directory if this might be a test file
-            tests_dir = os.path.join(
-                os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "tests"
-            )
-            test_file_path = os.path.join(tests_dir, "data", video_fname)
-            if os.path.exists(test_file_path):
-                videofile_path = test_file_path
-            else:
-                logger.error(f"Could not find video file {video_fname} in any location")
-                result["error"] = "Could not find video file"
-    logger.info(f"Detecting emotions from video file: {videofile_path}")
+            logger.error(f"Could not find video file {video_fname} in any location")
+            result["error"] = "Could not find video file"
     face_detection = FER(mtcnn=True) # type: ignore
     try:
         input_video = Video(videofile_path)

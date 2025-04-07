@@ -1,12 +1,13 @@
 """
 Environment variable loader utility.
-Provides consistent environment loading.
+Provides consistent environment loading from anywhere in the project.
 """
+
 import os
 from dotenv import load_dotenv
-from backend.utils.logger_config import get_logger
+import logging
 
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 _ENVIRONMENT_LOADED = False
 
@@ -17,22 +18,9 @@ def find_mlapi_root():
     Returns:
         str: Path to the mlapi root directory
     """
-    current_dir = os.path.dirname(os.path.abspath(__file__))
+    mlapi_dir = os.path.dirname(os.path.dirname((os.path.abspath(__file__))))
+    return mlapi_dir
     
-    # Go up the directory tree until we find mlapi directory
-    while os.path.basename(current_dir) != "mlapi" and current_dir != "/":
-        parent = os.path.dirname(current_dir)
-        if parent == current_dir:  # We've hit the root directory
-            break
-        current_dir = parent
-    
-    # If we didn't find mlapi, return None
-    if os.path.basename(current_dir) != "mlapi":
-        logger.warning("Could not find mlapi root directory")
-        return None
-    
-    return current_dir
-
 
 def load_environment(force_reload=False):
     """
