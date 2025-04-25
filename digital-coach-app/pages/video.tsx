@@ -51,6 +51,7 @@ export default function VideoPage() {
     // } catch (e) {
     //   console.log(e);
     // }
+    console.log("THE URL:", dlURL);
 
     console.log("Predicting...");
     try {
