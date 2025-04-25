@@ -13,19 +13,21 @@ Machine Learning API for video analysis, providing audio sentiment analysis, fac
 
 ## Getting Started with Docker
 
-The easiest way to run the application is using Docker Compose.
+The easiest way to run the application is using Docker Compose. Note that the final image size is approximately 4.5GB due to ML dependencies.
 
 ### Prerequisites
 
 - Docker and Docker Compose installed on your system
+- At least 5GB of free disk space
 
-### Running the application
+### Running with Docker
 
 1. Clone the repository
 2. Navigate to the project directory
-3. Start the services using Docker Compose:
+3. Build and start the services:
 
 ```bash
+docker-compose build  # This may take 5-10 minutes
 docker-compose up -d
 ```
 
@@ -35,40 +37,72 @@ This will start:
 - Multiple workers for processing different priority tasks
 - A monitoring service for job status
 
-### Accessing the API
+## Local Development Setup
 
-Once running, you can access:
-- API documentation: http://localhost:8000/docs
-- API base endpoint: http://localhost:8000/
-
-## Service Architecture
-
-The application is composed of several services:
-
-- **API Server**: FastAPI application exposing the REST endpoints
-- **Redis**: Queue manager and job storage
-- **High-Priority Workers**: Process video analysis tasks (2 replicas)
-- **Default Workers**: Handle standard priority tasks (3 replicas)
-- **Low-Priority Workers**: Handle background and non-urgent tasks
-- **Monitor**: Tracks job progress and status
-
-## Development Environment
-
-If you prefer to run the application locally without Docker:
+For local development without Docker:
 
 1. Install Python 3.12 or higher
-2. Install Redis locally
-3. Install dependencies: `pip install -e .`
-4. Start the API server: `python main.py`
-5. Start workers in separate terminals: `python -m redisStore.worker high default low`
+2. Install UV (faster pip alternative):
+   ```bash
+   curl -LsSf https://astral.sh/uv/install.sh | sh
+   ```
 
-## Testing
+3. Clone and setup the project:
+   ```bash
+   git clone <repository-url>
+   cd mlapi
+   uv venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   uv sync
+   ```
 
-Run tests using pytest:
+4. Install and start Redis:
+   ```bash
+   # On Ubuntu/Debian
+   sudo apt-get install redis-server
+   sudo systemctl start redis
+   
+   # On macOS
+   brew install redis
+   brew services start redis
+   
+   # On Windows, download from https://redis.io/download
+   ```
 
-```bash
-pytest
-```
+5. Start the services (in separate terminals):
+   ```bash
+   # Terminal 1: API server
+   python main.py
+   
+   
+   # Terminal 2: Worker
+   python -m redisStore.worker 
+   or 
+   rq worker high default low
+   ```
+
+## Usage
+
+1. Access the API documentation at http://localhost:8000/docs
+2. Test the API:
+   - Navigate to the `/api/create_answer` endpoint
+   - Execute the POST request with an empty body (it will use a default test video)
+   - For custom videos, provide a `video_url` in the request body
+   - Some YouTube videos are supported (must be publicly accessible)
+   - For the Frontend use the signed URL from the Firebase. 
+
+## Linting
+- `mypy .`
+
+## Formatting
+- `ruff format .`
+
+
+## Known Issues and Future Improvements
+
+- AssemblyAI API key is currently hardcoded (will be moved to environment variables)
+- Queue priority system needs optimization
+- Better error handling for video processing failures
 
 ## Environment Variables
 
@@ -79,4 +113,11 @@ Configure the application using environment variables:
 - `REDIS_PASSWORD`: Redis password (optional)
 - `REDIS_URL`: Complete Redis URL (optional, overrides other Redis settings)
 - `WORKERS_COUNT`: Number of worker processes (used in Docker setup)
-EOF < /dev/null
+
+## Testing
+
+Run tests using pytest:
+
+```bash
+pytest
+```
