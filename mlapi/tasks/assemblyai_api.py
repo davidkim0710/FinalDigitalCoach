@@ -11,7 +11,7 @@ from utils.logger_config import get_logger
 from rq.decorators import job
 from redisStore.myconnection import get_redis_con
 
-AAPI_KEY = "a5da7fd0585e490296e6ffb463dd5410"
+AAPI_KEY = "bfaf77b4cb614ca2be7ad4e7346e763e"
 logger = get_logger(__name__)
 
 
