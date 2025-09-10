@@ -10,8 +10,9 @@ import assemblyai as aai
 from utils.logger_config import get_logger
 from rq.decorators import job
 from redisStore.myconnection import get_redis_con
+import os
 
-AAPI_KEY = "bfaf77b4cb614ca2be7ad4e7346e763e"
+AAPI_KEY = os.getenv("AAPI_KEY")
 logger = get_logger(__name__)
 
 

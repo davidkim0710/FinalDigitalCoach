@@ -19,8 +19,7 @@ interface InteractiveAvatarProps {
 
 const InteractiveAvatar = forwardRef((props: InteractiveAvatarProps, ref) => {
   /*const HeyGenApiKey = process.env.HEY_GEN_KEY;*/
-  const HeyGenApiKey =
-    "ZmI0NmFkMzFhOGMxNGFlODhmNTk1NjVjMjU3NTBkOWYtMTc0MTMzNDM5NQ==";
+  const HeyGenApiKey = process.env.NEXT_PUBLIC_HEYGEN_API_KEY;
   const { onTranscriptChange, onInterviewerTranscriptChange } = props;
   const [isLoadingSession, setIsLoadingSession] = useState(false);
   const [stream, setStream] = useState<MediaStream>();
